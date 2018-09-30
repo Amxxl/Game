@@ -56,20 +56,19 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
             return 1;
 
         // Create window
-        int w, h;
+        int w, h, x, y;
         g_game->GetDefaultSize(w, h);
 
-        RECT rc;
-        rc.top = 0;
-        rc.left = 0;
-        rc.right = static_cast<LONG>(w); 
-        rc.bottom = static_cast<LONG>(h);
-
+        RECT rc = { 0,0, static_cast<LONG>(w), static_cast<LONG>(h) };
         AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
 
+        w = rc.right - rc.left;
+        h = rc.bottom - rc.top;
+        x = GetSystemMetrics(SM_CXSCREEN) / 2 - w / 2;
+        y = GetSystemMetrics(SM_CYSCREEN) / 2 - h / 2;
+
         HWND hwnd = CreateWindowEx(0, L"GameWindowClass", L"Game", WS_OVERLAPPEDWINDOW,
-            CW_USEDEFAULT, CW_USEDEFAULT, rc.right - rc.left, rc.bottom - rc.top, nullptr, nullptr, hInstance,
-            nullptr);
+            x, y, w, h, nullptr, nullptr, hInstance, nullptr);
         // TODO: Change to CreateWindowEx(WS_EX_TOPMOST, L"GameWindowClass", L"Game", WS_POPUP,
         // to default to fullscreen.
 
