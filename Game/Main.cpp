@@ -48,7 +48,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
         wcex.hInstance = hInstance;
         wcex.hIcon = LoadIcon(hInstance, L"IDI_ICON");
         wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
-        wcex.hbrBackground = (HBRUSH) (COLOR_WINDOW + 1);
+        wcex.hbrBackground = (HBRUSH) (COLOR_WINDOW + 3);
         wcex.lpszMenuName = nullptr;
         wcex.lpszClassName = L"GameWindowClass";
         wcex.hIconSm = LoadIcon(wcex.hInstance, L"IDI_ICON");
