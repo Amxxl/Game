@@ -59,7 +59,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
         int w, h, x, y;
         g_game->GetDefaultSize(w, h);
 
-        RECT rc = { 0,0, static_cast<LONG>(w), static_cast<LONG>(h) };
+        RECT rc = { 0, 0, static_cast<LONG>(w), static_cast<LONG>(h) };
         AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
 
         w = rc.right - rc.left;
