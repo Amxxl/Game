@@ -8,6 +8,7 @@
 extern void ExitGame();
 
 using namespace DirectX;
+using namespace DirectX::SimpleMath;
 
 using Microsoft::WRL::ComPtr;
 
@@ -158,6 +159,7 @@ void Game::GetDefaultSize(int& width, int& height) const
 void Game::CreateDeviceDependentResources()
 {
     auto device = m_deviceResources->GetD3DDevice();
+	auto context = m_deviceResources->GetD3DDeviceContext();
 
     // TODO: Initialize device dependent objects here (independent of window size).
     device;
@@ -177,7 +179,6 @@ void Game::OnDeviceLost()
 void Game::OnDeviceRestored()
 {
     CreateDeviceDependentResources();
-
     CreateWindowSizeDependentResources();
 }
 #pragma endregion
