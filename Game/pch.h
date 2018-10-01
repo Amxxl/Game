@@ -83,7 +83,7 @@ namespace DX
     public:
         com_exception(HRESULT hr) : result(hr) {}
 
-        virtual const char* what() const override
+        virtual char const* what() const override
         {
             static char s_str[64] = {};
             sprintf_s(s_str, "Failure with HRESULT of %08X", static_cast<unsigned int>(result));
