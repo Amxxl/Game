@@ -35,6 +35,10 @@ void Game::Initialize(HWND window, int width, int height)
     m_timer.SetFixedTimeStep(true);
     m_timer.SetTargetElapsedSeconds(1.0 / 60);
     */
+
+    m_keyboard = std::make_unique<Keyboard>();
+    m_mouse = std::make_unique<Mouse>();
+    m_mouse->SetWindow(window);
 }
 
 #pragma region Frame Update
@@ -56,6 +60,12 @@ void Game::Update(DX::StepTimer const& timer)
 
     // TODO: Add your game logic here.
     elapsedTime;
+
+    auto kb = m_keyboard->GetState();
+    if (kb.Escape)
+        PostQuitMessage(0);
+
+    auto mouse = m_mouse->GetState();
 }
 #pragma endregion
 
