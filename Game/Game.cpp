@@ -39,6 +39,9 @@ void Game::Initialize(HWND window, int width, int height)
     m_keyboard = std::make_unique<Keyboard>();
     m_mouse = std::make_unique<Mouse>();
     m_mouse->SetWindow(window);
+
+    m_sceneManager = std::make_unique<SceneManager>();
+    m_sceneManager->PushScene(PlayScene::GetInstance());
 }
 
 #pragma region Frame Update
@@ -56,16 +59,14 @@ void Game::Tick()
 // Updates the world.
 void Game::Update(DX::StepTimer const& timer)
 {
-    float elapsedTime = float(timer.GetElapsedSeconds());
-
     // TODO: Add your game logic here.
-    elapsedTime;
-
     auto kb = m_keyboard->GetState();
     if (kb.Escape)
         PostQuitMessage(0);
 
     auto mouse = m_mouse->GetState();
+
+    m_sceneManager->Update(timer);
 }
 #pragma endregion
 
@@ -75,9 +76,7 @@ void Game::Render()
 {
     // Don't try to render anything before the first Update.
     if (m_timer.GetFrameCount() == 0)
-    {
         return;
-    }
 
     Clear();
 
@@ -86,6 +85,7 @@ void Game::Render()
 
     // TODO: Add your rendering code here.
     context;
+    m_sceneManager->Render();
 
     m_deviceResources->PIXEndEvent();
 

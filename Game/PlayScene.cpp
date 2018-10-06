@@ -5,7 +5,7 @@
 #include "pch.h"
 #include "PlayScene.h"
 
-PlayScene PlayScene::instance;
+PlayScene PlayScene::s_instance;
 
 PlayScene::PlayScene()
 {

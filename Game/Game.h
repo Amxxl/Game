@@ -7,6 +7,8 @@
 #include "DeviceResources.h"
 #include "StepTimer.h"
 
+#include "SceneManager.h"
+#include "PlayScene.h"
 
 // A basic game implementation that creates a D3D11 device and
 // provides a game loop.
@@ -54,6 +56,9 @@ private:
     DX::StepTimer                           m_timer;
 
     // Keyboard and mouse input.
+    // @todo: find best solution to handle this in scenes.
     std::unique_ptr<DirectX::Keyboard> m_keyboard;
     std::unique_ptr<DirectX::Mouse> m_mouse;
+
+    std::unique_ptr<SceneManager> m_sceneManager;
 };

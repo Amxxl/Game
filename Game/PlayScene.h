@@ -23,11 +23,11 @@ class PlayScene : public Scene
 
         bool const IsPaused() const { return paused; }
 
-        static PlayScene* GetInstance() { return &instance; }
+        static PlayScene* GetInstance() { return &s_instance; }
 
     private:
         // Instance of our play scene.
-        static PlayScene instance;
+        static PlayScene s_instance;
 
     private:
         bool paused;
