@@ -2,8 +2,9 @@
 #include "SceneManager.h"
 
 
-SceneManager::SceneManager()
+SceneManager::SceneManager(ID3D11DeviceContext1* deviceContext)
 {
+    m_deviceContext = deviceContext;
 }
 
 
@@ -27,7 +28,7 @@ void SceneManager::SwapScene(Scene* scene)
 
     // Store and load new scene
     scenes.push_back(scene);
-    scenes.back()->Load();
+    scenes.back()->Load(m_deviceContext);
 }
 
 void SceneManager::PushScene(Scene* scene)
@@ -38,7 +39,7 @@ void SceneManager::PushScene(Scene* scene)
 
     // Store and load new scene
     scenes.push_back(scene);
-    scenes.back()->Load();
+    scenes.back()->Load(m_deviceContext);
 }
 
 void SceneManager::PopScene()

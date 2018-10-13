@@ -31,17 +31,25 @@ void Game::Initialize(HWND window, int width, int height)
 
     // TODO: Change the timer settings if you want something other than the default variable timestep mode.
     // e.g. for 60 FPS fixed timestep update logic, call:
-    /*
+    
     m_timer.SetFixedTimeStep(true);
     m_timer.SetTargetElapsedSeconds(1.0 / 60);
-    */
+    
+
+    // Setup ImGui
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO();
+    ImGui_ImplWin32_Init(window);
+    ImGui_ImplDX11_Init(m_deviceResources->GetD3DDevice(), m_deviceResources->GetD3DDeviceContext());
+    ImGui::StyleColorsDark();
 
     m_keyboard = std::make_unique<Keyboard>();
     m_mouse = std::make_unique<Mouse>();
     m_mouse->SetWindow(window);
 
-    m_sceneManager = std::make_unique<SceneManager>();
-    m_sceneManager->PushScene(PlayScene::GetInstance());
+    m_sceneManager = std::make_unique<SceneManager>(m_deviceResources->GetD3DDeviceContext());
+    m_sceneManager->PushScene(PlayScene::Instance());
 }
 
 #pragma region Frame Update
@@ -85,6 +93,7 @@ void Game::Render()
 
     // TODO: Add your rendering code here.
     context;
+
     m_sceneManager->Render();
 
     m_deviceResources->PIXEndEvent();
@@ -103,7 +112,7 @@ void Game::Clear()
     auto renderTarget = m_deviceResources->GetRenderTargetView();
     auto depthStencil = m_deviceResources->GetDepthStencilView();
 
-    context->ClearRenderTargetView(renderTarget, Colors::Black);
+    context->ClearRenderTargetView(renderTarget, Colors::BlueViolet);
     context->ClearDepthStencilView(depthStencil, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
     context->OMSetRenderTargets(1, &renderTarget, depthStencil);
 

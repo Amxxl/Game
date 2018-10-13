@@ -12,7 +12,7 @@ class Scene
         Scene() = default;
 
     public:
-        virtual bool Load() = 0;
+        virtual bool Load(ID3D11DeviceContext1* deviceContext) = 0;
         virtual void Unload() = 0;
 
         virtual void Update(DX::StepTimer const& timer) = 0;

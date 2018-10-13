@@ -9,7 +9,7 @@
 class SceneManager
 {
     public:
-        SceneManager();
+        SceneManager(ID3D11DeviceContext1* deviceContext);
         ~SceneManager();
 
         void SwapScene(Scene* scene);
@@ -20,5 +20,6 @@ class SceneManager
         void Render();
 
     private:
+        ID3D11DeviceContext1* m_deviceContext;
         std::vector<Scene*> scenes;
 };
