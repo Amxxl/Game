@@ -4,6 +4,14 @@
 
 #include "pch.h"
 #include "Game.h"
+#include "MouseData.h"
+
+#ifndef HID_USAGE_PAGE_GENERIC
+#define HID_USAGE_PAGE_GENERIC         ((USHORT) 0x01)
+#endif
+#ifndef HID_USAGE_GENERIC_MOUSE
+#define HID_USAGE_GENERIC_MOUSE        ((USHORT) 0x02)
+#endif
 
 using namespace DirectX;
 
@@ -83,6 +91,18 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
         GetClientRect(hwnd, &rc);
 
         g_game->Initialize(hwnd, rc.right - rc.left, rc.bottom - rc.top);
+
+        RAWINPUTDEVICE rid;
+        rid.usUsagePage = 0x01;
+        rid.usUsage = 0x02;
+        rid.dwFlags = 0;
+        rid.hwndTarget = NULL;
+        
+        if (RegisterRawInputDevices(&rid, 1, sizeof(rid)) == FALSE)
+        {
+            MessageBox(hwnd, L"Failed RAWINPUTDEVICE", L"Error", MB_OK);
+            return 1;
+        }
     }
 
     // Main message loop
@@ -104,7 +124,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 
     CoUninitialize();
 
-    return (int) msg.wParam;
+    return static_cast<int>(msg.wParam);
 }
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -211,6 +231,24 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         break;
 
     case WM_INPUT:
+    {
+        UINT dataSize;
+        GetRawInputData(reinterpret_cast<HRAWINPUT>(lParam), RID_INPUT, NULL, &dataSize, sizeof(RAWINPUTHEADER));
+
+        if (dataSize > 0)
+        {
+            std::unique_ptr<BYTE[]> rawdata = std::make_unique<BYTE[]>(dataSize);
+            if (GetRawInputData(reinterpret_cast<HRAWINPUT>(lParam), RID_INPUT, rawdata.get(), &dataSize, sizeof(RAWINPUTHEADER)) == dataSize)
+            {
+                RAWINPUT* raw = reinterpret_cast<RAWINPUT*>(rawdata.get());
+                if (raw->header.dwType == RIM_TYPEMOUSE)
+                {
+                    MouseData::SetRelativePos(raw->data.mouse.lLastX, raw->data.mouse.lLastY);
+                }
+            }
+        }
+        return DefWindowProc(hWnd, message, wParam, lParam);
+    }
     case WM_MOUSEMOVE:
     case WM_LBUTTONDOWN:
     case WM_LBUTTONUP:
@@ -292,11 +330,4 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     }
 
     return DefWindowProc(hWnd, message, wParam, lParam);
-}
-
-
-// Exit helper
-void ExitGame()
-{
-    PostQuitMessage(0);
 }

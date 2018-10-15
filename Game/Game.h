@@ -60,7 +60,6 @@ private:
     DX::StepTimer                           m_timer;
 
     // Keyboard and mouse input.
-    // @todo: find best solution to handle this in scenes.
     std::unique_ptr<DirectX::Keyboard> m_keyboard;
     std::unique_ptr<DirectX::Mouse> m_mouse;
 

@@ -22,6 +22,7 @@
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="MouseData.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -34,6 +35,7 @@
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="MouseData.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />

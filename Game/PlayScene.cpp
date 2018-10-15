@@ -4,6 +4,7 @@
 
 #include "pch.h"
 #include "PlayScene.h"
+#include "MouseData.h"
 
 PlayScene PlayScene::s_instance;
 
@@ -23,9 +24,6 @@ bool PlayScene::Load(ID3D11DeviceContext1* deviceContext)
     camera.SetProjectionValues(90.0f, 800.0f / 600.0f, 0.1f, 1000.0f);
     camera.SetPosition(2.0f, 2.0f, 4.0f);
     camera.SetLookAtPos(DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f));
-
-    mouse_x = Mouse::Get().GetState().x;
-    mouse_y = Mouse::Get().GetState().y;
     return true;
 }
 
@@ -44,24 +42,31 @@ void PlayScene::Update(DX::StepTimer const& timer)
 
     auto keyboard = Keyboard::Get().GetState();
 
+    float cameraSpeed = 2.0f;
+
     if (keyboard.W)
-        camera.AdjustPosition(camera.GetForwardVector() * deltaTime);
+        camera.AdjustPosition(camera.GetForwardVector() * deltaTime * cameraSpeed);
     else if (keyboard.S)
-        camera.AdjustPosition(camera.GetBackwardVector() * deltaTime);
+        camera.AdjustPosition(camera.GetBackwardVector() * deltaTime * cameraSpeed);
 
     if (keyboard.A)
-        camera.AdjustPosition(camera.GetLeftVector() * deltaTime);
+        camera.AdjustPosition(camera.GetLeftVector() * deltaTime * cameraSpeed);
     else if (keyboard.D)
-        camera.AdjustPosition(camera.GetRightVector() * deltaTime);
+        camera.AdjustPosition(camera.GetRightVector() * deltaTime * cameraSpeed);
 
     if (keyboard.Space)
-        camera.AdjustPosition(0.0f, deltaTime, 0.0f);
+        camera.AdjustPosition(0.0f, deltaTime * cameraSpeed, 0.0f);
     else if (keyboard.Z)
-        camera.AdjustPosition(0.0f, -deltaTime, 0.0f);
+        camera.AdjustPosition(0.0f, -deltaTime * cameraSpeed, 0.0f);
 
     auto mouse = Mouse::Get().GetState();
-    mouse_x = mouse.x;
-    mouse_y = mouse.y;
+
+    if (mouse.rightButton)
+    {
+        camera.AdjustRotation(MouseData::GetRelativeY() * 0.01f, -MouseData::GetRelativeX() * 0.01f, 0.0f);
+    }
+
+    MouseData::SetRelativePos(0, 0);
 }
 
 void PlayScene::Render()
@@ -81,11 +86,11 @@ void PlayScene::Render()
     ImGui::Text(ss.str().c_str());
 
     ss.str("");
-    ss << "Mouse X: " << mouse_x;
+    ss << "Mouse X: " << MouseData::GetRelativeX();
     ImGui::Text(ss.str().c_str());
 
     ss.str("");
-    ss << "Mouse Y: " << mouse_y;
+    ss << "Mouse Y: " << MouseData::GetRelativeY();
     ImGui::Text(ss.str().c_str());
 
     ImGui::End();
