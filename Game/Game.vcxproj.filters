@@ -11,9 +11,11 @@
     <Filter Include="Scenes">
       <UniqueIdentifier>{b2048a84-39ee-40b3-99a1-cb667f3a758e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{290517e8-aeb4-4ae3-8917-e15e2f08b3b1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="pch.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="StepTimer.h">
       <Filter>Common</Filter>
@@ -22,7 +24,6 @@
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="MouseData.h" />
     <ClInclude Include="Scene.h">
       <Filter>Scenes</Filter>
     </ClInclude>
@@ -35,16 +36,20 @@
     <ClInclude Include="SceneNode.h">
       <Filter>Scenes</Filter>
     </ClInclude>
+    <ClInclude Include="MouseData.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="pch.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="DeviceResources.cpp">
       <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="MouseData.cpp" />
     <ClCompile Include="Scene.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
@@ -57,9 +62,12 @@
     <ClCompile Include="SceneNode.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="resource.rc" />
+    <ClCompile Include="MouseData.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="bow.ico">
@@ -70,5 +78,10 @@
     <Manifest Include="settings.manifest">
       <Filter>Assets</Filter>
     </Manifest>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resource.rc">
+      <Filter>Assets</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

@@ -48,7 +48,7 @@ void PlayScene::Update(DX::StepTimer const& timer)
 
     auto keyboard = Keyboard::Get().GetState();
 
-    float cameraSpeed = 2.0f;
+    static float cameraSpeed = 2.0f;
 
     if (keyboard.W)
         camera.AdjustPosition(camera.GetForwardVector() * deltaTime * cameraSpeed);
@@ -72,6 +72,11 @@ void PlayScene::Update(DX::StepTimer const& timer)
         camera.AdjustRotation(MouseData::GetRelativeY() * 0.01f, -MouseData::GetRelativeX() * 0.01f, 0.0f);
     }
 
+    if (keyboard.LeftShift)
+        cameraSpeed = 10.0f;
+    else
+        cameraSpeed = 2.0f;
+
     MouseData::SetRelativePos(0, 0);
 
     root->Update(timer);
@@ -80,7 +85,24 @@ void PlayScene::Update(DX::StepTimer const& timer)
 void PlayScene::Render()
 {
     m_world = XMMatrixIdentity();
-    shape->Draw(m_world, camera.GetViewMatrix(), camera.GetProjectionMatrix());
+    //shape->Draw(m_world, camera.GetViewMatrix(), camera.GetProjectionMatrix(), Colors::Aqua);
+    //shape->Draw(m_world * XMMatrixTranslation(0.0f, 4.0f, 0.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix(), Colors::AliceBlue);
+
+    for (int y = 0; y <= 40; ++y)
+    {
+        for (int x = 0; x <= 40; ++x)
+        {
+            shape->Draw(m_world * XMMatrixTranslation(x * 2.0f, 0.0f, y * 2.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix(), Colors::SpringGreen);
+        }
+    }
+
+    for (int y = 0; y <= 20; ++y)
+    {
+        for (int x = 0; x <= 20; ++x)
+        {
+            shape->Draw(m_world * XMMatrixTranslation(x * 4.0f, 2.0f, y * 4.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix(), Colors::LawnGreen);
+        }
+    }
 
     ImGui_ImplDX11_NewFrame();
     ImGui_ImplWin32_NewFrame();
@@ -90,15 +112,6 @@ void PlayScene::Render()
 
     std::ostringstream ss;
     ss << "Frames per second: " << fps;
-
-    ImGui::Text(ss.str().c_str());
-
-    ss.str("");
-    ss << "Mouse X: " << MouseData::GetRelativeX();
-    ImGui::Text(ss.str().c_str());
-
-    ss.str("");
-    ss << "Mouse Y: " << MouseData::GetRelativeY();
     ImGui::Text(ss.str().c_str());
 
     ImGui::End();

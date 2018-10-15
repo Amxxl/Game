@@ -7,10 +7,10 @@
 #include "MouseData.h"
 
 #ifndef HID_USAGE_PAGE_GENERIC
-#define HID_USAGE_PAGE_GENERIC         ((USHORT) 0x01)
+#define HID_USAGE_PAGE_GENERIC ((USHORT)0x01)
 #endif
 #ifndef HID_USAGE_GENERIC_MOUSE
-#define HID_USAGE_GENERIC_MOUSE        ((USHORT) 0x02)
+#define HID_USAGE_GENERIC_MOUSE ((USHORT)0x02)
 #endif
 
 using namespace DirectX;
@@ -56,7 +56,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
         wcex.hInstance = hInstance;
         wcex.hIcon = LoadIcon(hInstance, L"IDI_ICON");
         wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
-        wcex.hbrBackground = (HBRUSH) (COLOR_WINDOW + 3);
+        wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 3);
         wcex.lpszMenuName = nullptr;
         wcex.lpszClassName = L"GameWindowClass";
         wcex.hIconSm = LoadIcon(wcex.hInstance, L"IDI_ICON");
@@ -93,10 +93,10 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
         g_game->Initialize(hwnd, rc.right - rc.left, rc.bottom - rc.top);
 
         RAWINPUTDEVICE rid;
-        rid.usUsagePage = 0x01;
-        rid.usUsage = 0x02;
+        rid.usUsagePage = HID_USAGE_PAGE_GENERIC;
+        rid.usUsage = HID_USAGE_GENERIC_MOUSE;
         rid.dwFlags = 0;
-        rid.hwndTarget = NULL;
+        rid.hwndTarget = nullptr;
         
         if (RegisterRawInputDevices(&rid, 1, sizeof(rid)) == FALSE)
         {
@@ -218,13 +218,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         if (game)
         {
             if (wParam)
-            {
                 game->OnActivated();
-            }
             else
-            {
                 game->OnDeactivated();
-            }
         }
         Keyboard::ProcessMessage(message, wParam, lParam);
         Mouse::ProcessMessage(message, wParam, lParam);
