@@ -15,10 +15,16 @@ PlayScene::PlayScene()
 
 PlayScene::~PlayScene()
 {
+    if (root != nullptr)
+    {
+        delete root;
+        root = nullptr;
+    }
 }
 
 bool PlayScene::Load(ID3D11DeviceContext1* deviceContext)
 {
+    root = new SceneNode();
     // @todo: Load resources here.
     shape = DirectX::GeometricPrimitive::CreateCube(deviceContext, 2.0f);
     camera.SetProjectionValues(90.0f, 800.0f / 600.0f, 0.1f, 1000.0f);
@@ -67,6 +73,8 @@ void PlayScene::Update(DX::StepTimer const& timer)
     }
 
     MouseData::SetRelativePos(0, 0);
+
+    root->Update(timer);
 }
 
 void PlayScene::Render()
@@ -96,4 +104,6 @@ void PlayScene::Render()
     ImGui::End();
     ImGui::Render();
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+
+    root->Render();
 }

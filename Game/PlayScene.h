@@ -8,6 +8,7 @@
 #include <sstream>
 
 #include "Scene.h"
+#include "SceneNode.h"
 
 #include "GeometricPrimitive.h"
 #include "Camera.h"
@@ -40,6 +41,7 @@ class PlayScene : public Scene
         static PlayScene s_instance;
 
     private:
+        SceneNode* root;
         std::unique_ptr<DirectX::GeometricPrimitive> shape;
         Camera camera;
         XMMATRIX m_world;
