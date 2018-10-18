@@ -21,8 +21,12 @@ Game::Game() noexcept(false)
 void Game::Initialize(HWND window, int width, int height)
 {
     m_deviceResources->SetWindow(window, width, height);
-
     m_deviceResources->CreateDeviceResources();
+
+    // Scenes manager.
+    m_sceneManager = std::make_unique<SceneManager>(m_deviceResources->GetD3DDeviceContext());
+    m_sceneManager->PushScene(PlayScene::Instance());
+
     CreateDeviceDependentResources();
 
     m_deviceResources->CreateWindowSizeDependentResources();
@@ -47,9 +51,6 @@ void Game::Initialize(HWND window, int width, int height)
     m_keyboard = std::make_unique<Keyboard>();
     m_mouse = std::make_unique<Mouse>();
     m_mouse->SetWindow(window);
-
-    m_sceneManager = std::make_unique<SceneManager>(m_deviceResources->GetD3DDeviceContext());
-    m_sceneManager->PushScene(PlayScene::Instance());
 }
 
 #pragma region Frame Update
@@ -129,16 +130,19 @@ void Game::Clear()
 void Game::OnActivated()
 {
     // TODO: Game is becoming active window.
+    m_sceneManager->OnActivated();
 }
 
 void Game::OnDeactivated()
 {
     // TODO: Game is becoming background window.
+    m_sceneManager->OnDeactivated();
 }
 
 void Game::OnSuspending()
 {
     // TODO: Game is being power-suspended (or minimized).
+    m_sceneManager->OnSuspending();
 }
 
 void Game::OnResuming()
@@ -146,12 +150,14 @@ void Game::OnResuming()
     m_timer.ResetElapsedTime();
 
     // TODO: Game is being power-resumed (or returning from minimize).
+    m_sceneManager->OnResuming();
 }
 
 void Game::OnWindowMoved()
 {
     auto r = m_deviceResources->GetOutputSize();
     m_deviceResources->WindowSizeChanged(r.right, r.bottom);
+    m_sceneManager->OnWindowMoved();
 }
 
 void Game::OnWindowSizeChanged(int width, int height)
@@ -162,6 +168,8 @@ void Game::OnWindowSizeChanged(int width, int height)
     CreateWindowSizeDependentResources();
 
     // TODO: Game window is being resized.
+    m_sceneManager->OnWindowSizeChanged(width, height);
+
 }
 
 // Properties
@@ -183,22 +191,27 @@ void Game::CreateDeviceDependentResources()
     // TODO: Initialize device dependent objects here (independent of window size).
     device;
     context;
+
+    m_sceneManager->CreateDeviceDependentResources();
 }
 
 // Allocate all memory resources that change on a window SizeChanged event.
 void Game::CreateWindowSizeDependentResources()
 {
     // TODO: Initialize windows-size dependent objects here.
+    m_sceneManager->CreateWindowSizeDependentResources();
 }
 
 void Game::OnDeviceLost()
 {
     // TODO: Add Direct3D resource cleanup here.
+    m_sceneManager->OnDeviceLost();
 }
 
 void Game::OnDeviceRestored()
 {
     CreateDeviceDependentResources();
     CreateWindowSizeDependentResources();
+    m_sceneManager->OnDeviceRestored();
 }
 #pragma endregion

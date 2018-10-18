@@ -17,6 +17,86 @@ SceneManager::~SceneManager()
     }
 }
 
+void SceneManager::CreateDeviceDependentResources()
+{
+    if (scenes.empty())
+        return;
+
+    scenes.back()->CreateDeviceDependentResources();
+}
+
+void SceneManager::CreateWindowSizeDependentResources()
+{
+    if (scenes.empty())
+        return;
+
+    scenes.back()->CreateWindowSizeDependentResources();
+}
+
+void SceneManager::OnDeviceLost()
+{
+    if (scenes.empty())
+        return;
+
+    scenes.back()->OnDeviceLost();
+}
+
+void SceneManager::OnDeviceRestored()
+{
+    if (scenes.empty())
+        return;
+
+    scenes.back()->OnDeviceRestored();
+}
+
+void SceneManager::OnActivated()
+{
+    if (scenes.empty())
+        return;
+
+    scenes.back()->OnActivated();
+}
+
+void SceneManager::OnDeactivated()
+{
+    if (scenes.empty())
+        return;
+
+    scenes.back()->OnDeactivated();
+}
+
+void SceneManager::OnSuspending()
+{
+    if (scenes.empty())
+        return;
+
+    scenes.back()->OnSuspending();
+}
+
+void SceneManager::OnResuming()
+{
+    if (scenes.empty())
+        return;
+
+    scenes.back()->OnResuming();
+}
+
+void SceneManager::OnWindowMoved()
+{
+    if (scenes.empty())
+        return;
+
+    scenes.back()->OnWindowMoved();
+}
+
+void SceneManager::OnWindowSizeChanged(int width, int height)
+{
+    if (scenes.empty())
+        return;
+
+    scenes.back()->OnWindowSizeChanged(width, height);
+}
+
 void SceneManager::SwapScene(Scene* scene)
 {
     // Unload current scene

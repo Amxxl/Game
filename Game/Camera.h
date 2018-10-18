@@ -57,5 +57,6 @@ class Camera
         XMVECTOR vec_left;
         XMVECTOR vec_right;
         XMVECTOR vec_backward;
+        XMVECTOR vec_up;
 };
 

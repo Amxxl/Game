@@ -22,6 +22,46 @@ PlayScene::~PlayScene()
     }
 }
 
+void PlayScene::CreateDeviceDependentResources()
+{
+}
+
+void PlayScene::CreateWindowSizeDependentResources()
+{
+}
+
+void PlayScene::OnDeviceLost()
+{
+}
+
+void PlayScene::OnDeviceRestored()
+{
+}
+
+void PlayScene::OnActivated()
+{
+}
+
+void PlayScene::OnDeactivated()
+{
+}
+
+void PlayScene::OnSuspending()
+{
+}
+
+void PlayScene::OnResuming()
+{
+}
+
+void PlayScene::OnWindowMoved()
+{
+}
+
+void PlayScene::OnWindowSizeChanged(int width, int height)
+{
+}
+
 bool PlayScene::Load(ID3D11DeviceContext1* deviceContext)
 {
     root = new SceneNode();
@@ -30,6 +70,13 @@ bool PlayScene::Load(ID3D11DeviceContext1* deviceContext)
     camera.SetProjectionValues(90.0f, 800.0f / 600.0f, 0.1f, 1000.0f);
     camera.SetPosition(2.0f, 2.0f, 4.0f);
     camera.SetLookAtPos(DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f));
+
+    sky = DirectX::GeometricPrimitive::CreateSphere(deviceContext, 1200.0f, 32, false, true);
+
+    ID3D11Device* device = nullptr;
+    deviceContext->GetDevice(&device);
+
+    DirectX::CreateWICTextureFromFile(device, L"sky.jpg", nullptr, skyTexture.ReleaseAndGetAddressOf());
     return true;
 }
 
@@ -67,38 +114,36 @@ void PlayScene::Update(DX::StepTimer const& timer)
 
     auto mouse = Mouse::Get().GetState();
 
-    if (mouse.rightButton)
-    {
+   // if (mouse.rightButton)
+    //{
         camera.AdjustRotation(MouseData::GetRelativeY() * 0.01f, -MouseData::GetRelativeX() * 0.01f, 0.0f);
-    }
+   // }
 
     if (keyboard.LeftShift)
-        cameraSpeed = 10.0f;
+        cameraSpeed = 30.0f;
     else
-        cameraSpeed = 2.0f;
+        cameraSpeed = 10.0f;
 
     MouseData::SetRelativePos(0, 0);
-
     root->Update(timer);
 }
 
 void PlayScene::Render()
 {
     m_world = XMMatrixIdentity();
-    //shape->Draw(m_world, camera.GetViewMatrix(), camera.GetProjectionMatrix(), Colors::Aqua);
-    //shape->Draw(m_world * XMMatrixTranslation(0.0f, 4.0f, 0.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix(), Colors::AliceBlue);
-
-    for (int y = 0; y <= 40; ++y)
+    sky->Draw(m_world * XMMatrixTranslation(camera.GetPositionFloat3().x, camera.GetPositionFloat3().y, camera.GetPositionFloat3().z), camera.GetViewMatrix(), camera.GetProjectionMatrix(), Colors::White, skyTexture.Get());
+    
+    for (int y = 0; y <= 60; ++y)
     {
-        for (int x = 0; x <= 40; ++x)
+        for (int x = 0; x <= 60; ++x)
         {
             shape->Draw(m_world * XMMatrixTranslation(x * 2.0f, 0.0f, y * 2.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix(), Colors::SpringGreen);
         }
     }
 
-    for (int y = 0; y <= 20; ++y)
+    for (int y = 0; y <= 30; ++y)
     {
-        for (int x = 0; x <= 20; ++x)
+        for (int x = 0; x <= 30; ++x)
         {
             shape->Draw(m_world * XMMatrixTranslation(x * 4.0f, 2.0f, y * 4.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix(), Colors::LawnGreen);
         }

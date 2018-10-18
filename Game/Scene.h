@@ -12,6 +12,21 @@ class Scene
         Scene() = default;
 
     public:
+        virtual void CreateDeviceDependentResources() {}
+        virtual void CreateWindowSizeDependentResources() {}
+
+        // IDeviceNotify
+        virtual void OnDeviceLost() {}
+        virtual void OnDeviceRestored() {}
+
+        // Messages
+        virtual void OnActivated() {}
+        virtual void OnDeactivated() {}
+        virtual void OnSuspending() {}
+        virtual void OnResuming() {}
+        virtual void OnWindowMoved() {}
+        virtual void OnWindowSizeChanged(int width, int height) {}
+
         virtual bool Load(ID3D11DeviceContext1* deviceContext) = 0;
         virtual void Unload() = 0;
 

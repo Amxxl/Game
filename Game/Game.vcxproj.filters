@@ -14,6 +14,9 @@
     <Filter Include="Input">
       <UniqueIdentifier>{290517e8-aeb4-4ae3-8917-e15e2f08b3b1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scenes\Nodes">
+      <UniqueIdentifier>{05045848-e1a9-448a-b4a4-b62553d5146e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -33,14 +36,14 @@
     <ClInclude Include="PlayScene.h">
       <Filter>Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="SceneNode.h">
-      <Filter>Scenes</Filter>
-    </ClInclude>
     <ClInclude Include="MouseData.h">
       <Filter>Input</Filter>
     </ClInclude>
     <ClInclude Include="pch.h">
       <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneNode.h">
+      <Filter>Scenes\Nodes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -59,14 +62,14 @@
     <ClCompile Include="PlayScene.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="SceneNode.cpp">
-      <Filter>Scenes</Filter>
-    </ClCompile>
     <ClCompile Include="MouseData.cpp">
       <Filter>Input</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp">
       <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneNode.cpp">
+      <Filter>Scenes\Nodes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
