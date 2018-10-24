@@ -8,14 +8,11 @@
 #include <sstream>
 
 #include "Scene.h"
-#include "SceneNode.h"
 
 #include "GeometricPrimitive.h"
 #include "Camera.h"
 
-#include "imgui.h"
-#include "imgui_impl_win32.h"
-#include "imgui_impl_dx11.h"
+#include "NodeDisplayFPS.h"
 
 class PlayScene : public Scene
 {
@@ -56,7 +53,6 @@ class PlayScene : public Scene
         static PlayScene s_instance;
 
     private:
-        SceneNode* root;
         std::unique_ptr<DirectX::GeometricPrimitive> shape;
         std::unique_ptr<DirectX::GeometricPrimitive> sky;
 
@@ -65,8 +61,6 @@ class PlayScene : public Scene
 
         Camera camera;
         XMMATRIX m_world;
-
-        unsigned int fps;
 
         int mouse_x;
         int mouse_y;

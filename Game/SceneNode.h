@@ -13,14 +13,14 @@ class SceneNode
         SceneNode();
         virtual ~SceneNode();
 
-        void AddChild(SceneNode* childNode);
-        
+        void AddNode(SceneNode* node);
+        void SetNative(SceneNode* node);
+
         virtual void Update(DX::StepTimer const& timer);
         virtual void Render();
 
     protected:
-        std::vector<SceneNode*> childrens;
-        SceneNode* parent;
-
+        std::vector<SceneNode*> nodes;
+        SceneNode* native;
 };
 

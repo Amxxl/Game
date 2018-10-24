@@ -17,6 +17,9 @@
     <Filter Include="Scenes\Nodes">
       <UniqueIdentifier>{05045848-e1a9-448a-b4a4-b62553d5146e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scenes\Scenes">
+      <UniqueIdentifier>{469e46df-83e3-46b3-a07a-e3474ff4931c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -33,9 +36,6 @@
     <ClInclude Include="SceneManager.h">
       <Filter>Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="PlayScene.h">
-      <Filter>Scenes</Filter>
-    </ClInclude>
     <ClInclude Include="MouseData.h">
       <Filter>Input</Filter>
     </ClInclude>
@@ -43,6 +43,12 @@
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="SceneNode.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayScene.h">
+      <Filter>Scenes\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="NodeDisplayFPS.h">
       <Filter>Scenes\Nodes</Filter>
     </ClInclude>
   </ItemGroup>
@@ -59,9 +65,6 @@
     <ClCompile Include="SceneManager.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="PlayScene.cpp">
-      <Filter>Scenes</Filter>
-    </ClCompile>
     <ClCompile Include="MouseData.cpp">
       <Filter>Input</Filter>
     </ClCompile>
@@ -69,6 +72,12 @@
       <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="SceneNode.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayScene.cpp">
+      <Filter>Scenes\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="NodeDisplayFPS.cpp">
       <Filter>Scenes\Nodes</Filter>
     </ClCompile>
   </ItemGroup>

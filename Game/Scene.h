@@ -4,7 +4,9 @@
 
 #pragma once
 
+#include "SceneNode.h"
 #include "StepTimer.h"
+
 
 class Scene
 {
@@ -35,4 +37,8 @@ class Scene
 
         virtual void Pause() = 0;
         virtual void Resume() = 0;
+
+    protected:
+        // All scenes must have Scene Graph.
+        SceneNode* sceneGraph;
 };

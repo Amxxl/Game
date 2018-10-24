@@ -15,10 +15,10 @@ PlayScene::PlayScene()
 
 PlayScene::~PlayScene()
 {
-    if (root != nullptr)
+    if (sceneGraph != nullptr)
     {
-        delete root;
-        root = nullptr;
+        delete sceneGraph;
+        sceneGraph = nullptr;
     }
 }
 
@@ -64,7 +64,9 @@ void PlayScene::OnWindowSizeChanged(int width, int height)
 
 bool PlayScene::Load(ID3D11DeviceContext1* deviceContext)
 {
-    root = new SceneNode();
+    sceneGraph = new SceneNode();
+
+    sceneGraph->AddNode(new NodeDisplayFPS());
     // @todo: Load resources here.
     shape = DirectX::GeometricPrimitive::CreateCube(deviceContext, 2.0f);
     camera.SetProjectionValues(90.0f, 800.0f / 600.0f, 0.1f, 1000.0f);
@@ -91,7 +93,6 @@ void PlayScene::Update(DX::StepTimer const& timer)
         return;
 
     float deltaTime = static_cast<float>(timer.GetElapsedSeconds());
-    fps = timer.GetFramesPerSecond();
 
     auto keyboard = Keyboard::Get().GetState();
 
@@ -125,7 +126,7 @@ void PlayScene::Update(DX::StepTimer const& timer)
         cameraSpeed = 10.0f;
 
     MouseData::SetRelativePos(0, 0);
-    root->Update(timer);
+    sceneGraph->Update(timer);
 }
 
 void PlayScene::Render()
@@ -149,19 +150,5 @@ void PlayScene::Render()
         }
     }
 
-    ImGui_ImplDX11_NewFrame();
-    ImGui_ImplWin32_NewFrame();
-    ImGui::NewFrame();
-
-    ImGui::Begin("Info");
-
-    std::ostringstream ss;
-    ss << "Frames per second: " << fps;
-    ImGui::Text(ss.str().c_str());
-
-    ImGui::End();
-    ImGui::Render();
-    ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-
-    root->Render();
+    sceneGraph->Render();
 }

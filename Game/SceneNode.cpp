@@ -8,47 +8,57 @@
 
 SceneNode::SceneNode()
 {
-    // Only child nodes can have parents,
-    // by default node is not a child node.
-    parent = nullptr;
-    childrens.clear();
+    // By default this node is native.
+    native = nullptr;
+    nodes.clear();
 }
 
 
 SceneNode::~SceneNode()
 {
-    // Delete all childrens
-    for (unsigned int i = 0; i < childrens.size(); ++i)
-        delete childrens[i];
+    // Delete all nodes
+    for (unsigned int i = 0; i < nodes.size(); ++i)
+        delete nodes[i];
 
-    childrens.clear();
+    nodes.clear();
 }
 
-void SceneNode::AddChild(SceneNode* childNode)
+void SceneNode::AddNode(SceneNode* node)
 {
-    // Set this node to be childNode parent and add it to the childrens list.
-    childNode->parent = this;
-    childrens.push_back(childNode);
+    // Set this node to be native of other node and add second to the nodes list.
+    node->native = this;
+    nodes.push_back(node);
+}
+
+void SceneNode::SetNative(SceneNode* node)
+{
+    // Do not applied if already have native.
+    if (native != nullptr)
+        return;
+
+    // Otherwise add this to the native node.
+    node->AddNode(this);
+    native = node;
 }
 
 void SceneNode::Update(DX::StepTimer const& timer)
 {
-    // Do not update if childrens empty.
-    if (childrens.empty())
+    // Do not update if nodes are empty.
+    if (nodes.empty())
         return;
 
-    // Update all children nodes.
-    for (auto i = childrens.begin(); i != childrens.end(); ++i)
+    // Update all nodes of native node.
+    for (auto i = nodes.begin(); i != nodes.end(); ++i)
         (*i)->Update(timer);
 }
 
 void SceneNode::Render()
 {
-    // Do not render if childrens empty.
-    if (childrens.empty())
+    // Do not render if nodes empty.
+    if (nodes.empty())
         return;
 
-    // Render all children nodes.
-    for (auto i = childrens.begin(); i != childrens.end(); ++i)
+    // Render all nodes of native.
+    for (auto i = nodes.begin(); i != nodes.end(); ++i)
         (*i)->Render();
 }
