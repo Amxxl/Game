@@ -53,6 +53,9 @@
 #include <dxgidebug.h>
 #endif
 
+#pragma warning(disable: 4100) // Disable unreferenced parameters warning.
+#pragma warning(disable: 4458) // Disable same named class members warning.
+
 // DirectXTK headers
 //#include "Audio.h"
 #include "CommonStates.h"
