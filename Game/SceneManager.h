@@ -6,7 +6,7 @@
 
 #include "Scene.h"
 
-class SceneManager
+class SceneManager // @todo: Rename it to SceneController.
 {
     public:
         SceneManager(ID3D11DeviceContext1* deviceContext);

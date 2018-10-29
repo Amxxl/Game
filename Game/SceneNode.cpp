@@ -33,7 +33,7 @@ void SceneNode::AddNode(SceneNode* node)
 void SceneNode::SetNative(SceneNode* node)
 {
     // Do not applied if already have native.
-    if (native != nullptr)
+    if (native != nullptr) // @todo: make it possible to change native.
         return;
 
     // Otherwise add this to the native node.

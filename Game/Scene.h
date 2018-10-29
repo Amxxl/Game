@@ -40,5 +40,10 @@ class Scene
 
     protected:
         // All scenes must have Scene Graph.
+        // Scene Graph is just a root node of every scene.
         SceneNode* sceneGraph;
+
+        // @todo: make it possible to switch scenes from any scene.
+        // TIP: SceneManager* sceneManager; // something like that.
+
 };

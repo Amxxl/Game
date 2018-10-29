@@ -20,6 +20,12 @@
     <Filter Include="Scenes\Scenes">
       <UniqueIdentifier>{469e46df-83e3-46b3-a07a-e3474ff4931c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scenes\Scenes\Play">
+      <UniqueIdentifier>{c264fd5f-4881-44cf-9cb6-be1121508116}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes\Scenes\Play\Nodes">
+      <UniqueIdentifier>{44114136-f0ff-487b-9de0-d0b1031916c9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -43,13 +49,13 @@
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="SceneNode.h">
-      <Filter>Scenes</Filter>
+      <Filter>Scenes\Nodes</Filter>
     </ClInclude>
     <ClInclude Include="PlayScene.h">
-      <Filter>Scenes\Scenes</Filter>
+      <Filter>Scenes\Scenes\Play</Filter>
     </ClInclude>
     <ClInclude Include="NodeDisplayFPS.h">
-      <Filter>Scenes\Nodes</Filter>
+      <Filter>Scenes\Scenes\Play\Nodes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -72,13 +78,13 @@
       <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="SceneNode.cpp">
-      <Filter>Scenes</Filter>
+      <Filter>Scenes\Nodes</Filter>
     </ClCompile>
     <ClCompile Include="PlayScene.cpp">
-      <Filter>Scenes\Scenes</Filter>
+      <Filter>Scenes\Scenes\Play</Filter>
     </ClCompile>
     <ClCompile Include="NodeDisplayFPS.cpp">
-      <Filter>Scenes\Nodes</Filter>
+      <Filter>Scenes\Scenes\Play\Nodes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
