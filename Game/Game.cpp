@@ -6,7 +6,7 @@
 #include "Game.h"
 
 
-using namespace DirectX;
+//using namespace DirectX;
 using namespace DirectX::SimpleMath;
 
 using Microsoft::WRL::ComPtr;

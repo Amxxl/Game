@@ -8,39 +8,43 @@
       <UniqueIdentifier>2c184148-7a0a-4261-bd1a-5b29d30f8dcd</UniqueIdentifier>
       <Extensions>ico;cur;bmp;dds;dlg;fbx;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tga;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Scenes">
-      <UniqueIdentifier>{b2048a84-39ee-40b3-99a1-cb667f3a758e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Input">
       <UniqueIdentifier>{290517e8-aeb4-4ae3-8917-e15e2f08b3b1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scenes\Nodes">
+    <Filter Include="Game">
+      <UniqueIdentifier>{d58d3153-bb18-4f5d-b0f3-26bd68f02123}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Scenes">
+      <UniqueIdentifier>{b2048a84-39ee-40b3-99a1-cb667f3a758e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Scenes\Nodes">
       <UniqueIdentifier>{05045848-e1a9-448a-b4a4-b62553d5146e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scenes\Scenes">
+    <Filter Include="Game\Scenes\Scenes">
       <UniqueIdentifier>{469e46df-83e3-46b3-a07a-e3474ff4931c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scenes\Scenes\Play">
+    <Filter Include="Game\Scenes\Scenes\Play">
       <UniqueIdentifier>{c264fd5f-4881-44cf-9cb6-be1121508116}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scenes\Scenes\Play\Nodes">
+    <Filter Include="Game\Scenes\Scenes\Play\Nodes">
       <UniqueIdentifier>{44114136-f0ff-487b-9de0-d0b1031916c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{0d65af47-998c-4fd2-a345-f8a988e3d53c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Game.h" />
     <ClInclude Include="StepTimer.h">
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="DeviceResources.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h" />
     <ClInclude Include="Scene.h">
-      <Filter>Scenes</Filter>
+      <Filter>Game\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="SceneManager.h">
-      <Filter>Scenes</Filter>
+      <Filter>Game\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="MouseData.h">
       <Filter>Input</Filter>
@@ -49,27 +53,37 @@
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="SceneNode.h">
-      <Filter>Scenes\Nodes</Filter>
+      <Filter>Game\Scenes\Nodes</Filter>
     </ClInclude>
     <ClInclude Include="PlayScene.h">
-      <Filter>Scenes\Scenes\Play</Filter>
+      <Filter>Game\Scenes\Scenes\Play</Filter>
     </ClInclude>
     <ClInclude Include="NodeDisplayFPS.h">
-      <Filter>Scenes\Scenes\Play\Nodes</Filter>
+      <Filter>Game\Scenes\Scenes\Play\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexBuffer.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="IndexBuffer.h">
+      <Filter>Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Game.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="DeviceResources.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Scene.cpp">
-      <Filter>Scenes</Filter>
+      <Filter>Game\Scenes</Filter>
     </ClCompile>
     <ClCompile Include="SceneManager.cpp">
-      <Filter>Scenes</Filter>
+      <Filter>Game\Scenes</Filter>
     </ClCompile>
     <ClCompile Include="MouseData.cpp">
       <Filter>Input</Filter>
@@ -78,13 +92,25 @@
       <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="SceneNode.cpp">
-      <Filter>Scenes\Nodes</Filter>
+      <Filter>Game\Scenes\Nodes</Filter>
     </ClCompile>
     <ClCompile Include="PlayScene.cpp">
-      <Filter>Scenes\Scenes\Play</Filter>
+      <Filter>Game\Scenes\Scenes\Play</Filter>
     </ClCompile>
     <ClCompile Include="NodeDisplayFPS.cpp">
-      <Filter>Scenes\Scenes\Play\Nodes</Filter>
+      <Filter>Game\Scenes\Scenes\Play\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexBuffer.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="IndexBuffer.cpp">
+      <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
