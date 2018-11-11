@@ -4,14 +4,20 @@
 
 #pragma once
 
-template<class T>
+template<typename T>
 class VertexBuffer
 {
     public:
         VertexBuffer() = default;
-        VertexBuffer(VertexBuffer<T> const&) = delete;
+        explicit VertexBuffer(_In_ ID3D11Device* device, _In_ T* data, UINT numVertices)
+        {
+            Create(device, data, numVertices);
+        }
 
-        HRESULT Create(ID3D11Device* device, T* data, UINT numVertices)
+        VertexBuffer(VertexBuffer const&) = delete;
+        VertexBuffer& operator=(VertexBuffer const&) = delete;
+
+        void Create(_In_ ID3D11Device* device, _In_ T* data, UINT numVertices)
         {
             this->bufferSize = numVertices;
             this->stride = std::make_unique<UINT>(sizeof(T));
@@ -26,7 +32,7 @@ class VertexBuffer
             D3D11_SUBRESOURCE_DATA vertexBufferData = {};
             vertexBufferData.pSysMem = data;
 
-            return device->CreateBuffer(&vertexBufferDesc, &vertexBufferData, this->buffer.GetAddressOf());
+            DX::ThrowIfFailed(device->CreateBuffer(&vertexBufferDesc, &vertexBufferData, buffer.GetAddressOf()));
         }
 
         ID3D11Buffer* Get() const { return buffer.Get(); }

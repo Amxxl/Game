@@ -4,19 +4,26 @@
 
 #pragma once
 
+template<typename T>
 class IndexBuffer
 {
     public:
         IndexBuffer() = default;
-        IndexBuffer(IndexBuffer const&) = delete;
+        explicit IndexBuffer(_In_ ID3D11Device* device, _In_ T* data, UINT numIndices)
+        {
+            Create(device, data, numIndices);
+        }
 
-        HRESULT Create(ID3D11Device* device, DWORD* data, UINT numIndices)
+        IndexBuffer(IndexBuffer const&) = delete;
+        IndexBuffer& operator=(IndexBuffer const&) = delete;
+
+        void Create(_In_ ID3D11Device* device, _In_ T* data, UINT numIndices)
         {
             this->bufferSize = numIndices;
             
             D3D11_BUFFER_DESC indexBufferDesc = {};
             indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-            indexBufferDesc.ByteWidth = sizeof(DWORD) * numIndices;
+            indexBufferDesc.ByteWidth = sizeof(T) * numIndices;
             indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
             indexBufferDesc.CPUAccessFlags = 0;
             indexBufferDesc.MiscFlags = 0;
@@ -24,7 +31,7 @@ class IndexBuffer
             D3D11_SUBRESOURCE_DATA indexBufferData = {};
             indexBufferData.pSysMem = data;
 
-            return device->CreateBuffer(&indexBufferDesc, &indexBufferData, buffer.GetAddressOf());
+            DX::ThrowIfFailed(device->CreateBuffer(&indexBufferDesc, &indexBufferData, buffer.GetAddressOf()));
         }
 
         ID3D11Buffer* Get() const { return buffer.Get(); }
