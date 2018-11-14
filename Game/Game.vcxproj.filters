@@ -76,6 +76,9 @@
     <ClInclude Include="ConstantBuffer.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Terrain.h">
+      <Filter>Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -117,6 +120,9 @@
     </ClCompile>
     <ClCompile Include="ConstantBuffer.cpp">
       <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Terrain.cpp">
+      <Filter>Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

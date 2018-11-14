@@ -27,7 +27,7 @@ class ConstantBuffer
             constantBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
             constantBufferDesc.MiscFlags = 0;
 
-            DX::ThrowIfFailed(device->CreateBuffer(&constantBufferDesc, nullptr, buffer.ReleaseAndGetAddressOf()));
+            DX::ThrowIfFailed(device->CreateBuffer(&constantBufferDesc, nullptr, buffer.GetAddressOf()));
         }
 
         // Writes new data into the constant buffer.
