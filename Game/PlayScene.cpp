@@ -79,6 +79,10 @@ bool PlayScene::Load(ID3D11DeviceContext1* deviceContext)
     deviceContext->GetDevice(&device);
 
     DirectX::CreateWICTextureFromFile(device, L"sky.jpg", nullptr, skyTexture.ReleaseAndGetAddressOf());
+
+    terrain.Initialize(deviceContext);
+
+    m_deviceContext = deviceContext;
     return true;
 }
 
@@ -133,7 +137,7 @@ void PlayScene::Render()
 {
     m_world = XMMatrixIdentity();
     sky->Draw(m_world * XMMatrixTranslation(camera.GetPositionFloat3().x, camera.GetPositionFloat3().y, camera.GetPositionFloat3().z), camera.GetViewMatrix(), camera.GetProjectionMatrix(), Colors::White, skyTexture.Get());
-    
+    /*
     for (int y = 0; y <= 60; ++y)
     {
         for (int x = 0; x <= 60; ++x)
@@ -148,7 +152,10 @@ void PlayScene::Render()
         {
             shape->Draw(m_world * XMMatrixTranslation(x * 4.0f, 2.0f, y * 4.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix(), Colors::LawnGreen);
         }
-    }
+    }*/
+    terrain.SetMatrices(m_deviceContext, m_world, camera.GetViewMatrix(), camera.GetProjectionMatrix());
+    terrain.Render(m_deviceContext);
 
     sceneGraph->Render();
+    
 }

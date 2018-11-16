@@ -13,6 +13,7 @@
 #include "Camera.h"
 
 #include "NodeDisplayFPS.h"
+#include "Terrain.h"
 
 class PlayScene : public Scene
 {
@@ -55,6 +56,10 @@ class PlayScene : public Scene
     private:
         std::unique_ptr<DirectX::GeometricPrimitive> shape;
         std::unique_ptr<DirectX::GeometricPrimitive> sky;
+
+        ID3D11DeviceContext* m_deviceContext = nullptr;
+
+        Terrain terrain;
 
         Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> skyTexture;
         std::unique_ptr<DirectX::BasicEffect> effect;

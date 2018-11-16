@@ -17,20 +17,11 @@
     <Filter Include="Game\Scenes">
       <UniqueIdentifier>{b2048a84-39ee-40b3-99a1-cb667f3a758e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Scenes\Nodes">
-      <UniqueIdentifier>{05045848-e1a9-448a-b4a4-b62553d5146e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Scenes\Scenes">
-      <UniqueIdentifier>{469e46df-83e3-46b3-a07a-e3474ff4931c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Scenes\Scenes\Play">
-      <UniqueIdentifier>{c264fd5f-4881-44cf-9cb6-be1121508116}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Scenes\Scenes\Play\Nodes">
-      <UniqueIdentifier>{44114136-f0ff-487b-9de0-d0b1031916c9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Graphics">
       <UniqueIdentifier>{0d65af47-998c-4fd2-a345-f8a988e3d53c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\World">
+      <UniqueIdentifier>{d8b2dca3-4a68-4720-8c71-d05bd05bdf37}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -52,15 +43,6 @@
     <ClInclude Include="pch.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="SceneNode.h">
-      <Filter>Game\Scenes\Nodes</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayScene.h">
-      <Filter>Game\Scenes\Scenes\Play</Filter>
-    </ClInclude>
-    <ClInclude Include="NodeDisplayFPS.h">
-      <Filter>Game\Scenes\Scenes\Play\Nodes</Filter>
-    </ClInclude>
     <ClInclude Include="Game.h">
       <Filter>Game</Filter>
     </ClInclude>
@@ -76,8 +58,20 @@
     <ClInclude Include="ConstantBuffer.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="SceneNode.h">
+      <Filter>Game\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="NodeDisplayFPS.h">
+      <Filter>Game\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayScene.h">
+      <Filter>Game\Scenes</Filter>
+    </ClInclude>
     <ClInclude Include="Terrain.h">
-      <Filter>Game</Filter>
+      <Filter>Game\World</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainShader.h">
+      <Filter>Game\World</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -97,15 +91,6 @@
     <ClCompile Include="pch.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="SceneNode.cpp">
-      <Filter>Game\Scenes\Nodes</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayScene.cpp">
-      <Filter>Game\Scenes\Scenes\Play</Filter>
-    </ClCompile>
-    <ClCompile Include="NodeDisplayFPS.cpp">
-      <Filter>Game\Scenes\Scenes\Play\Nodes</Filter>
-    </ClCompile>
     <ClCompile Include="Game.cpp">
       <Filter>Game</Filter>
     </ClCompile>
@@ -121,8 +106,20 @@
     <ClCompile Include="ConstantBuffer.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="SceneNode.cpp">
+      <Filter>Game\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="NodeDisplayFPS.cpp">
+      <Filter>Game\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayScene.cpp">
+      <Filter>Game\Scenes</Filter>
+    </ClCompile>
     <ClCompile Include="Terrain.cpp">
-      <Filter>Game</Filter>
+      <Filter>Game\World</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainShader.cpp">
+      <Filter>Game\World</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -139,5 +136,13 @@
     <ResourceCompile Include="resource.rc">
       <Filter>Assets</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="TerrainVertexShader.hlsl">
+      <Filter>Assets</Filter>
+    </FxCompile>
+    <FxCompile Include="TerrainPixelShader.hlsl">
+      <Filter>Assets</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
