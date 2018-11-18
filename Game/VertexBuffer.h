@@ -20,7 +20,7 @@ class VertexBuffer
         void Create(_In_ ID3D11Device* device, _In_ T* data, UINT numVertices)
         {
             this->bufferSize = numVertices;
-            this->stride = std::make_unique<UINT>(sizeof(T));
+            this->stride = std::make_unique<UINT>(static_cast<UINT>(sizeof(T)));
 
             D3D11_BUFFER_DESC vertexBufferDesc = {};
             vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
