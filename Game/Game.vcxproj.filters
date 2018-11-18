@@ -23,6 +23,9 @@
     <Filter Include="Game\World">
       <UniqueIdentifier>{d8b2dca3-4a68-4720-8c71-d05bd05bdf37}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Assets\Shaders">
+      <UniqueIdentifier>{31f9c28e-180b-4810-a8a9-4b797f1d7695}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="StepTimer.h">
@@ -138,11 +141,11 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="TerrainVertexShader.hlsl">
-      <Filter>Assets</Filter>
-    </FxCompile>
     <FxCompile Include="TerrainPixelShader.hlsl">
-      <Filter>Assets</Filter>
+      <Filter>Assets\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="TerrainVertexShader.hlsl">
+      <Filter>Assets\Shaders</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>
