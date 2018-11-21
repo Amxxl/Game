@@ -54,7 +54,6 @@ class PlayScene : public Scene
         static PlayScene s_instance;
 
     private:
-        std::unique_ptr<DirectX::GeometricPrimitive> shape;
         std::unique_ptr<DirectX::GeometricPrimitive> sky;
 
         ID3D11DeviceContext* m_deviceContext = nullptr;

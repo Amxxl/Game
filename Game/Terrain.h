@@ -25,6 +25,7 @@ class Terrain
         void Render(ID3D11DeviceContext* deviceContext);
 
     private:
+        bool LoadRawHeightMap();
         void SetTerrainCoordinates();
 
     private:
@@ -33,7 +34,7 @@ class Terrain
         int m_vertexCount, m_indexCount;
         float m_heightScale;
         HeightMapType* m_heightMap;
-        VertexBuffer<DirectX::VertexPositionColor> vertexBuffer;
+        VertexBuffer<DirectX::VertexPositionColorTexture> vertexBuffer;
         IndexBuffer<DWORD> indexBuffer;
         TerrainShader shader;
 };

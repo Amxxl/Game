@@ -67,10 +67,8 @@ bool PlayScene::Load(ID3D11DeviceContext1* deviceContext)
     sceneGraph = new SceneNode();
 
     sceneGraph->AddNode(new NodeDisplayFPS());
-    // @todo: Load resources here.
-    shape = DirectX::GeometricPrimitive::CreateCube(deviceContext, 2.0f);
     camera.SetProjectionValues(90.0f, 800.0f / 600.0f, 0.1f, 1000.0f);
-    camera.SetPosition(2.0f, 2.0f, 4.0f);
+    camera.SetPosition(2.0f, 10.0f, 4.0f);
     camera.SetLookAtPos(DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f));
 
     sky = DirectX::GeometricPrimitive::CreateSphere(deviceContext, 1200.0f, 32, false, true);
@@ -119,15 +117,12 @@ void PlayScene::Update(DX::StepTimer const& timer)
 
     auto mouse = Mouse::Get().GetState();
 
-   // if (mouse.rightButton)
-    //{
-        camera.AdjustRotation(MouseData::GetRelativeY() * 0.01f, -MouseData::GetRelativeX() * 0.01f, 0.0f);
-   // }
+    camera.AdjustRotation(MouseData::GetRelativeY() * 0.01f, -MouseData::GetRelativeX() * 0.01f, 0.0f);
 
     if (keyboard.LeftShift)
-        cameraSpeed = 30.0f;
+        cameraSpeed = 40.0f;
     else
-        cameraSpeed = 10.0f;
+        cameraSpeed = 15.0f;
 
     MouseData::SetRelativePos(0, 0);
     sceneGraph->Update(timer);
@@ -137,25 +132,9 @@ void PlayScene::Render()
 {
     m_world = XMMatrixIdentity();
     sky->Draw(m_world * XMMatrixTranslation(camera.GetPositionFloat3().x, camera.GetPositionFloat3().y, camera.GetPositionFloat3().z), camera.GetViewMatrix(), camera.GetProjectionMatrix(), Colors::White, skyTexture.Get());
-    /*
-    for (int y = 0; y <= 60; ++y)
-    {
-        for (int x = 0; x <= 60; ++x)
-        {
-            shape->Draw(m_world * XMMatrixTranslation(x * 2.0f, 0.0f, y * 2.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix(), Colors::SpringGreen);
-        }
-    }
-
-    for (int y = 0; y <= 30; ++y)
-    {
-        for (int x = 0; x <= 30; ++x)
-        {
-            shape->Draw(m_world * XMMatrixTranslation(x * 4.0f, 2.0f, y * 4.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix(), Colors::LawnGreen);
-        }
-    }*/
+    
     terrain.SetMatrices(m_deviceContext, m_world, camera.GetViewMatrix(), camera.GetProjectionMatrix());
     terrain.Render(m_deviceContext);
 
     sceneGraph->Render();
-    
 }

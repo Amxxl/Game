@@ -24,6 +24,8 @@ class TerrainShader
         void RenderShader(ID3D11DeviceContext* deviceContext, int numIndices);
 
     private:
+        std::unique_ptr<DirectX::CommonStates> states;
+        Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> texture;
         Microsoft::WRL::ComPtr<ID3D11VertexShader> vertexShader;
         Microsoft::WRL::ComPtr<ID3D11PixelShader> pixelShader;
         Microsoft::WRL::ComPtr<ID3D11InputLayout> inputLayout;
