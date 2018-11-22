@@ -25,7 +25,7 @@ class Terrain
         void Render(ID3D11DeviceContext* deviceContext);
 
     private:
-        bool LoadRawHeightMap();
+        bool LoadRawHeightMap(char const* fileName);
         void SetTerrainCoordinates();
 
     private:

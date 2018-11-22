@@ -30,7 +30,7 @@ void Terrain::Initialize(ID3D11DeviceContext * deviceContext)
     m_terrainHeight = 256;
     m_heightScale = 1200.0f;
 
-    this->LoadRawHeightMap();
+    this->LoadRawHeightMap("terrain.raw");
     this->SetTerrainCoordinates();
 
     DirectX::VertexPositionColorTexture* vertices;
@@ -158,13 +158,11 @@ void Terrain::SetTerrainCoordinates()
     }
 }
 
-bool Terrain::LoadRawHeightMap()
+bool Terrain::LoadRawHeightMap(char const* fileName)
 {
     int i, j, index;
     unsigned int imageSize;
     unsigned short* rawImage;
-
-    const char* m_terrainFilename = "terrain.raw";
 
     // Calculate the size of the raw image data.
     imageSize = m_terrainWidth * m_terrainHeight;
@@ -175,8 +173,9 @@ bool Terrain::LoadRawHeightMap()
         return false;
 
     // Open raw file to read.
-    std::ifstream File;
-    File.open(m_terrainFilename, std::ios::binary);
+    std::ifstream File(fileName, std::ios::binary);
+    if (!File.is_open())
+        return false;
 
     // Read raw data from file.
     rawImage = new unsigned short[imageSize];
