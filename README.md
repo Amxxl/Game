@@ -2,7 +2,6 @@
 Developing a game in C++ with DirectXTK (Direct3D 11)
 
 # Screen Shot
-![Screen Shot](/Sceenshot.png?raw=true "Screen Shot")
 ![Screen Shot](/../master/Screenshot.png?raw=true "Screen Shot")
 
 # Supported Platforms
