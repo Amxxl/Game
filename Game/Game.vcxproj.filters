@@ -129,6 +129,9 @@
     <Image Include="bow.ico">
       <Filter>Assets</Filter>
     </Image>
+    <Image Include="terrain.png">
+      <Filter>Assets</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="settings.manifest">
