@@ -18,6 +18,7 @@ class Terrain
         struct HeightMapType
         {
             float x, y, z;
+            float u, v;
         };
 
         void Initialize(ID3D11DeviceContext* deviceContext);
@@ -26,9 +27,13 @@ class Terrain
 
     private:
         bool LoadRawHeightMap(char const* fileName);
+
         void SetTerrainCoordinates();
+        void SetTextureCoordinates();
 
     private:
+        static constexpr int const TEXTURE_REPEAT = 16;
+
         std::unique_ptr<DirectX::CommonStates> states;
         int m_terrainWidth, m_terrainHeight;
         int m_vertexCount, m_indexCount;

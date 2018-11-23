@@ -32,10 +32,12 @@ void Terrain::Initialize(ID3D11DeviceContext * deviceContext)
 
     this->LoadRawHeightMap("terrain.raw");
     this->SetTerrainCoordinates();
+    this->SetTextureCoordinates();
 
     DirectX::VertexPositionColorTexture* vertices;
     unsigned long* indices;
     int i, j, index, index1, index2, index3, index4;
+    float u, v;
 
     // Calculate the number of vertices in the terrain mesh.
     m_vertexCount = (m_terrainWidth - 1) * (m_terrainHeight - 1) * 6;
@@ -55,51 +57,100 @@ void Terrain::Initialize(ID3D11DeviceContext * deviceContext)
         for (i = 0; i < (m_terrainWidth - 1); i++)
         {
             // Get the indexes to the four points of the quad.
-            index1 = (m_terrainWidth * j) + i; // Upper left.
-            index2 = (m_terrainWidth * j) + (i + 1); // Upper right.
-            index3 = (m_terrainWidth * (j + 1)) + i; // Bottom left.
-            index4 = (m_terrainWidth * (j + 1)) + (i + 1); // Bottom right.
+            index1 = (m_terrainHeight * (j + 1)) + i;       // Upper left.
+            index2 = (m_terrainHeight * (j + 1)) + (i + 1); // Upper right.
+            index3 = (m_terrainHeight * j) + i;             // Bottom left.
+            index4 = (m_terrainHeight * j) + (i + 1);       // Bottom right.
+
+            // Upper left.
+            u = m_heightMap[index1].u;
+            v = m_heightMap[index1].v;
+
+            // Modify the texture coordinates to cover the top edge.
+            if (u == 1.0f) { u = 0.0f; }
+            if (v == 1.0f) { v = 0.0f; }
+            
 
             // Now create two triangles for that quad.
             // Triangle 1 - Upper left.
             vertices[index].position = DirectX::XMFLOAT3(m_heightMap[index1].x, m_heightMap[index1].y, m_heightMap[index1].z);
             vertices[index].color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-            vertices[index].textureCoordinate = DirectX::XMFLOAT2(0.0f, 0.0f);
+            vertices[index].textureCoordinate = DirectX::XMFLOAT2(u, v);
             indices[index] = index;
             index++;
+
+
+            // Upper right.
+            u = m_heightMap[index2].u;
+            v = m_heightMap[index2].v;
+
+            // Modify the texture coordinates to cover the top and right edge.
+            if (u == 0.0f) { u = 1.0f; }
+            if (v == 1.0f) { v = 0.0f; }
 
             // Triangle 1 - Upper right.
             vertices[index].position = DirectX::XMFLOAT3(m_heightMap[index2].x, m_heightMap[index2].y, m_heightMap[index2].z);
             vertices[index].color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-            vertices[index].textureCoordinate = DirectX::XMFLOAT2(1.0f, 0.0f);
+            vertices[index].textureCoordinate = DirectX::XMFLOAT2(u, v);
             indices[index] = index;
             index++;
+
+
+            // Bottom left.
+            u = m_heightMap[index3].u;
+            v = m_heightMap[index3].v;
+
+            if (u == 1.0f) { u = 0.0f; }
+            if (v == 0.0f) { v = 1.0f; }
 
             // Triangle 1 - Bottom left.
             vertices[index].position = DirectX::XMFLOAT3(m_heightMap[index3].x, m_heightMap[index3].y, m_heightMap[index3].z);
             vertices[index].color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-            vertices[index].textureCoordinate = DirectX::XMFLOAT2(0.0f, 1.0f);
+            vertices[index].textureCoordinate = DirectX::XMFLOAT2(u, v);
             indices[index] = index;
             index++;
+
+            // Bottom left.
+            u = m_heightMap[index3].u;
+            v = m_heightMap[index3].v;
+
+            if (u == 1.0f) { u = 0.0f; }
+            if (v == 0.0f) { v = 1.0f; }
 
             // Triangle 2 - Bottom left.
             vertices[index].position = DirectX::XMFLOAT3(m_heightMap[index3].x, m_heightMap[index3].y, m_heightMap[index3].z);
             vertices[index].color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-            vertices[index].textureCoordinate = DirectX::XMFLOAT2(0.0f, 1.0f);
+            vertices[index].textureCoordinate = DirectX::XMFLOAT2(u, v);
             indices[index] = index;
             index++;
+
+            // Upper right.
+            u = m_heightMap[index2].u;
+            v = m_heightMap[index2].v;
+
+            // Modify the texture coordinates to cover the top and right edge.
+            if (u == 0.0f) { u = 1.0f; }
+            if (v == 1.0f) { v = 0.0f; }
 
             // Triangle 2 - Upper right.
             vertices[index].position = DirectX::XMFLOAT3(m_heightMap[index2].x, m_heightMap[index2].y, m_heightMap[index2].z);
             vertices[index].color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-            vertices[index].textureCoordinate = DirectX::XMFLOAT2(1.0f, 0.0f);
+            vertices[index].textureCoordinate = DirectX::XMFLOAT2(u, v);
             indices[index] = index;
             index++;
+
+            // Bottom right.
+            u = m_heightMap[index4].u;
+            v = m_heightMap[index4].v;
+
+            // Modify the texture coordinates to cover the right edge.
+            if (u == 0.0f) { u = 1.0f; }
+            if (v == 0.0f) { v = 1.0f; }
 
             // Triangle 2 - Bottom right.
             vertices[index].position = DirectX::XMFLOAT3(m_heightMap[index4].x, m_heightMap[index4].y, m_heightMap[index4].z);
             vertices[index].color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-            vertices[index].textureCoordinate = DirectX::XMFLOAT2(1.0f, 1.0f);
+            vertices[index].textureCoordinate = DirectX::XMFLOAT2(u, v);
             indices[index] = index;
             index++;
         }
@@ -129,7 +180,7 @@ void Terrain::Render(ID3D11DeviceContext* deviceContext)
     deviceContext->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
     deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-    deviceContext->RSSetState(states->CullClockwise());
+    deviceContext->RSSetState(states->CullCounterClockwise());
 
     shader.RenderShader(deviceContext, m_indexCount);
 }
@@ -156,6 +207,60 @@ void Terrain::SetTerrainCoordinates()
             m_heightMap[index].y /= m_heightScale;
         }
     }
+}
+
+void Terrain::SetTextureCoordinates()
+{
+    int incrementCount, i, j, uCount, vCount;
+    float incrementValue, uCoordinate, vCoordinate;
+
+    // Calculate how much to increment the texture coordinates by.
+    incrementValue = static_cast<float>(TEXTURE_REPEAT) / static_cast<float>(m_terrainWidth);
+
+    // Calculate how many times to repeat the texture.
+    incrementCount = m_terrainWidth / TEXTURE_REPEAT;
+
+    // Initialize the u and v coordinate values.
+    uCoordinate = 0.0f;
+    vCoordinate = 1.0f;
+
+    // Initialize the u and v coordinate indexes.
+    uCount = 0;
+    vCount = 0;
+
+    // Loop through the entire height map and calculate the u and v texture coordinates for each vertex.
+    for (j = 0; j < m_terrainHeight; j++)
+    {
+        for (i = 0; i < m_terrainWidth; i++)
+        {
+            // Store the texture coordinate in the height map.
+            m_heightMap[(m_terrainHeight * j) + i].u = uCoordinate;
+            m_heightMap[(m_terrainHeight * j) + i].v = vCoordinate;
+
+            // Increment the u texture coordinate by the increment value and increment the index by one.
+            uCoordinate += incrementValue;
+            uCount++;
+
+            // Check if at the far right end of the texture and if so then start at the beginning again.
+            if (uCount == incrementCount)
+            {
+                uCoordinate = 0.0f;
+                uCount = 0;
+            }
+        }
+
+        // Increment the v texture coordinate by the increment value and increment the index by one.
+        vCoordinate -= incrementValue;
+        vCount++;
+
+        // Check if at the top of the texture and if so then start at the bottom again.
+        if (vCount == incrementCount)
+        {
+            vCoordinate = 1.0f;
+            vCount = 0;
+        }
+    }
+
 }
 
 bool Terrain::LoadRawHeightMap(char const* fileName)

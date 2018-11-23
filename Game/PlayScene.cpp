@@ -98,7 +98,7 @@ void PlayScene::Update(DX::StepTimer const& timer)
 
     auto keyboard = Keyboard::Get().GetState();
 
-    static float cameraSpeed = 2.0f;
+    static float cameraSpeed = 15.0f;
 
     if (keyboard.W)
         camera.AdjustPosition(camera.GetForwardVector() * deltaTime * cameraSpeed);
