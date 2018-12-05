@@ -35,8 +35,11 @@ class DynamicVertexBuffer
             DX::ThrowIfFailed(device->CreateBuffer(&dynamicVertexBufferDesc, vertexBufferData, buffer.GetAddressOf()));
         }
 
+        // Writes new data into vertex buffer.
         void SetData(_In_ ID3D11DeviceContext* deviceContext, T* data, UINT numVertices)
         {
+            assert(buffer);
+
             D3D11_MAPPED_SUBRESOURCE mappedResource;
             DX::ThrowIfFailed(deviceContext->Map(buffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource));
             memcpy(mappedResource.pData, data, sizeof(T) * numVertices);
