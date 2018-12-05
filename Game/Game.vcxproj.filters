@@ -26,14 +26,11 @@
     <Filter Include="Assets\Shaders">
       <UniqueIdentifier>{31f9c28e-180b-4810-a8a9-4b797f1d7695}</UniqueIdentifier>
     </Filter>
+    <Filter Include="System">
+      <UniqueIdentifier>{b4a5e20e-73f0-42ff-a636-ff58c1c498dc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="StepTimer.h">
-      <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="DeviceResources.h">
-      <Filter>Common</Filter>
-    </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>Game\Scenes</Filter>
     </ClInclude>
@@ -76,12 +73,18 @@
     <ClInclude Include="TerrainShader.h">
       <Filter>Game\World</Filter>
     </ClInclude>
+    <ClInclude Include="DeviceResources.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="StepTimer.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="DynamicVertexBuffer.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="DeviceResources.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
     <ClCompile Include="Scene.cpp">
       <Filter>Game\Scenes</Filter>
     </ClCompile>
@@ -95,9 +98,6 @@
       <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="Game.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp">
       <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="VertexBuffer.cpp">
@@ -123,6 +123,15 @@
     </ClCompile>
     <ClCompile Include="TerrainShader.cpp">
       <Filter>Game\World</Filter>
+    </ClCompile>
+    <ClCompile Include="DeviceResources.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Game\World</Filter>
+    </ClCompile>
+    <ClCompile Include="DynamicVertexBuffer.cpp">
+      <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
