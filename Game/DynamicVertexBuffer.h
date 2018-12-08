@@ -32,7 +32,7 @@ class DynamicVertexBuffer
             D3D11_SUBRESOURCE_DATA vertexBufferData = {};
             vertexBufferData.pSysMem = data;
 
-            DX::ThrowIfFailed(device->CreateBuffer(&dynamicVertexBufferDesc, vertexBufferData, buffer.GetAddressOf()));
+            DX::ThrowIfFailed(device->CreateBuffer(&dynamicVertexBufferDesc, &vertexBufferData, buffer.GetAddressOf()));
         }
 
         // Writes new data into vertex buffer.
@@ -47,7 +47,7 @@ class DynamicVertexBuffer
         }
 
         ID3D11Buffer* Get() const { return buffer.Get(); }
-        ID3D11Buffer* const* GetAddressOf() const { buffer.GetAddressOf(); }
+        ID3D11Buffer* const* GetAddressOf() const { return buffer.GetAddressOf(); }
         
         UINT BufferSize() const { return this->bufferSize; }
         UINT const Stride() const { return *this->stride.get(); }

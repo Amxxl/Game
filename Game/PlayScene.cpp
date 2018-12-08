@@ -81,6 +81,9 @@ bool PlayScene::Load(ID3D11DeviceContext1* deviceContext)
     terrain.Initialize(deviceContext);
 
     m_deviceContext = deviceContext;
+
+    model.LoadModel(deviceContext, L"boy.md5mesh");
+
     return true;
 }
 
@@ -135,6 +138,9 @@ void PlayScene::Render()
     
     terrain.SetMatrices(m_deviceContext, m_world, camera.GetViewMatrix(), camera.GetProjectionMatrix());
     terrain.Render(m_deviceContext);
+
+    model.SetMatrices(m_deviceContext, m_world * DirectX::XMMatrixScaling(0.02f, 0.02f, 0.02f) * DirectX::XMMatrixTranslation(5.0f, 0.0f, 5.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix());
+    model.Render(m_deviceContext);
 
     sceneGraph->Render();
 }

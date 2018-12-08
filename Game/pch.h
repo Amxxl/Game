@@ -106,4 +106,12 @@ namespace DX
             throw com_exception(hr);
         }
     }
+
+    // Helper to get device from device context.
+    inline ID3D11Device* GetDevice(ID3D11DeviceContext* deviceContext)
+    {
+        ID3D11Device* device = nullptr;
+        deviceContext->GetDevice(&device);
+        return device;
+    }
 }

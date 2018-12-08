@@ -15,6 +15,8 @@
 #include "NodeDisplayFPS.h"
 #include "Terrain.h"
 
+#include "MD5Model.h"
+
 class PlayScene : public Scene
 {
     public:
@@ -59,6 +61,7 @@ class PlayScene : public Scene
         ID3D11DeviceContext* m_deviceContext = nullptr;
 
         Terrain terrain;
+        MD5Model model;
 
         Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> skyTexture;
         std::unique_ptr<DirectX::BasicEffect> effect;

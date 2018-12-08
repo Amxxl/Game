@@ -22,11 +22,7 @@ TerrainShader::~TerrainShader()
 void TerrainShader::InitializeShaders(ID3D11DeviceContext* deviceContext)
 {
     // Helper to get device.
-    ID3D11Device* device = nullptr;
-    deviceContext->GetDevice(&device);
-
-    if (device == nullptr)
-        return;
+    ID3D11Device* device = DX::GetDevice(deviceContext);
 
     DX::ThrowIfFailed(device->CreateVertexShader(TerrainShaders::TerrainVertexShaderBytecode, sizeof(TerrainShaders::TerrainVertexShaderBytecode), nullptr, vertexShader.GetAddressOf()));
     DX::ThrowIfFailed(device->CreatePixelShader(TerrainShaders::TerrainPixelShaderBytecode, sizeof(TerrainShaders::TerrainPixelShaderBytecode), nullptr, pixelShader.GetAddressOf()));
@@ -38,11 +34,7 @@ void TerrainShader::InitializeShaders(ID3D11DeviceContext* deviceContext)
 void TerrainShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, DirectX::XMMATRIX worldMatrix, DirectX::XMMATRIX viewMatrix, DirectX::XMMATRIX projectionMatrix)
 {
     // Helper to get device.
-    ID3D11Device* device = nullptr;
-    deviceContext->GetDevice(&device);
-
-    if (device == nullptr)
-        return;
+    ID3D11Device* device = DX::GetDevice(deviceContext);
 
     // Load texture
     DirectX::CreateWICTextureFromFile(device, L"terrain.png", nullptr, texture.ReleaseAndGetAddressOf());
@@ -66,7 +58,7 @@ void TerrainShader::RenderShader(ID3D11DeviceContext* deviceContext, int numIndi
     deviceContext->VSSetShader(vertexShader.Get(), nullptr, 0);
     deviceContext->PSSetShader(pixelShader.Get(), nullptr, 0);
 
-    ID3D11SamplerState* samplerState = states->PointWrap();//states->LinearClamp();
+    ID3D11SamplerState* samplerState = states->LinearClamp();
 
     deviceContext->PSSetSamplers(0, 1, &samplerState);
     deviceContext->DrawIndexed(numIndices, 0, 0);
