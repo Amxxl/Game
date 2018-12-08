@@ -42,7 +42,6 @@ class MD5Model
             std::wstring m_Shader;
 
             std::vector<MD5Vertex> vertices;
-            std::vector<DirectX::XMFLOAT3> positions;
 
             unsigned int trianglesCount;
             std::vector<DWORD> indices;
@@ -50,7 +49,6 @@ class MD5Model
             std::vector<Weight> m_Weights;
 
             Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> texture;
-
             DynamicVertexBuffer<MD5Vertex>* vertexBuffer;
             IndexBuffer<DWORD>* indexBuffer;
         };
@@ -59,6 +57,8 @@ class MD5Model
         void PrepareNormals(Mesh& mesh);
 
     private:
+        void QuaternionComputeW(DirectX::XMFLOAT4& q);
+
         int m_iMD5Version;
         int m_iNumJoints;
         int m_iNumMeshes;

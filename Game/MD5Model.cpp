@@ -13,15 +13,15 @@ MD5Model::MD5Model()
 
 MD5Model::~MD5Model()
 {
-    /*
     for (int i = 0; i < m_Meshes.size(); ++i)
     {
-        m_Meshes[i].vertexBuffer->Get()->Release();
         delete m_Meshes[i].vertexBuffer;
+        m_Meshes[i].vertexBuffer = nullptr;
 
-        m_Meshes[i].indexBuffer->Get()->Release();
         delete m_Meshes[i].indexBuffer;
-    }*/
+        m_Meshes[i].indexBuffer = nullptr;
+    }
+    m_Meshes.clear();
 }
 
 bool MD5Model::LoadModel(ID3D11DeviceContext* deviceContext, std::wstring const& fileName)
@@ -44,8 +44,8 @@ bool MD5Model::LoadModel(ID3D11DeviceContext* deviceContext, std::wstring const&
         {
             fileIn >> m_iMD5Version; // Store version of md5mesh file.
 
-            if (m_iMD5Version != 10)
-                return false; // Wrong version of file.
+            if (m_iMD5Version != 10) // MD5 version must be 10
+                return false;
         }
         else if (data == L"commandline")
         {
@@ -100,18 +100,8 @@ bool MD5Model::LoadModel(ID3D11DeviceContext* deviceContext, std::wstring const&
                 joint.m_Name.erase(0, 1);
                 joint.m_Name.erase(joint.m_Name.size() - 1, 1);
 
-                // Compute the w axis of the quaternion. (The MD5 model uses a 3D vector to describe the
-                // direction the bone is facing. However, we need to turn this into a quaternion, and the way
-                // quaternions work, is the xyz values describe the axis of rotation, while the w is a value
-                // between 0 and 1 which describes the angle of rotation).
-                float t = 1.0f - (joint.m_Orient.x * joint.m_Orient.x)
-                    - (joint.m_Orient.y * joint.m_Orient.y)
-                    - (joint.m_Orient.z * joint.m_Orient.z);
-
-                if (t < 0.0f)
-                    joint.m_Orient.w = 0.0f;
-                else
-                    joint.m_Orient.w = -sqrtf(t);
+                // Compute the w axis of the quaternion.
+                this->QuaternionComputeW(joint.m_Orient);
 
                 std::getline(fileIn, data); // Skip rest of this lane.
                 m_Joints.push_back(joint); // Store the joint into joint vector.
@@ -272,9 +262,9 @@ void MD5Model::Render(ID3D11DeviceContext* deviceContext)
     }
 }
 
-// Find each vertex's position using the joint and weights.
 void MD5Model::PrepareMesh(Mesh& mesh)
 {
+    // Find each vertex position using the joint and weight.
     for (int i = 0; i < mesh.vertices.size(); ++i)
     {
         MD5Vertex vertex = mesh.vertices[i];
@@ -298,16 +288,9 @@ void MD5Model::PrepareMesh(Mesh& mesh)
             vertex.position.z += (joint.m_Pos.z + rotatedPoint.z) * weight.m_Bias;
         }
 
-       // mesh.positions.push_back(vertex.position);
+        // Put the vertex position into vertices for this mesh.
         mesh.vertices[i].position = vertex.position;
     }
-
-    /*
-    // Put the positions into the vertices for this mesh
-    for (int i = 0; i < mesh.vertices.size(); i++)
-    {
-        mesh.vertices[i].position = mesh.positions[i];
-    }*/
 }
 
 // Calculate vertex normals using normal averaging.
@@ -382,9 +365,11 @@ void MD5Model::PrepareNormals(Mesh& mesh)
         mesh.vertices[i].normal.y = -XMVectorGetY(normalSum);
         mesh.vertices[i].normal.z = -XMVectorGetZ(normalSum);
 
-        // Create the joint space normal for easy normal calculations in animation.
         MD5Vertex vertex = mesh.vertices[i]; // Get the current vertex
+
+        // Create the joint space normal for easy normal calculations in animation.
         //mesh.jointSpaceNormals.push_back(XMFLOAT3(0.0f, 0.0f, 0.0f)); // Push back a blank normal
+        
         XMVECTOR normal = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f); // Clear normal
 
         for (int k = 0; k < vertex.WeightCount; k++)
@@ -402,4 +387,10 @@ void MD5Model::PrepareNormals(Mesh& mesh)
         normalSum = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
         facesUsing = 0;
     }
+}
+
+void MD5Model::QuaternionComputeW(DirectX::XMFLOAT4& q)
+{
+    float t = 1.0f - (q.x * q.x) - (q.y * q.y) - (q.z * q.z);
+    t < 0.0f ? q.w = 0.0f : q.w = -sqrtf(t);
 }
