@@ -8,7 +8,7 @@
 #include "MD5ModelShader.h"
 #include "DynamicVertexBuffer.h"
 #include "IndexBuffer.h"
-
+#include "MD5Animation.h"
 
 class MD5Model
 {
@@ -17,6 +17,10 @@ class MD5Model
         ~MD5Model();
         
         bool LoadModel(ID3D11DeviceContext* deviceContext, std::wstring const& fileName);
+        bool LoadAnim(std::wstring const& fileName);
+
+        void Update(ID3D11DeviceContext* deviceContext, float deltaTime);
+
         void SetMatrices(ID3D11DeviceContext* deviceContext, DirectX::XMMATRIX world, DirectX::XMMATRIX view, DirectX::XMMATRIX proj);
         void Render(ID3D11DeviceContext* deviceContext);
 
@@ -56,6 +60,8 @@ class MD5Model
         void PrepareMesh(Mesh& mesh);
         void PrepareNormals(Mesh& mesh);
 
+        bool CheckAnimation(MD5Animation const& animation) const;
+
     private:
         void QuaternionComputeW(DirectX::XMFLOAT4& q);
 
@@ -65,6 +71,9 @@ class MD5Model
 
         std::vector<Joint> m_Joints;
         std::vector<Mesh> m_Meshes;
+
+        MD5Animation m_Animation;
+        bool m_bHasAnimation;
 
         MD5ModelShader shader;
 };

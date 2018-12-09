@@ -100,7 +100,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
         
         if (RegisterRawInputDevices(&rid, 1, sizeof(rid)) == FALSE)
         {
-            MessageBox(hwnd, L"Failed RAWINPUTDEVICE", L"Error", MB_OK);
+            MessageBox(hwnd, L"Failed to register RAWINPUTDEVICE.", L"Error", MB_OK);
             return 1;
         }
     }

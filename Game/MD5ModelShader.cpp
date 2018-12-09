@@ -50,6 +50,16 @@ void MD5ModelShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, Dir
     constantBuffer.SetData(deviceContext, matrixBuffer);
 
     deviceContext->VSSetConstantBuffers(0, 1, constantBuffer.GetAddressOf());
+
+    lightBuffer.Create(device);
+    LightBufferType light;
+    light.ambientColor = DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
+    light.diffuseColor = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+    light.lightDirection = DirectX::XMFLOAT3(1.0f, 0.0f, 1.0f);
+    light.padding = 0.0f;
+    lightBuffer.SetData(deviceContext, light);
+
+    deviceContext->PSSetConstantBuffers(0, 1, lightBuffer.GetAddressOf());
 }
 
 void MD5ModelShader::SetTexture(ID3D11DeviceContext* deviceContext, ID3D11ShaderResourceView* texture)

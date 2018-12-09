@@ -16,6 +16,14 @@ class TerrainShader
             DirectX::XMMATRIX projection;
         };
 
+        struct LightBufferType
+        {
+            DirectX::XMFLOAT4 ambientColor;
+            DirectX::XMFLOAT4 diffuseColor;
+            DirectX::XMFLOAT3 lightDirection;
+            float padding;
+        };
+
         TerrainShader();
         ~TerrainShader();
 
@@ -30,4 +38,5 @@ class TerrainShader
         Microsoft::WRL::ComPtr<ID3D11PixelShader> pixelShader;
         Microsoft::WRL::ComPtr<ID3D11InputLayout> inputLayout;
         ConstantBuffer<MatrixBufferType> constantBuffer;
+        ConstantBuffer<LightBufferType> lightBuffer;
 };

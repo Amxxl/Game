@@ -43,7 +43,7 @@ class DynamicVertexBuffer
             D3D11_MAPPED_SUBRESOURCE mappedResource;
             DX::ThrowIfFailed(deviceContext->Map(buffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource));
             memcpy(mappedResource.pData, data, sizeof(T) * numVertices);
-            deviceContext->Unmap();
+            deviceContext->Unmap(buffer.Get(), 0);
         }
 
         ID3D11Buffer* Get() const { return buffer.Get(); }

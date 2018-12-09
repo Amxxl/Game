@@ -83,6 +83,7 @@ bool PlayScene::Load(ID3D11DeviceContext1* deviceContext)
     m_deviceContext = deviceContext;
 
     model.LoadModel(deviceContext, L"boy.md5mesh");
+    model.LoadAnim(L"boy.md5anim");
 
     return true;
 }
@@ -126,6 +127,8 @@ void PlayScene::Update(DX::StepTimer const& timer)
         cameraSpeed = 40.0f;
     else
         cameraSpeed = 15.0f;
+
+    model.Update(m_deviceContext, deltaTime);
 
     MouseData::SetRelativePos(0, 0);
     sceneGraph->Update(timer);

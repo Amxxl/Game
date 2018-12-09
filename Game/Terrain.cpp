@@ -33,8 +33,10 @@ void Terrain::Initialize(ID3D11DeviceContext * deviceContext)
     this->LoadRawHeightMap("terrain.raw");
     this->SetTerrainCoordinates();
     this->SetTextureCoordinates();
+    this->CalculateNormals();
 
-    DirectX::VertexPositionColorTexture* vertices;
+    //DirectX::VertexPositionColorTexture* vertices;
+    DirectX::VertexPositionNormalColorTexture* vertices;
     unsigned long* indices;
     int i, j, index, index1, index2, index3, index4;
     float u, v;
@@ -46,7 +48,7 @@ void Terrain::Initialize(ID3D11DeviceContext * deviceContext)
     m_indexCount = m_vertexCount;
 
     // Create the vertex array.
-    vertices = new DirectX::VertexPositionColorTexture[m_vertexCount];
+    vertices = new DirectX::VertexPositionNormalColorTexture[m_vertexCount];
     indices = new unsigned long[m_indexCount];
 
     // Initialize the index to the vertex array.
@@ -74,6 +76,7 @@ void Terrain::Initialize(ID3D11DeviceContext * deviceContext)
             // Now create two triangles for that quad.
             // Triangle 1 - Upper left.
             vertices[index].position = DirectX::XMFLOAT3(m_heightMap[index1].x, m_heightMap[index1].y, m_heightMap[index1].z);
+            vertices[index].normal = DirectX::XMFLOAT3(m_heightMap[index1].nx, m_heightMap[index1].ny, m_heightMap[index1].nz);
             vertices[index].color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
             vertices[index].textureCoordinate = DirectX::XMFLOAT2(u, v);
             indices[index] = index;
@@ -90,6 +93,7 @@ void Terrain::Initialize(ID3D11DeviceContext * deviceContext)
 
             // Triangle 1 - Upper right.
             vertices[index].position = DirectX::XMFLOAT3(m_heightMap[index2].x, m_heightMap[index2].y, m_heightMap[index2].z);
+            vertices[index].normal = DirectX::XMFLOAT3(m_heightMap[index2].nx, m_heightMap[index2].ny, m_heightMap[index2].nz);
             vertices[index].color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
             vertices[index].textureCoordinate = DirectX::XMFLOAT2(u, v);
             indices[index] = index;
@@ -105,6 +109,7 @@ void Terrain::Initialize(ID3D11DeviceContext * deviceContext)
 
             // Triangle 1 - Bottom left.
             vertices[index].position = DirectX::XMFLOAT3(m_heightMap[index3].x, m_heightMap[index3].y, m_heightMap[index3].z);
+            vertices[index].normal = DirectX::XMFLOAT3(m_heightMap[index3].nx, m_heightMap[index3].ny, m_heightMap[index3].nz);
             vertices[index].color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
             vertices[index].textureCoordinate = DirectX::XMFLOAT2(u, v);
             indices[index] = index;
@@ -119,6 +124,7 @@ void Terrain::Initialize(ID3D11DeviceContext * deviceContext)
 
             // Triangle 2 - Bottom left.
             vertices[index].position = DirectX::XMFLOAT3(m_heightMap[index3].x, m_heightMap[index3].y, m_heightMap[index3].z);
+            vertices[index].normal = DirectX::XMFLOAT3(m_heightMap[index3].nx, m_heightMap[index3].ny, m_heightMap[index3].nz);
             vertices[index].color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
             vertices[index].textureCoordinate = DirectX::XMFLOAT2(u, v);
             indices[index] = index;
@@ -134,6 +140,7 @@ void Terrain::Initialize(ID3D11DeviceContext * deviceContext)
 
             // Triangle 2 - Upper right.
             vertices[index].position = DirectX::XMFLOAT3(m_heightMap[index2].x, m_heightMap[index2].y, m_heightMap[index2].z);
+            vertices[index].normal = DirectX::XMFLOAT3(m_heightMap[index2].nx, m_heightMap[index2].ny, m_heightMap[index2].nz);
             vertices[index].color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
             vertices[index].textureCoordinate = DirectX::XMFLOAT2(u, v);
             indices[index] = index;
@@ -149,6 +156,7 @@ void Terrain::Initialize(ID3D11DeviceContext * deviceContext)
 
             // Triangle 2 - Bottom right.
             vertices[index].position = DirectX::XMFLOAT3(m_heightMap[index4].x, m_heightMap[index4].y, m_heightMap[index4].z);
+            vertices[index].normal = DirectX::XMFLOAT3(m_heightMap[index4].nx, m_heightMap[index4].ny, m_heightMap[index4].nz);
             vertices[index].color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
             vertices[index].textureCoordinate = DirectX::XMFLOAT2(u, v);
             indices[index] = index;
@@ -261,6 +269,135 @@ void Terrain::SetTextureCoordinates()
         }
     }
 
+}
+
+void Terrain::CalculateNormals()
+{
+    int i, j, index1, index2, index3, index, count;
+    float vertex1[3], vertex2[3], vertex3[3], vector1[3], vector2[3], sum[3], length;
+    VectorType* normals;
+
+    // Create a temporary array to hold the un-normalized normal vectors.
+    normals = new VectorType[(m_terrainHeight - 1) * (m_terrainWidth - 1)];
+
+    // Go through all the faces in the mesh and calculate their normals.
+    for (j = 0; j < (m_terrainHeight - 1); j++)
+    {
+        for (i = 0; i < (m_terrainWidth - 1); i++)
+        {
+            index1 = (j * m_terrainHeight) + i;
+            index2 = (j * m_terrainHeight) + (i + 1);
+            index3 = ((j + 1) * m_terrainHeight) + i;
+
+            // Get three vertices from the face.
+            vertex1[0] = m_heightMap[index1].x;
+            vertex1[1] = m_heightMap[index1].y;
+            vertex1[2] = m_heightMap[index1].z;
+
+            vertex2[0] = m_heightMap[index2].x;
+            vertex2[1] = m_heightMap[index2].y;
+            vertex2[2] = m_heightMap[index2].z;
+
+            vertex3[0] = m_heightMap[index3].x;
+            vertex3[1] = m_heightMap[index3].y;
+            vertex3[2] = m_heightMap[index3].z;
+
+            // Calculate the two vectors for this face.
+            vector1[0] = vertex1[0] - vertex3[0];
+            vector1[1] = vertex1[1] - vertex3[1];
+            vector1[2] = vertex1[2] - vertex3[2];
+            vector2[0] = vertex3[0] - vertex2[0];
+            vector2[1] = vertex3[1] - vertex2[1];
+            vector2[2] = vertex3[2] - vertex2[2];
+
+            index = (j * (m_terrainHeight - 1)) + i;
+
+            // Calculate the cross product of those two vectors to get the un-normalized value for this face normal.
+            normals[index].x = (vector1[1] * vector2[2]) - (vector1[2] * vector2[1]);
+            normals[index].y = (vector1[2] * vector2[0]) - (vector1[0] * vector2[2]);
+            normals[index].z = (vector1[0] * vector2[1]) - (vector1[1] * vector2[0]);
+        }
+    }
+
+    // Now go through all the vertices and take an average of each face normal 	
+    // that the vertex touches to get the averaged normal for that vertex.
+    for (j = 0; j < m_terrainHeight; j++)
+    {
+        for (i = 0; i < m_terrainWidth; i++)
+        {
+            // Initialize the sum.
+            sum[0] = 0.0f;
+            sum[1] = 0.0f;
+            sum[2] = 0.0f;
+
+            // Initialize the count.
+            count = 0;
+
+            // Bottom left face.
+            if (((i - 1) >= 0) && ((j - 1) >= 0))
+            {
+                index = ((j - 1) * (m_terrainHeight - 1)) + (i - 1);
+
+                sum[0] += normals[index].x;
+                sum[1] += normals[index].y;
+                sum[2] += normals[index].z;
+                count++;
+            }
+
+            // Bottom right face.
+            if ((i < (m_terrainWidth - 1)) && ((j - 1) >= 0))
+            {
+                index = ((j - 1) * (m_terrainHeight - 1)) + i;
+
+                sum[0] += normals[index].x;
+                sum[1] += normals[index].y;
+                sum[2] += normals[index].z;
+                count++;
+            }
+
+            // Upper left face.
+            if (((i - 1) >= 0) && (j < (m_terrainHeight - 1)))
+            {
+                index = (j * (m_terrainHeight - 1)) + (i - 1);
+
+                sum[0] += normals[index].x;
+                sum[1] += normals[index].y;
+                sum[2] += normals[index].z;
+                count++;
+            }
+
+            // Upper right face.
+            if ((i < (m_terrainWidth - 1)) && (j < (m_terrainHeight - 1)))
+            {
+                index = (j * (m_terrainHeight - 1)) + i;
+
+                sum[0] += normals[index].x;
+                sum[1] += normals[index].y;
+                sum[2] += normals[index].z;
+                count++;
+            }
+
+            // Take the average of the faces touching this vertex.
+            sum[0] = (sum[0] / static_cast<float>(count));
+            sum[1] = (sum[1] / static_cast<float>(count));
+            sum[2] = (sum[2] / static_cast<float>(count));
+
+            // Calculate the length of this normal.
+            length = sqrt((sum[0] * sum[0]) + (sum[1] * sum[1]) + (sum[2] * sum[2]));
+
+            // Get an index to the vertex location in the height map array.
+            index = (j * m_terrainHeight) + i;
+
+            // Normalize the final shared normal for this vertex and store it in the height map array.
+            m_heightMap[index].nx = (sum[0] / length);
+            m_heightMap[index].ny = (sum[1] / length);
+            m_heightMap[index].nz = (sum[2] / length);
+        }
+    }
+
+    // Release the temporary normals.
+    delete[] normals;
+    normals = 0;
 }
 
 bool Terrain::LoadRawHeightMap(char const* fileName)

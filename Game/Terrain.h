@@ -18,7 +18,13 @@ class Terrain
         struct HeightMapType
         {
             float x, y, z;
+            float nx, ny, nz;
             float u, v;
+        };
+        
+        struct VectorType
+        {
+            float x, y, z;
         };
 
         void Initialize(ID3D11DeviceContext* deviceContext);
@@ -30,6 +36,7 @@ class Terrain
 
         void SetTerrainCoordinates();
         void SetTextureCoordinates();
+        void CalculateNormals();
 
     private:
         static constexpr int const TEXTURE_REPEAT = 16;
@@ -39,7 +46,7 @@ class Terrain
         int m_vertexCount, m_indexCount;
         float m_heightScale;
         HeightMapType* m_heightMap;
-        VertexBuffer<DirectX::VertexPositionColorTexture> vertexBuffer;
+        VertexBuffer<DirectX::VertexPositionNormalColorTexture> vertexBuffer;
         IndexBuffer<DWORD> indexBuffer;
         TerrainShader shader;
 };

@@ -97,6 +97,9 @@
     <ClInclude Include="MD5Animation.h">
       <Filter>Game\MD5Model</Filter>
     </ClInclude>
+    <ClInclude Include="ConstantBufferTypes.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -159,6 +162,9 @@
     </ClCompile>
     <ClCompile Include="MD5Animation.cpp">
       <Filter>Game\MD5Model</Filter>
+    </ClCompile>
+    <ClCompile Include="ConstantBufferTypes.cpp">
+      <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -160,6 +160,7 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ConstantBuffer.h" />
+    <ClInclude Include="ConstantBufferTypes.h" />
     <ClInclude Include="DeviceResources.h" />
     <ClInclude Include="DynamicVertexBuffer.h" />
     <ClInclude Include="Game.h" />
@@ -183,6 +184,7 @@
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ConstantBuffer.cpp" />
+    <ClCompile Include="ConstantBufferTypes.cpp" />
     <ClCompile Include="DeviceResources.cpp" />
     <ClCompile Include="DynamicVertexBuffer.cpp" />
     <ClCompile Include="Game.cpp" />

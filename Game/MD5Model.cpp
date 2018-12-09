@@ -242,6 +242,114 @@ bool MD5Model::LoadModel(ID3D11DeviceContext* deviceContext, std::wstring const&
     return true;
 }
 
+bool MD5Model::LoadAnim(std::wstring const& fileName)
+{
+    if (m_Animation.LoadAnimation(fileName))
+    {
+        // Check to make sure the animation is appropriate for this model.
+        m_bHasAnimation = CheckAnimation(m_Animation);
+    }
+    return false;
+}
+
+void MD5Model::Update(ID3D11DeviceContext* deviceContext, float deltaTime)
+{
+    m_Animation.currAnimTime += deltaTime;
+
+    if (m_Animation.currAnimTime > m_Animation.totalAnimTime)
+        m_Animation.currAnimTime = 0.0f;
+
+    // Which frame are we on
+    float currentFrame = m_Animation.currAnimTime * m_Animation.m_iFrameRate;
+    int frame0 = static_cast<int>(floorf(currentFrame));
+    int frame1 = frame0 + 1;
+
+    // Make sure we don't go over the number of frames.
+    if (frame0 == m_Animation.m_iNumFrames - 1)
+        frame1 = 0;
+
+    float interpolation = currentFrame - frame0; // Get the remainder (in time) between frame0 and frame1 to use as interpolation factor.
+
+    std::vector<MD5Animation::Joint> interpolatedSkeleton; // Create a frame skeleton to store the interpolated skeletons in
+
+    // Compute the interpolated skeleton.
+    for (int i = 0; i < m_Animation.m_iNumJoints; i++)
+    {
+        MD5Animation::Joint tempJoint;
+        MD5Animation::Joint joint0 = m_Animation.frameSkeleton[frame0][i];
+        MD5Animation::Joint joint1 = m_Animation.frameSkeleton[frame1][i];
+
+        tempJoint.m_iParentId = joint0.m_iParentId;
+
+        // Turn the two quaternions into XMVECTORs for easy computations.
+        DirectX::XMVECTOR joint0Orient = DirectX::XMVectorSet(joint0.m_Orient.x, joint0.m_Orient.y, joint0.m_Orient.z, joint0.m_Orient.w);
+        DirectX::XMVECTOR joint1Orient = DirectX::XMVectorSet(joint1.m_Orient.x, joint1.m_Orient.y, joint1.m_Orient.z, joint1.m_Orient.w);
+
+        // Interpolate positions
+        tempJoint.m_Pos.x = joint0.m_Pos.x + (interpolation * (joint1.m_Pos.x - joint0.m_Pos.x));
+        tempJoint.m_Pos.y = joint0.m_Pos.y + (interpolation * (joint1.m_Pos.y - joint0.m_Pos.y));
+        tempJoint.m_Pos.z = joint0.m_Pos.z + (interpolation * (joint1.m_Pos.z - joint0.m_Pos.z));
+
+        // Interpolate orientations using spherical interpolation (Slerp).
+        DirectX::XMStoreFloat4(&tempJoint.m_Orient, DirectX::XMQuaternionSlerp(joint0Orient, joint1Orient, interpolation));
+
+        interpolatedSkeleton.push_back(tempJoint); // Push the joint back into our interpolated skeleton.
+    }
+
+    for (int k = 0; k < m_iNumMeshes; k++)
+    {
+        for (int i = 0; i < m_Meshes[k].vertices.size(); ++i)
+        {
+            MD5Vertex tempVert = m_Meshes[k].vertices[i];
+            tempVert.position = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f); // Make sure the vertex's pos is cleared first.
+            tempVert.normal = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f); // Clear vertices normal.
+
+            // Sum up the joints and weights information to get vertex's position and normal.
+            for (int j = 0; j < tempVert.WeightCount; ++j)
+            {
+                Weight tempWeight = m_Meshes[k].m_Weights[tempVert.StartWeight + j];
+                MD5Animation::Joint tempJoint = interpolatedSkeleton[tempWeight.m_JointId];
+
+                // Convert joint orientation and weight pos to vectors for easier computation.
+                DirectX::XMVECTOR tempJointOrientation = DirectX::XMVectorSet(tempJoint.m_Orient.x, tempJoint.m_Orient.y, tempJoint.m_Orient.z, tempJoint.m_Orient.w);
+                DirectX::XMVECTOR tempWeightPos = DirectX::XMVectorSet(tempWeight.m_Pos.x, tempWeight.m_Pos.y, tempWeight.m_Pos.z, 0.0f);
+
+                // We will need to use the conjugate of the joint orientation quaternion
+                DirectX::XMVECTOR tempJointOrientationConjugate = DirectX::XMQuaternionInverse(tempJointOrientation);
+
+                // Calculate vertex position (in joint space, eg. rotate the point around (0,0,0)) for this weight using the joint orientation quaternion and its conjugate
+                // We can rotate a point using a quaternion with the equation "rotatedPoint = quaternion * point * quaternionConjugate"
+                DirectX::XMFLOAT3 rotatedPoint;
+                DirectX::XMStoreFloat3(&rotatedPoint, DirectX::XMQuaternionMultiply(DirectX::XMQuaternionMultiply(tempJointOrientation, tempWeightPos), tempJointOrientationConjugate));
+
+                // Now move the vertices position from joint space (0, 0, 0) to the joints position in world space, taking the weights bias into account
+                tempVert.position.x += (tempJoint.m_Pos.x + rotatedPoint.x) * tempWeight.m_Bias;
+                tempVert.position.y += (tempJoint.m_Pos.y + rotatedPoint.y) * tempWeight.m_Bias;
+                tempVert.position.z += (tempJoint.m_Pos.z + rotatedPoint.z) * tempWeight.m_Bias;
+
+                // Compute the normals for this frames skeleton using the weight normals from before
+                // We can compute the normals the same way we compute the vertices position,
+                // only we don't have to translate them (just rotate).
+                DirectX::XMVECTOR tempWeightNormal = DirectX::XMVectorSet(tempWeight.m_Normal.x, tempWeight.m_Normal.y, tempWeight.m_Normal.z, 0.0f);
+
+                // Rotate the normal
+                DirectX::XMStoreFloat3(&rotatedPoint, DirectX::XMQuaternionMultiply(DirectX::XMQuaternionMultiply(tempJointOrientation, tempWeightNormal), tempJointOrientationConjugate));
+
+                // Add to vertices normal and take weight bias into account
+                tempVert.normal.x -= rotatedPoint.x * tempWeight.m_Bias;
+                tempVert.normal.y -= rotatedPoint.y * tempWeight.m_Bias;
+                tempVert.normal.z -= rotatedPoint.z * tempWeight.m_Bias;
+            }
+
+            m_Meshes[k].vertices[i].position = tempVert.position;
+            m_Meshes[k].vertices[i].normal = tempVert.normal;
+            DirectX::XMStoreFloat3(&m_Meshes[k].vertices[i].normal, DirectX::XMVector3Normalize(DirectX::XMLoadFloat3(&m_Meshes[k].vertices[i].normal)));
+        }
+
+        m_Meshes[k].vertexBuffer->SetData(deviceContext, &m_Meshes[k].vertices[0], static_cast<UINT>(m_Meshes[k].vertices.size()));
+    }
+}
+
 void MD5Model::SetMatrices(ID3D11DeviceContext* deviceContext, DirectX::XMMATRIX world, DirectX::XMMATRIX view, DirectX::XMMATRIX proj)
 {
     shader.SetShaderParameters(deviceContext, world, view, proj);
@@ -387,6 +495,23 @@ void MD5Model::PrepareNormals(Mesh& mesh)
         normalSum = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
         facesUsing = 0;
     }
+}
+
+bool MD5Model::CheckAnimation(MD5Animation const& animation) const
+{
+    if (m_iNumJoints != animation.GetNumJoints())
+        return false;
+
+    // Check to make sure the joints match up
+    for (unsigned int i = 0; i < m_Joints.size(); ++i)
+    {
+        Joint const& meshJoint = m_Joints[i];
+        MD5Animation::JointInfo const& animJoint = animation.GetJointInfo(i);
+
+        if (meshJoint.m_Name != animJoint.m_Name || meshJoint.m_ParentId != animJoint.m_ParentId)
+            return false;
+    }
+    return true;
 }
 
 void MD5Model::QuaternionComputeW(DirectX::XMFLOAT4& q)

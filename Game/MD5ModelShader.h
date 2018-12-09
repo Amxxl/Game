@@ -10,6 +10,9 @@
 class MD5ModelShader
 {
     public:
+        MD5ModelShader();
+        ~MD5ModelShader();
+
         struct MatrixBufferType
         {
             DirectX::XMMATRIX world;
@@ -17,8 +20,13 @@ class MD5ModelShader
             DirectX::XMMATRIX proj;
         };
 
-        MD5ModelShader();
-        ~MD5ModelShader();
+        struct LightBufferType
+        {
+            DirectX::XMFLOAT4 ambientColor;
+            DirectX::XMFLOAT4 diffuseColor;
+            DirectX::XMFLOAT3 lightDirection;
+            float padding;
+        };
 
         void InitializeShaders(ID3D11DeviceContext* deviceContext);
         void SetShaderParameters(ID3D11DeviceContext* deviceContext, DirectX::XMMATRIX world, DirectX::XMMATRIX view, DirectX::XMMATRIX proj);
@@ -32,5 +40,6 @@ class MD5ModelShader
         Microsoft::WRL::ComPtr<ID3D11PixelShader> pixelShader;
         Microsoft::WRL::ComPtr<ID3D11InputLayout> inputLayout;
         ConstantBuffer<MatrixBufferType> constantBuffer;
+        ConstantBuffer<LightBufferType> lightBuffer;
 };
 
