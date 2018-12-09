@@ -39,6 +39,7 @@ class DynamicVertexBuffer
         void SetData(_In_ ID3D11DeviceContext* deviceContext, T* data, UINT numVertices)
         {
             assert(buffer);
+            this->bufferSize = numVertices;
 
             D3D11_MAPPED_SUBRESOURCE mappedResource;
             DX::ThrowIfFailed(deviceContext->Map(buffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource));
