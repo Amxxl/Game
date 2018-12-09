@@ -137,8 +137,9 @@ void PlayScene::Update(DX::StepTimer const& timer)
 void PlayScene::Render()
 {
     m_world = XMMatrixIdentity();
+
     sky->Draw(m_world * XMMatrixTranslation(camera.GetPositionFloat3().x, camera.GetPositionFloat3().y, camera.GetPositionFloat3().z), camera.GetViewMatrix(), camera.GetProjectionMatrix(), Colors::White, skyTexture.Get());
-    
+
     terrain.SetMatrices(m_deviceContext, m_world, camera.GetViewMatrix(), camera.GetProjectionMatrix());
     terrain.Render(m_deviceContext);
 

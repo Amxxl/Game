@@ -86,7 +86,7 @@ bool MD5Model::LoadModel(ID3D11DeviceContext* deviceContext, std::wstring const&
                     }
                 }
 
-                fileIn >> joint.m_ParentId; // Store Parent joint's Id.
+                fileIn >> joint.m_ParentId; // Store Parent joint Id.
                 fileIn >> data; // Skip the "("
 
                 // Store position of this joint.

@@ -57,20 +57,18 @@ class PlayScene : public Scene
 
     private:
         std::unique_ptr<DirectX::GeometricPrimitive> sky;
+        Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> skyTexture;
 
         ID3D11DeviceContext* m_deviceContext = nullptr;
 
         Terrain terrain;
         MD5Model model;
-
-        Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> skyTexture;
-        std::unique_ptr<DirectX::BasicEffect> effect;
-
         Camera camera;
         XMMATRIX m_world;
 
         int mouse_x;
         int mouse_y;
+
     private:
         bool paused;
 };
