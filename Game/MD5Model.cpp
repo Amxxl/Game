@@ -10,18 +10,17 @@ MD5Model::MD5Model()
 {
 }
 
-
 MD5Model::~MD5Model()
 {
-    for (int i = 0; i < m_Meshes.size(); ++i)
+    for (int i = 0; i < model.meshes.size(); ++i)
     {
-        delete m_Meshes[i].vertexBuffer;
-        m_Meshes[i].vertexBuffer = nullptr;
+        delete model.meshes[i].vertexBuffer;
+        model.meshes[i].vertexBuffer = nullptr;
 
-        delete m_Meshes[i].indexBuffer;
-        m_Meshes[i].indexBuffer = nullptr;
+        delete model.meshes[i].indexBuffer;
+        model.meshes[i].indexBuffer = nullptr;
     }
-    m_Meshes.clear();
+    model.meshes.clear();
 }
 
 bool MD5Model::LoadModel(ID3D11DeviceContext* deviceContext, std::wstring const& fileName)
@@ -42,9 +41,12 @@ bool MD5Model::LoadModel(ID3D11DeviceContext* deviceContext, std::wstring const&
 
         if (data == L"MD5Version")
         {
-            fileIn >> m_iMD5Version; // Store version of md5mesh file.
+            // Check version of .md5mesh file.
+            int MD5Version = 0;
+            fileIn >> MD5Version;
 
-            if (m_iMD5Version != 10) // MD5 version must be 10
+            // MD5 Version must be 10.
+            if (MD5Version != 10)
                 return false;
         }
         else if (data == L"commandline")
@@ -53,11 +55,11 @@ bool MD5Model::LoadModel(ID3D11DeviceContext* deviceContext, std::wstring const&
         }
         else if (data == L"numJoints")
         {
-            fileIn >> m_iNumJoints; // Store number of joints.
+            fileIn >> model.numJoints; // Store number of joints.
         }
         else if (data == L"numMeshes")
         {
-            fileIn >> m_iNumMeshes; // Store number of meshes.
+            fileIn >> model.numMeshes; // Store number of meshes.
         }
         else if (data == L"joints")
         {
@@ -65,7 +67,7 @@ bool MD5Model::LoadModel(ID3D11DeviceContext* deviceContext, std::wstring const&
 
             fileIn >> data; // Skip the "{"
 
-            for (int i = 0; i < m_iNumJoints; i++)
+            for (int i = 0; i < model.numJoints; i++)
             {
                 fileIn >> joint.m_Name;
 
@@ -104,7 +106,7 @@ bool MD5Model::LoadModel(ID3D11DeviceContext* deviceContext, std::wstring const&
                 this->QuaternionComputeW(joint.m_Orient);
 
                 std::getline(fileIn, data); // Skip rest of this lane.
-                m_Joints.push_back(joint); // Store the joint into joint vector.
+                model.joints.push_back(joint); // Store the joint into joints vector.
             }
 
             fileIn >> data; // Skip the "}"
@@ -233,7 +235,7 @@ bool MD5Model::LoadModel(ID3D11DeviceContext* deviceContext, std::wstring const&
             mesh.vertexBuffer = new DynamicVertexBuffer<MD5Vertex>(device, &mesh.vertices[0], static_cast<UINT>(mesh.vertices.size()));
             mesh.indexBuffer = new IndexBuffer<DWORD>(device, &mesh.indices[0], mesh.trianglesCount * 3);
 
-            m_Meshes.push_back(mesh);
+            model.meshes.push_back(mesh); // Store mesh in model's meshes vector.
         }
     }
 
@@ -244,28 +246,28 @@ bool MD5Model::LoadModel(ID3D11DeviceContext* deviceContext, std::wstring const&
 
 bool MD5Model::LoadAnim(std::wstring const& fileName)
 {
-    if (m_Animation.LoadAnimation(fileName))
+    if (model.animation.LoadAnimation(fileName))
     {
         // Check to make sure the animation is appropriate for this model.
-        m_bHasAnimation = CheckAnimation(m_Animation);
+        model.HasAnimation = CheckAnimation(model.animation);
     }
     return false;
 }
 
 void MD5Model::Update(ID3D11DeviceContext* deviceContext, float deltaTime)
 {
-    m_Animation.currAnimTime += deltaTime;
+    model.animation.currAnimTime += deltaTime;
 
-    if (m_Animation.currAnimTime > m_Animation.totalAnimTime)
-        m_Animation.currAnimTime = 0.0f;
+    if (model.animation.currAnimTime > model.animation.totalAnimTime)
+        model.animation.currAnimTime = 0.0f;
 
     // Which frame are we on
-    float currentFrame = m_Animation.currAnimTime * m_Animation.m_iFrameRate;
+    float currentFrame = model.animation.currAnimTime * model.animation.m_iFrameRate;
     int frame0 = static_cast<int>(floorf(currentFrame));
     int frame1 = frame0 + 1;
 
     // Make sure we don't go over the number of frames.
-    if (frame0 == m_Animation.m_iNumFrames - 1)
+    if (frame0 == model.animation.m_iNumFrames - 1)
         frame1 = 0;
 
     float interpolation = currentFrame - frame0; // Get the remainder (in time) between frame0 and frame1 to use as interpolation factor.
@@ -273,11 +275,11 @@ void MD5Model::Update(ID3D11DeviceContext* deviceContext, float deltaTime)
     std::vector<MD5Animation::Joint> interpolatedSkeleton; // Create a frame skeleton to store the interpolated skeletons in
 
     // Compute the interpolated skeleton.
-    for (int i = 0; i < m_Animation.m_iNumJoints; i++)
+    for (int i = 0; i < model.animation.m_iNumJoints; i++)
     {
         MD5Animation::Joint tempJoint;
-        MD5Animation::Joint joint0 = m_Animation.frameSkeleton[frame0][i];
-        MD5Animation::Joint joint1 = m_Animation.frameSkeleton[frame1][i];
+        MD5Animation::Joint joint0 = model.animation.frameSkeleton[frame0][i];
+        MD5Animation::Joint joint1 = model.animation.frameSkeleton[frame1][i];
 
         tempJoint.m_iParentId = joint0.m_iParentId;
 
@@ -296,18 +298,18 @@ void MD5Model::Update(ID3D11DeviceContext* deviceContext, float deltaTime)
         interpolatedSkeleton.push_back(tempJoint); // Push the joint back into our interpolated skeleton.
     }
 
-    for (int k = 0; k < m_iNumMeshes; k++)
+    for (int k = 0; k < model.numMeshes; k++)
     {
-        for (int i = 0; i < m_Meshes[k].vertices.size(); ++i)
+        for (int i = 0; i < model.meshes[k].vertices.size(); ++i)
         {
-            MD5Vertex tempVert = m_Meshes[k].vertices[i];
+            MD5Vertex tempVert = model.meshes[k].vertices[i];
             tempVert.position = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f); // Make sure the vertex's pos is cleared first.
             tempVert.normal = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f); // Clear vertices normal.
 
             // Sum up the joints and weights information to get vertex's position and normal.
             for (int j = 0; j < tempVert.WeightCount; ++j)
             {
-                Weight tempWeight = m_Meshes[k].m_Weights[tempVert.StartWeight + j];
+                Weight tempWeight = model.meshes[k].m_Weights[tempVert.StartWeight + j];
                 MD5Animation::Joint tempJoint = interpolatedSkeleton[tempWeight.m_JointId];
 
                 // Convert joint orientation and weight pos to vectors for easier computation.
@@ -341,12 +343,12 @@ void MD5Model::Update(ID3D11DeviceContext* deviceContext, float deltaTime)
                 tempVert.normal.z -= rotatedPoint.z * tempWeight.m_Bias;
             }
 
-            m_Meshes[k].vertices[i].position = tempVert.position;
-            m_Meshes[k].vertices[i].normal = tempVert.normal;
-            DirectX::XMStoreFloat3(&m_Meshes[k].vertices[i].normal, DirectX::XMVector3Normalize(DirectX::XMLoadFloat3(&m_Meshes[k].vertices[i].normal)));
+            model.meshes[k].vertices[i].position = tempVert.position;
+            model.meshes[k].vertices[i].normal = tempVert.normal;
+            DirectX::XMStoreFloat3(&model.meshes[k].vertices[i].normal, DirectX::XMVector3Normalize(DirectX::XMLoadFloat3(&model.meshes[k].vertices[i].normal)));
         }
 
-        m_Meshes[k].vertexBuffer->SetData(deviceContext, &m_Meshes[k].vertices[0], static_cast<UINT>(m_Meshes[k].vertices.size()));
+        model.meshes[k].vertexBuffer->SetData(deviceContext, &model.meshes[k].vertices[0], static_cast<UINT>(model.meshes[k].vertices.size()));
     }
 }
 
@@ -357,16 +359,16 @@ void MD5Model::SetMatrices(ID3D11DeviceContext* deviceContext, DirectX::XMMATRIX
 
 void MD5Model::Render(ID3D11DeviceContext* deviceContext)
 {
-    for (int i = 0; i < m_iNumMeshes; i++)
+    for (int i = 0; i < model.numMeshes; i++)
     {
-        deviceContext->IASetIndexBuffer(m_Meshes[i].indexBuffer->Get(), DXGI_FORMAT_R32_UINT, 0);
+        deviceContext->IASetIndexBuffer(model.meshes[i].indexBuffer->Get(), DXGI_FORMAT_R32_UINT, 0);
 
-        UINT stride = m_Meshes[i].vertexBuffer->Stride();
+        UINT stride = model.meshes[i].vertexBuffer->Stride();
         UINT offset = 0;
-        deviceContext->IASetVertexBuffers(0, 1, m_Meshes[i].vertexBuffer->GetAddressOf(), &stride, &offset);
+        deviceContext->IASetVertexBuffers(0, 1, model.meshes[i].vertexBuffer->GetAddressOf(), &stride, &offset);
 
-        shader.SetTexture(deviceContext, m_Meshes[i].texture.Get());
-        shader.RenderShader(deviceContext, static_cast<UINT>(m_Meshes[i].indices.size()));
+        shader.SetTexture(deviceContext, model.meshes[i].texture.Get());
+        shader.RenderShader(deviceContext, static_cast<UINT>(model.meshes[i].indices.size()));
     }
 }
 
@@ -381,7 +383,7 @@ void MD5Model::PrepareMesh(Mesh& mesh)
         for (int j = 0; j < vertex.WeightCount; ++j)
         {
             Weight weight = mesh.m_Weights[vertex.StartWeight + j];
-            Joint joint = m_Joints[weight.m_JointId];
+            Joint joint = model.joints[weight.m_JointId];
 
             DirectX::XMVECTOR tempJointOrientation = DirectX::XMVectorSet(joint.m_Orient.x, joint.m_Orient.y, joint.m_Orient.z, joint.m_Orient.w);
             DirectX::XMVECTOR tempWeightPos = DirectX::XMVectorSet(weight.m_Pos.x, weight.m_Pos.y, weight.m_Pos.z, 0.0f);
@@ -482,7 +484,7 @@ void MD5Model::PrepareNormals(Mesh& mesh)
 
         for (int k = 0; k < vertex.WeightCount; k++)
         {
-            Joint joint = m_Joints[mesh.m_Weights[vertex.StartWeight + k].m_JointId];
+            Joint joint = model.joints[mesh.m_Weights[vertex.StartWeight + k].m_JointId];
             XMVECTOR jointOrientation = XMVectorSet(joint.m_Orient.x, joint.m_Orient.y, joint.m_Orient.z, joint.m_Orient.w);
 
             // Calculate normal based off joints orientation (turn into joint space).
@@ -499,13 +501,13 @@ void MD5Model::PrepareNormals(Mesh& mesh)
 
 bool MD5Model::CheckAnimation(MD5Animation const& animation) const
 {
-    if (m_iNumJoints != animation.GetNumJoints())
+    if (model.numJoints != animation.GetNumJoints())
         return false;
 
     // Check to make sure the joints match up
-    for (unsigned int i = 0; i < m_Joints.size(); ++i)
+    for (unsigned int i = 0; i < model.joints.size(); ++i)
     {
-        Joint const& meshJoint = m_Joints[i];
+        Joint const& meshJoint = model.joints[i];
         MD5Animation::JointInfo const& animJoint = animation.GetJointInfo(i);
 
         if (meshJoint.m_Name != animJoint.m_Name || meshJoint.m_ParentId != animJoint.m_ParentId)

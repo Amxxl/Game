@@ -57,6 +57,18 @@ class MD5Model
             IndexBuffer<DWORD>* indexBuffer;
         };
 
+        struct Model
+        {
+            int numJoints;
+            int numMeshes;
+
+            std::vector<Joint> joints;
+            std::vector<Mesh> meshes;
+
+            bool HasAnimation;
+            MD5Animation animation;
+        };
+
         void PrepareMesh(Mesh& mesh);
         void PrepareNormals(Mesh& mesh);
 
@@ -65,16 +77,7 @@ class MD5Model
     private:
         void QuaternionComputeW(DirectX::XMFLOAT4& q);
 
-        int m_iMD5Version;
-        int m_iNumJoints;
-        int m_iNumMeshes;
-
-        std::vector<Joint> m_Joints;
-        std::vector<Mesh> m_Meshes;
-
-        MD5Animation m_Animation;
-        bool m_bHasAnimation;
-
+        Model model;
         MD5ModelShader shader;
 };
 
