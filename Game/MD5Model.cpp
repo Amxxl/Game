@@ -262,12 +262,12 @@ void MD5Model::Update(ID3D11DeviceContext* deviceContext, float deltaTime)
         model.animation.currAnimTime = 0.0f;
 
     // Which frame are we on
-    float currentFrame = model.animation.currAnimTime * model.animation.m_iFrameRate;
+    float currentFrame = model.animation.currAnimTime * model.animation.frameRate;
     int frame0 = static_cast<int>(floorf(currentFrame));
     int frame1 = frame0 + 1;
 
     // Make sure we don't go over the number of frames.
-    if (frame0 == model.animation.m_iNumFrames - 1)
+    if (frame0 == model.animation.numFrames - 1)
         frame1 = 0;
 
     float interpolation = currentFrame - frame0; // Get the remainder (in time) between frame0 and frame1 to use as interpolation factor.
@@ -275,7 +275,7 @@ void MD5Model::Update(ID3D11DeviceContext* deviceContext, float deltaTime)
     std::vector<MD5Animation::Joint> interpolatedSkeleton; // Create a frame skeleton to store the interpolated skeletons in
 
     // Compute the interpolated skeleton.
-    for (int i = 0; i < model.animation.m_iNumJoints; i++)
+    for (int i = 0; i < model.animation.numJoints; i++)
     {
         MD5Animation::Joint tempJoint;
         MD5Animation::Joint joint0 = model.animation.frameSkeleton[frame0][i];

@@ -32,6 +32,39 @@
     <Filter Include="Game\MD5Model">
       <UniqueIdentifier>{1ad24ecb-6b22-4a55-ab97-de09f683ea53}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics\Buffers">
+      <UniqueIdentifier>{afc3f87d-f1e4-4c43-bc6e-9581c2f726f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Buffers\Vertex">
+      <UniqueIdentifier>{dd8b5cfe-c7ed-4d09-a70f-c727ad05f897}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Buffers\Index">
+      <UniqueIdentifier>{a0de050d-a990-4726-a934-4833d8a04020}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Buffers\Constant">
+      <UniqueIdentifier>{47a55836-1f41-4189-b696-5a2283f5cadf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Buffers\Constant\Types">
+      <UniqueIdentifier>{22597b25-27c1-4bdf-a6ba-ad69142990d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Buffers\Vertex\Types">
+      <UniqueIdentifier>{319bdef6-a9d8-4427-84b0-cf68fa7fa0ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\Models">
+      <UniqueIdentifier>{95107d52-2e76-449d-b2d0-6eafb2b0e416}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\Models\Guard">
+      <UniqueIdentifier>{3628a3d0-7c02-4e15-a6f2-c6c330aa7ff4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\Models\Guard\Textures">
+      <UniqueIdentifier>{5526205e-d82f-4aa7-92b2-07aa8d38e6c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\Terrain">
+      <UniqueIdentifier>{0a0a9485-aff7-48a1-90e4-50e1ca69f958}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\Images">
+      <UniqueIdentifier>{2c843e4a-9af7-4b38-9bb2-f6a92087244f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene.h">
@@ -51,15 +84,6 @@
     </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Game</Filter>
-    </ClInclude>
-    <ClInclude Include="VertexBuffer.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="IndexBuffer.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="ConstantBuffer.h">
-      <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="SceneNode.h">
       <Filter>Game\Scenes</Filter>
@@ -82,9 +106,6 @@
     <ClInclude Include="StepTimer.h">
       <Filter>System</Filter>
     </ClInclude>
-    <ClInclude Include="DynamicVertexBuffer.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="MD5Vertex.h">
       <Filter>Game\MD5Model</Filter>
     </ClInclude>
@@ -98,7 +119,22 @@
       <Filter>Game\MD5Model</Filter>
     </ClInclude>
     <ClInclude Include="ConstantBufferTypes.h">
-      <Filter>Graphics</Filter>
+      <Filter>Graphics\Buffers\Constant\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="ConstantBuffer.h">
+      <Filter>Graphics\Buffers\Constant</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexBuffer.h">
+      <Filter>Graphics\Buffers\Vertex</Filter>
+    </ClInclude>
+    <ClInclude Include="DynamicVertexBuffer.h">
+      <Filter>Graphics\Buffers\Vertex</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexBufferTypes.h">
+      <Filter>Graphics\Buffers\Vertex\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="IndexBuffer.h">
+      <Filter>Graphics\Buffers\Index</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -118,15 +154,6 @@
     <ClCompile Include="Game.cpp">
       <Filter>Game</Filter>
     </ClCompile>
-    <ClCompile Include="VertexBuffer.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="IndexBuffer.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="ConstantBuffer.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="SceneNode.cpp">
       <Filter>Game\Scenes</Filter>
     </ClCompile>
@@ -145,9 +172,6 @@
     <ClCompile Include="DeviceResources.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="DynamicVertexBuffer.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>Game</Filter>
     </ClCompile>
@@ -164,15 +188,75 @@
       <Filter>Game\MD5Model</Filter>
     </ClCompile>
     <ClCompile Include="ConstantBufferTypes.cpp">
-      <Filter>Graphics</Filter>
+      <Filter>Graphics\Buffers\Constant\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="ConstantBuffer.cpp">
+      <Filter>Graphics\Buffers\Constant</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexBuffer.cpp">
+      <Filter>Graphics\Buffers\Vertex</Filter>
+    </ClCompile>
+    <ClCompile Include="DynamicVertexBuffer.cpp">
+      <Filter>Graphics\Buffers\Vertex</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexBufferTypes.cpp">
+      <Filter>Graphics\Buffers\Vertex\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="IndexBuffer.cpp">
+      <Filter>Graphics\Buffers\Index</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="bow.ico">
       <Filter>Assets</Filter>
     </Image>
+    <Image Include="guard1_body.jpg">
+      <Filter>Assets\Models\Guard\Textures</Filter>
+    </Image>
+    <Image Include="guard1_body_h.jpg">
+      <Filter>Assets\Models\Guard\Textures</Filter>
+    </Image>
+    <Image Include="guard1_body_s.jpg">
+      <Filter>Assets\Models\Guard\Textures</Filter>
+    </Image>
+    <Image Include="guard1_face.jpg">
+      <Filter>Assets\Models\Guard\Textures</Filter>
+    </Image>
+    <Image Include="guard1_face_local.jpg">
+      <Filter>Assets\Models\Guard\Textures</Filter>
+    </Image>
+    <Image Include="guard1_face_s.jpg">
+      <Filter>Assets\Models\Guard\Textures</Filter>
+    </Image>
+    <Image Include="guard1_helmet.jpg">
+      <Filter>Assets\Models\Guard\Textures</Filter>
+    </Image>
+    <Image Include="guard1_helmet_h.jpg">
+      <Filter>Assets\Models\Guard\Textures</Filter>
+    </Image>
+    <Image Include="guard1_helmet_s.jpg">
+      <Filter>Assets\Models\Guard\Textures</Filter>
+    </Image>
+    <Image Include="iron_grill.jpg">
+      <Filter>Assets\Models\Guard\Textures</Filter>
+    </Image>
+    <Image Include="round_grill.jpg">
+      <Filter>Assets\Models\Guard\Textures</Filter>
+    </Image>
+    <Image Include="round_grill_h.jpg">
+      <Filter>Assets\Models\Guard\Textures</Filter>
+    </Image>
+    <Image Include="terrain.jpg">
+      <Filter>Assets\Terrain</Filter>
+    </Image>
     <Image Include="terrain.png">
-      <Filter>Assets</Filter>
+      <Filter>Assets\Terrain</Filter>
+    </Image>
+    <Image Include="sky.jpg">
+      <Filter>Assets\Images</Filter>
+    </Image>
+    <Image Include="water.jpg">
+      <Filter>Assets\Images</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>
@@ -200,8 +284,14 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="guard.md5anim">
+      <Filter>Assets\Models\Guard</Filter>
+    </None>
+    <None Include="guard.md5mesh">
+      <Filter>Assets\Models\Guard</Filter>
+    </None>
     <None Include="terrain.raw">
-      <Filter>Assets</Filter>
+      <Filter>Assets\Terrain</Filter>
     </None>
   </ItemGroup>
 </Project>

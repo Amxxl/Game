@@ -80,4 +80,3 @@ class MD5Model
         Model model;
         MD5ModelShader shader;
 };
-

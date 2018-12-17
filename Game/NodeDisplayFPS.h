@@ -22,6 +22,7 @@ class NodeDisplayFPS : public SceneNode
         void Render() override;
 
     private:
+        bool display;
         unsigned int m_fps;
 };
 

@@ -9,43 +9,41 @@ class VertexBuffer
 {
     public:
         VertexBuffer() = default;
-        explicit VertexBuffer(_In_ ID3D11Device* device, _In_ T* data, UINT numVertices)
+        explicit VertexBuffer(_In_ ID3D11Device* device, _In_ T* data, UINT vertexCount)
         {
-            Create(device, data, numVertices);
+            Create(device, data, vertexCount);
         }
 
         VertexBuffer(VertexBuffer const&) = delete;
         VertexBuffer& operator=(VertexBuffer const&) = delete;
 
-        void Create(_In_ ID3D11Device* device, _In_ T* data, UINT numVertices)
+        void Create(_In_ ID3D11Device* device, _In_ T* data, UINT vertexCount)
         {
-            this->bufferSize = numVertices;
-            this->stride = std::make_unique<UINT>(static_cast<UINT>(sizeof(T)));
+            this->vertexCount = vertexCount;
 
-            D3D11_BUFFER_DESC vertexBufferDesc = {};
-            vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-            vertexBufferDesc.ByteWidth = sizeof(T) * numVertices;
-            vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-            vertexBufferDesc.CPUAccessFlags = 0;
-            vertexBufferDesc.MiscFlags = 0;
+            D3D11_BUFFER_DESC desc = { };
 
-            D3D11_SUBRESOURCE_DATA vertexBufferData = {};
+            desc.ByteWidth = stride * vertexCount;
+            desc.Usage = D3D11_USAGE_DEFAULT;
+            desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+
+            D3D11_SUBRESOURCE_DATA vertexBufferData = { };
             vertexBufferData.pSysMem = data;
 
-            DX::ThrowIfFailed(device->CreateBuffer(&vertexBufferDesc, &vertexBufferData, buffer.GetAddressOf()));
+            DX::ThrowIfFailed(
+                device->CreateBuffer(&desc, &vertexBufferData, buffer.ReleaseAndGetAddressOf())
+            );
         }
 
         ID3D11Buffer* Get() const { return buffer.Get(); }
         ID3D11Buffer* const* GetAddressOf() const { return buffer.GetAddressOf(); }
-        UINT BufferSize() const { return this->bufferSize; }
+        UINT VertexCount() const { return vertexCount; }
 
-        UINT const Stride() const { return *this->stride.get(); }
-        UINT const* StridePtr() const { return this->stride.get(); }
+        UINT const Stride() const { return stride; }
+        UINT const* StridePtr() const { return &stride; }
 
     private:
         Microsoft::WRL::ComPtr<ID3D11Buffer> buffer;
-        std::unique_ptr<UINT> stride;
-        UINT bufferSize = 0;
-
+        UINT stride = static_cast<UINT>(sizeof(T));
+        UINT vertexCount = 0;
 };
-

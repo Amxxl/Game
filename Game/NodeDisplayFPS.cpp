@@ -4,6 +4,7 @@
 NodeDisplayFPS::NodeDisplayFPS()
 {
     m_fps = 0;
+    display = true;
 }
 
 
@@ -19,6 +20,9 @@ void NodeDisplayFPS::Update(DX::StepTimer const& timer)
 
 void NodeDisplayFPS::Render()
 {
+    if (!display)
+        return;
+
     ImGui_ImplDX11_NewFrame();
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
@@ -28,6 +32,10 @@ void NodeDisplayFPS::Render()
     std::ostringstream ss;
     ss << "Frames per second: " << m_fps;
     ImGui::Text(ss.str().c_str());
+    if (ImGui::Button("Hide", ImVec2(60.0f, 20.0f)))
+    {
+        display = false;
+    }
 
     ImGui::End();
     ImGui::Render();

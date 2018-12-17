@@ -180,6 +180,7 @@
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="TerrainShader.h" />
     <ClInclude Include="VertexBuffer.h" />
+    <ClInclude Include="VertexBufferTypes.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
@@ -209,13 +210,29 @@
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="TerrainShader.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
+    <ClCompile Include="VertexBufferTypes.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="bow.ico" />
+    <Image Include="guard1_body.jpg" />
+    <Image Include="guard1_body_h.jpg" />
+    <Image Include="guard1_body_s.jpg" />
+    <Image Include="guard1_face.jpg" />
+    <Image Include="guard1_face_local.jpg" />
+    <Image Include="guard1_face_s.jpg" />
+    <Image Include="guard1_helmet.jpg" />
+    <Image Include="guard1_helmet_h.jpg" />
+    <Image Include="guard1_helmet_s.jpg" />
+    <Image Include="iron_grill.jpg" />
+    <Image Include="round_grill.jpg" />
+    <Image Include="round_grill_h.jpg" />
+    <Image Include="sky.jpg" />
+    <Image Include="terrain.jpg" />
     <Image Include="terrain.png" />
+    <Image Include="water.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="settings.manifest" />
@@ -343,6 +360,8 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="guard.md5anim" />
+    <None Include="guard.md5mesh" />
     <None Include="terrain.raw" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

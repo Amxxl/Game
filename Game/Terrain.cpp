@@ -16,8 +16,9 @@ Terrain::~Terrain()
     }
 }
 
-void Terrain::Initialize(ID3D11DeviceContext * deviceContext)
+void Terrain::Initialize(ID3D11DeviceContext* deviceContext)
 {
+    DX::ExecutionTimer execTime;
     ID3D11Device* device = nullptr;
     deviceContext->GetDevice(&device);
 
@@ -33,12 +34,14 @@ void Terrain::Initialize(ID3D11DeviceContext * deviceContext)
     this->LoadRawHeightMap("terrain.raw");
     this->SetTerrainCoordinates();
     this->SetTextureCoordinates();
+    this->SetTextureCoordinates1();
     this->CalculateNormals();
 
     //DirectX::VertexPositionColorTexture* vertices;
-    DirectX::VertexPositionNormalColorTexture* vertices;
+    //DirectX::VertexPositionNormalColorTexture* vertices;
+    DirectX::VertexPositionNormalColorDualTexture* vertices;
     unsigned long* indices;
-    int i, j, index, index1, index2, index3, index4;
+    int index, index1, index2, index3, index4;
     float u, v;
 
     // Calculate the number of vertices in the terrain mesh.
@@ -48,15 +51,16 @@ void Terrain::Initialize(ID3D11DeviceContext * deviceContext)
     m_indexCount = m_vertexCount;
 
     // Create the vertex array.
-    vertices = new DirectX::VertexPositionNormalColorTexture[m_vertexCount];
+    //vertices = new DirectX::VertexPositionNormalColorTexture[m_vertexCount];
+    vertices = new DirectX::VertexPositionNormalColorDualTexture[m_vertexCount];
     indices = new unsigned long[m_indexCount];
 
     // Initialize the index to the vertex array.
     index = 0;
 
-    for (j = 0; j < (m_terrainHeight - 1); j++)
+    for (int j = 0; j < (m_terrainHeight - 1); ++j)
     {
-        for (i = 0; i < (m_terrainWidth - 1); i++)
+        for (int i = 0; i < (m_terrainWidth - 1); ++i)
         {
             // Get the indexes to the four points of the quad.
             index1 = (m_terrainHeight * (j + 1)) + i;       // Upper left.
@@ -78,7 +82,8 @@ void Terrain::Initialize(ID3D11DeviceContext * deviceContext)
             vertices[index].position = DirectX::XMFLOAT3(m_heightMap[index1].x, m_heightMap[index1].y, m_heightMap[index1].z);
             vertices[index].normal = DirectX::XMFLOAT3(m_heightMap[index1].nx, m_heightMap[index1].ny, m_heightMap[index1].nz);
             vertices[index].color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-            vertices[index].textureCoordinate = DirectX::XMFLOAT2(u, v);
+            vertices[index].textureCoordinate0 = DirectX::XMFLOAT2(u, v);
+            vertices[index].textureCoordinate1 = DirectX::XMFLOAT2(m_heightMap[index1].u1, m_heightMap[index1].v1);
             indices[index] = index;
             index++;
 
@@ -95,7 +100,8 @@ void Terrain::Initialize(ID3D11DeviceContext * deviceContext)
             vertices[index].position = DirectX::XMFLOAT3(m_heightMap[index2].x, m_heightMap[index2].y, m_heightMap[index2].z);
             vertices[index].normal = DirectX::XMFLOAT3(m_heightMap[index2].nx, m_heightMap[index2].ny, m_heightMap[index2].nz);
             vertices[index].color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-            vertices[index].textureCoordinate = DirectX::XMFLOAT2(u, v);
+            vertices[index].textureCoordinate0 = DirectX::XMFLOAT2(u, v);
+            vertices[index].textureCoordinate1 = DirectX::XMFLOAT2(m_heightMap[index2].u1, m_heightMap[index2].v1);
             indices[index] = index;
             index++;
 
@@ -111,7 +117,8 @@ void Terrain::Initialize(ID3D11DeviceContext * deviceContext)
             vertices[index].position = DirectX::XMFLOAT3(m_heightMap[index3].x, m_heightMap[index3].y, m_heightMap[index3].z);
             vertices[index].normal = DirectX::XMFLOAT3(m_heightMap[index3].nx, m_heightMap[index3].ny, m_heightMap[index3].nz);
             vertices[index].color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-            vertices[index].textureCoordinate = DirectX::XMFLOAT2(u, v);
+            vertices[index].textureCoordinate0 = DirectX::XMFLOAT2(u, v);
+            vertices[index].textureCoordinate1 = DirectX::XMFLOAT2(m_heightMap[index3].u1, m_heightMap[index3].v1);
             indices[index] = index;
             index++;
 
@@ -126,7 +133,8 @@ void Terrain::Initialize(ID3D11DeviceContext * deviceContext)
             vertices[index].position = DirectX::XMFLOAT3(m_heightMap[index3].x, m_heightMap[index3].y, m_heightMap[index3].z);
             vertices[index].normal = DirectX::XMFLOAT3(m_heightMap[index3].nx, m_heightMap[index3].ny, m_heightMap[index3].nz);
             vertices[index].color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-            vertices[index].textureCoordinate = DirectX::XMFLOAT2(u, v);
+            vertices[index].textureCoordinate0 = DirectX::XMFLOAT2(u, v);
+            vertices[index].textureCoordinate1 = DirectX::XMFLOAT2(m_heightMap[index3].u1, m_heightMap[index3].v1);
             indices[index] = index;
             index++;
 
@@ -142,7 +150,8 @@ void Terrain::Initialize(ID3D11DeviceContext * deviceContext)
             vertices[index].position = DirectX::XMFLOAT3(m_heightMap[index2].x, m_heightMap[index2].y, m_heightMap[index2].z);
             vertices[index].normal = DirectX::XMFLOAT3(m_heightMap[index2].nx, m_heightMap[index2].ny, m_heightMap[index2].nz);
             vertices[index].color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-            vertices[index].textureCoordinate = DirectX::XMFLOAT2(u, v);
+            vertices[index].textureCoordinate0 = DirectX::XMFLOAT2(u, v);
+            vertices[index].textureCoordinate1 = DirectX::XMFLOAT2(m_heightMap[index2].u1, m_heightMap[index2].v1);
             indices[index] = index;
             index++;
 
@@ -158,7 +167,8 @@ void Terrain::Initialize(ID3D11DeviceContext * deviceContext)
             vertices[index].position = DirectX::XMFLOAT3(m_heightMap[index4].x, m_heightMap[index4].y, m_heightMap[index4].z);
             vertices[index].normal = DirectX::XMFLOAT3(m_heightMap[index4].nx, m_heightMap[index4].ny, m_heightMap[index4].nz);
             vertices[index].color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-            vertices[index].textureCoordinate = DirectX::XMFLOAT2(u, v);
+            vertices[index].textureCoordinate0 = DirectX::XMFLOAT2(u, v);
+            vertices[index].textureCoordinate1 = DirectX::XMFLOAT2(m_heightMap[index4].u1, m_heightMap[index4].v1);
             indices[index] = index;
             index++;
         }
@@ -198,9 +208,9 @@ void Terrain::SetTerrainCoordinates()
     int i, j, index;
 
     // Loop through all the elements in the height map array and adjust their coordinates correctly.
-    for (j = 0; j < m_terrainHeight; j++)
+    for (j = 0; j < m_terrainHeight; ++j)
     {
-        for (i = 0; i < m_terrainWidth; i++)
+        for (i = 0; i < m_terrainWidth; ++i)
         {
             index = (m_terrainWidth * j) + i;
 
@@ -237,9 +247,9 @@ void Terrain::SetTextureCoordinates()
     vCount = 0;
 
     // Loop through the entire height map and calculate the u and v texture coordinates for each vertex.
-    for (j = 0; j < m_terrainHeight; j++)
+    for (j = 0; j < m_terrainHeight; ++j)
     {
-        for (i = 0; i < m_terrainWidth; i++)
+        for (i = 0; i < m_terrainWidth; ++i)
         {
             // Store the texture coordinate in the height map.
             m_heightMap[(m_terrainHeight * j) + i].u = uCoordinate;
@@ -271,9 +281,41 @@ void Terrain::SetTextureCoordinates()
 
 }
 
+void Terrain::SetTextureCoordinates1()
+{
+    int index1, index2, index3, index4;
+
+    for (int j = 0; j < m_terrainHeight - 1; ++j)
+    {
+        for (int i = 0; i < m_terrainWidth - 1; ++i)
+        {
+            // Get the indexes to the four points of the quad.
+            index1 = (m_terrainHeight * (j + 1)) + i;       // Upper left.
+            index2 = (m_terrainHeight * (j + 1)) + (i + 1); // Upper right.
+            index3 = (m_terrainHeight * j) + i;             // Bottom left.
+            index4 = (m_terrainHeight * j) + (i + 1);       // Bottom right.
+
+            // Store the texture coordinate in the height map.
+            m_heightMap[index1].u1 = 1.0f / m_terrainWidth * i;
+            m_heightMap[index1].v1 = 1.0f / m_terrainHeight * j;
+
+            m_heightMap[index2].u1 = 1.0f / m_terrainWidth * i;
+            m_heightMap[index2].v1 = 1.0f / m_terrainHeight * j;
+
+            m_heightMap[index3].u1 = 1.0f / m_terrainWidth * i;
+            m_heightMap[index3].v1 = 1.0f / m_terrainHeight * j;
+
+            m_heightMap[index4].u1 = 1.0f / m_terrainWidth * i;
+            m_heightMap[index4].v1 = 1.0f / m_terrainHeight * j;
+
+        }
+    }
+
+}
+
 void Terrain::CalculateNormals()
 {
-    int i, j, index1, index2, index3, index, count;
+    int index1, index2, index3, index, count;
     float vertex1[3], vertex2[3], vertex3[3], vector1[3], vector2[3], sum[3], length;
     VectorType* normals;
 
@@ -281,9 +323,9 @@ void Terrain::CalculateNormals()
     normals = new VectorType[(m_terrainHeight - 1) * (m_terrainWidth - 1)];
 
     // Go through all the faces in the mesh and calculate their normals.
-    for (j = 0; j < (m_terrainHeight - 1); j++)
+    for (int j = 0; j < (m_terrainHeight - 1); ++j)
     {
-        for (i = 0; i < (m_terrainWidth - 1); i++)
+        for (int i = 0; i < (m_terrainWidth - 1); ++i)
         {
             index1 = (j * m_terrainHeight) + i;
             index2 = (j * m_terrainHeight) + (i + 1);
@@ -321,9 +363,9 @@ void Terrain::CalculateNormals()
 
     // Now go through all the vertices and take an average of each face normal 	
     // that the vertex touches to get the averaged normal for that vertex.
-    for (j = 0; j < m_terrainHeight; j++)
+    for (int j = 0; j < m_terrainHeight; ++j)
     {
-        for (i = 0; i < m_terrainWidth; i++)
+        for (int i = 0; i < m_terrainWidth; ++i)
         {
             // Initialize the sum.
             sum[0] = 0.0f;

@@ -5,6 +5,7 @@
 #pragma once
 
 #include "VertexBuffer.h"
+#include "VertexBufferTypes.h"
 #include "IndexBuffer.h"
 #include "TerrainShader.h"
 #include "CommonStates.h"
@@ -20,6 +21,7 @@ class Terrain
             float x, y, z;
             float nx, ny, nz;
             float u, v;
+            float u1, v1;
         };
         
         struct VectorType
@@ -36,6 +38,7 @@ class Terrain
 
         void SetTerrainCoordinates();
         void SetTextureCoordinates();
+        void SetTextureCoordinates1();
         void CalculateNormals();
 
     private:
@@ -46,7 +49,8 @@ class Terrain
         int m_vertexCount, m_indexCount;
         float m_heightScale;
         HeightMapType* m_heightMap;
-        VertexBuffer<DirectX::VertexPositionNormalColorTexture> vertexBuffer;
+        //VertexBuffer<DirectX::VertexPositionNormalColorTexture> vertexBuffer;
+        VertexBuffer<DirectX::VertexPositionNormalColorDualTexture> vertexBuffer;
         IndexBuffer<DWORD> indexBuffer;
         TerrainShader shader;
 };

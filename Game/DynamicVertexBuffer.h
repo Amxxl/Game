@@ -9,53 +9,59 @@ class DynamicVertexBuffer
 {
     public:
         DynamicVertexBuffer() = default;
-        explicit DynamicVertexBuffer(_In_ ID3D11Device* device, T* data, UINT numVertices)
+        explicit DynamicVertexBuffer(_In_ ID3D11Device* device, T* data, UINT vertexCount)
         {
-            Create(device, data, numVertices);
+            Create(device, data, vertexCount);
         }
 
         DynamicVertexBuffer(DynamicVertexBuffer const&) = delete;
         DynamicVertexBuffer& operator=(DynamicVertexBuffer const&) = delete;
 
-        void Create(_In_ ID3D11Device* device, T* data, UINT numVertices)
+        void Create(_In_ ID3D11Device* device, T* data, UINT vertexCount)
         {
-            this->bufferSize = numVertices;
-            this->stride = std::make_unique<UINT>(static_cast<UINT>(sizeof(T)));
+            this->vertexCount = vertexCount;
 
-            D3D11_BUFFER_DESC dynamicVertexBufferDesc = {};
-            dynamicVertexBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-            dynamicVertexBufferDesc.ByteWidth = sizeof(T) * numVertices;
-            dynamicVertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-            dynamicVertexBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-            dynamicVertexBufferDesc.MiscFlags = 0;
+            D3D11_BUFFER_DESC desc = { };
 
-            D3D11_SUBRESOURCE_DATA vertexBufferData = {};
+            desc.ByteWidth = stride * vertexCount;
+            desc.Usage = D3D11_USAGE_DYNAMIC;
+            desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+            desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+
+            D3D11_SUBRESOURCE_DATA vertexBufferData = { };
             vertexBufferData.pSysMem = data;
 
-            DX::ThrowIfFailed(device->CreateBuffer(&dynamicVertexBufferDesc, &vertexBufferData, buffer.GetAddressOf()));
+            DX::ThrowIfFailed(
+                device->CreateBuffer(&desc, &vertexBufferData, buffer.ReleaseAndGetAddressOf())
+            );
         }
 
         // Writes new data into vertex buffer.
-        void SetData(_In_ ID3D11DeviceContext* deviceContext, T* data, UINT numVertices)
+        void SetData(_In_ ID3D11DeviceContext* deviceContext, T* data, UINT vertexCount)
         {
             assert(buffer);
-            this->bufferSize = numVertices;
+            this->vertexCount = vertexCount;
 
-            D3D11_MAPPED_SUBRESOURCE mappedResource;
-            DX::ThrowIfFailed(deviceContext->Map(buffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource));
-            memcpy(mappedResource.pData, data, sizeof(T) * numVertices);
+            D3D11_MAPPED_SUBRESOURCE mappedResource = { };
+
+            DX::ThrowIfFailed(
+                deviceContext->Map(buffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource)
+            );
+
+            memcpy(mappedResource.pData, data, stride * vertexCount);
+
             deviceContext->Unmap(buffer.Get(), 0);
         }
 
         ID3D11Buffer* Get() const { return buffer.Get(); }
         ID3D11Buffer* const* GetAddressOf() const { return buffer.GetAddressOf(); }
         
-        UINT BufferSize() const { return this->bufferSize; }
-        UINT const Stride() const { return *this->stride.get(); }
-        UINT const* StridePtr() const { return this->stride.get(); }
+        UINT VertexCount() const { return vertexCount; }
+        UINT const Stride() const { return stride; }
+        UINT const* StridePtr() const { return &stride; }
 
     private:
         Microsoft::WRL::ComPtr<ID3D11Buffer> buffer;
-        std::unique_ptr<UINT> stride;
-        UINT bufferSize;
+        UINT stride = static_cast<UINT>(sizeof(T));
+        UINT vertexCount = 0;
 };

@@ -4,6 +4,7 @@
 
 #include "pch.h"
 #include "TerrainShader.h"
+#include "VertexBufferTypes.h"
 
 namespace TerrainShaders
 {
@@ -26,8 +27,8 @@ void TerrainShader::InitializeShaders(ID3D11DeviceContext* deviceContext)
 
     DX::ThrowIfFailed(device->CreateVertexShader(TerrainShaders::TerrainVertexShaderBytecode, sizeof(TerrainShaders::TerrainVertexShaderBytecode), nullptr, vertexShader.GetAddressOf()));
     DX::ThrowIfFailed(device->CreatePixelShader(TerrainShaders::TerrainPixelShaderBytecode, sizeof(TerrainShaders::TerrainPixelShaderBytecode), nullptr, pixelShader.GetAddressOf()));
-    DX::ThrowIfFailed(device->CreateInputLayout(DirectX::VertexPositionNormalColorTexture::InputElements, DirectX::VertexPositionNormalColorTexture::InputElementCount, TerrainShaders::TerrainVertexShaderBytecode, sizeof(TerrainShaders::TerrainVertexShaderBytecode), inputLayout.GetAddressOf()));
-    
+    DX::ThrowIfFailed(device->CreateInputLayout(DirectX::VertexPositionNormalColorDualTexture::InputElements, DirectX::VertexPositionNormalColorDualTexture::InputElementCount, TerrainShaders::TerrainVertexShaderBytecode, sizeof(TerrainShaders::TerrainVertexShaderBytecode), inputLayout.GetAddressOf()));
+
     states = std::make_unique<DirectX::CommonStates>(device);
 }
 
@@ -38,6 +39,7 @@ void TerrainShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, Dire
 
     // Load texture
     DirectX::CreateWICTextureFromFile(device, L"terrain.png", nullptr, texture.ReleaseAndGetAddressOf());
+    DirectX::CreateWICTextureFromFile(device, L"terrain.jpg", nullptr, texture1.ReleaseAndGetAddressOf());
 
     constantBuffer.Create(device);
 
@@ -61,6 +63,7 @@ void TerrainShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, Dire
 
     deviceContext->PSSetConstantBuffers(0, 1, lightBuffer.GetAddressOf());
     deviceContext->PSSetShaderResources(0, 1, texture.GetAddressOf());
+    deviceContext->PSSetShaderResources(1, 1, texture1.GetAddressOf());
 }
 
 void TerrainShader::RenderShader(ID3D11DeviceContext* deviceContext, int numIndices)
@@ -71,6 +74,7 @@ void TerrainShader::RenderShader(ID3D11DeviceContext* deviceContext, int numIndi
 
     ID3D11SamplerState* samplerState = states->LinearClamp();
     deviceContext->PSSetSamplers(0, 1, &samplerState);
+    deviceContext->PSSetSamplers(1, 1, &samplerState);
 
     ID3D11RasterizerState* raster = states->CullCounterClockwise();
     deviceContext->RSSetState(raster);

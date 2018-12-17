@@ -79,6 +79,9 @@
 #include "WICTextureLoader.h"
 //#include "XboxDDSTextureLoader.h"
 
+#include <chrono>
+#include <sstream>
+
 namespace DX
 {
     // Helper class for COM exceptions
@@ -114,4 +117,29 @@ namespace DX
         deviceContext->GetDevice(&device);
         return device;
     }
+
+    class ExecutionTimer
+    {
+        public:
+            ExecutionTimer()
+            {
+                begin = std::chrono::high_resolution_clock::now();
+            }
+
+            ~ExecutionTimer()
+            {
+                end = std::chrono::high_resolution_clock::now();
+                duration = end - begin;
+
+                float ms = duration.count() * 1000.0f;
+
+                std::wstringstream ss(L"");
+                ss  << L"Execution Time: " << ms << " ms. ";
+
+                OutputDebugString(ss.str().c_str());
+            }
+        private:
+            std::chrono::time_point<std::chrono::steady_clock> begin, end;
+            std::chrono::duration<float> duration;
+    };
 }

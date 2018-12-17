@@ -72,18 +72,20 @@ bool PlayScene::Load(ID3D11DeviceContext1* deviceContext)
     camera.SetLookAtPos(DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f));
 
     sky = DirectX::GeometricPrimitive::CreateSphere(deviceContext, 1200.0f, 32, false, true);
+    water = DirectX::GeometricPrimitive::CreateBox(deviceContext, DirectX::XMFLOAT3(512.0f, 50.0f, 512.0f));
 
     ID3D11Device* device = nullptr;
     deviceContext->GetDevice(&device);
 
     DirectX::CreateWICTextureFromFile(device, L"sky.jpg", nullptr, skyTexture.ReleaseAndGetAddressOf());
+    DirectX::CreateWICTextureFromFile(device, L"water.jpg", nullptr, waterTexture.ReleaseAndGetAddressOf());
 
     terrain.Initialize(deviceContext);
 
     m_deviceContext = deviceContext;
 
-    model.LoadModel(deviceContext, L"boy.md5mesh");
-    model.LoadAnim(L"boy.md5anim");
+    model.LoadModel(deviceContext, L"guard.md5mesh");
+    model.LoadAnim(L"guard.md5anim");
 
     return true;
 }
@@ -139,12 +141,13 @@ void PlayScene::Render()
     m_world = XMMatrixIdentity();
 
     sky->Draw(m_world * XMMatrixTranslation(camera.GetPositionFloat3().x, camera.GetPositionFloat3().y, camera.GetPositionFloat3().z), camera.GetViewMatrix(), camera.GetProjectionMatrix(), Colors::White, skyTexture.Get());
-
     terrain.SetMatrices(m_deviceContext, m_world, camera.GetViewMatrix(), camera.GetProjectionMatrix());
     terrain.Render(m_deviceContext);
 
     model.SetMatrices(m_deviceContext, m_world * DirectX::XMMatrixScaling(0.02f, 0.02f, 0.02f) * DirectX::XMMatrixTranslation(5.0f, 0.0f, 5.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix());
     model.Render(m_deviceContext);
+
+   // water->Draw(m_world * XMMatrixTranslation(256.0f, -15.0f, 256.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix(), XMVectorSet(0.0f, 0.0f, 1.0f, 0.9f), waterTexture.Get());
 
     sceneGraph->Render();
 }

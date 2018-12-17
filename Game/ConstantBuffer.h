@@ -4,7 +4,6 @@
 
 #pragma once
 
-
 template<typename T>
 class ConstantBuffer
 {
@@ -20,14 +19,16 @@ class ConstantBuffer
 
         void Create(_In_ ID3D11Device* device)
         {
-            D3D11_BUFFER_DESC constantBufferDesc = {};
-            constantBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-            constantBufferDesc.ByteWidth = sizeof(T);
-            constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-            constantBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-            constantBufferDesc.MiscFlags = 0;
+            D3D11_BUFFER_DESC desc = {};
 
-            DX::ThrowIfFailed(device->CreateBuffer(&constantBufferDesc, nullptr, buffer.GetAddressOf()));
+            desc.ByteWidth = static_cast<UINT>(sizeof(T));
+            desc.Usage = D3D11_USAGE_DYNAMIC;
+            desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+            desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+
+            DX::ThrowIfFailed(
+                device->CreateBuffer(&desc, nullptr, buffer.ReleaseAndGetAddressOf())
+            );
         }
 
         // Writes new data into the constant buffer.
@@ -35,10 +36,14 @@ class ConstantBuffer
         {
             assert(buffer);
 
-            D3D11_MAPPED_SUBRESOURCE mappedResource;
-            DX::ThrowIfFailed(deviceContext->Map(buffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource));
+            D3D11_MAPPED_SUBRESOURCE mappedResource = { };
+
+            DX::ThrowIfFailed(
+                deviceContext->Map(buffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource)
+            );
 
             *static_cast<T*>(mappedResource.pData) = value;
+
             deviceContext->Unmap(buffer.Get(), 0);
         }
 
@@ -47,5 +52,4 @@ class ConstantBuffer
 
     private:
         Microsoft::WRL::ComPtr<ID3D11Buffer> buffer;
-
 };

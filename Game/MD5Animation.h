@@ -41,7 +41,7 @@ class MD5Animation
 
         int GetNumJoints() const
         {
-            return m_iNumJoints;
+            return numJoints;
         }
 
         JointInfo const& GetJointInfo(unsigned int index) const
@@ -50,21 +50,21 @@ class MD5Animation
             return jointInfo[index];
         }
 
+        void BuildFrameSkeleton(FrameData const& frameData);
         void QuaternionComputeW(DirectX::XMFLOAT4& q);
+
+        int numFrames;
+        int numJoints;
+        int frameRate;
+        int numAnimatedComponents;
+
+        float frameTime;
+        float totalAnimTime;
+        float currAnimTime;
 
         std::vector<JointInfo> jointInfo;
         std::vector<BoundingBox> frameBounds;
         std::vector<Joint> baseFrameJoints;
         std::vector<FrameData> frameData;
         std::vector<std::vector<Joint>> frameSkeleton;
-
-        int m_iMD5Version;
-        int m_iNumFrames;
-        int m_iNumJoints;
-        int m_iFrameRate;
-        int m_iNumAnimatedComponents;
-
-        float frameTime;
-        float totalAnimTime;
-        float currAnimTime;
 };
