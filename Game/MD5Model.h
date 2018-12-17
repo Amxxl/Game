@@ -53,8 +53,8 @@ class MD5Model
             std::vector<Weight> m_Weights;
 
             Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> texture;
-            DynamicVertexBuffer<MD5Vertex>* vertexBuffer;
-            IndexBuffer<DWORD>* indexBuffer;
+            DynamicVertexBuffer<MD5Vertex> vertexBuffer;
+            IndexBuffer<DWORD> indexBuffer;
         };
 
         struct Model

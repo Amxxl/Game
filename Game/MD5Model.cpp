@@ -12,6 +12,7 @@ MD5Model::MD5Model()
 
 MD5Model::~MD5Model()
 {
+    /*
     for (int i = 0; i < model.meshes.size(); ++i)
     {
         delete model.meshes[i].vertexBuffer;
@@ -19,7 +20,7 @@ MD5Model::~MD5Model()
 
         delete model.meshes[i].indexBuffer;
         model.meshes[i].indexBuffer = nullptr;
-    }
+    }*/
     model.meshes.clear();
 }
 
@@ -232,8 +233,11 @@ bool MD5Model::LoadModel(ID3D11DeviceContext* deviceContext, std::wstring const&
             PrepareNormals(mesh);
 
             // Create vertex and index buffers for this mesh.
-            mesh.vertexBuffer = new DynamicVertexBuffer<MD5Vertex>(device, &mesh.vertices[0], static_cast<UINT>(mesh.vertices.size()));
-            mesh.indexBuffer = new IndexBuffer<DWORD>(device, &mesh.indices[0], mesh.trianglesCount * 3);
+           // mesh.vertexBuffer = new DynamicVertexBuffer<MD5Vertex>(device, &mesh.vertices[0], static_cast<UINT>(mesh.vertices.size()));
+           // mesh.indexBuffer = new IndexBuffer<DWORD>(device, &mesh.indices[0], mesh.trianglesCount * 3);
+            mesh.vertexBuffer.Create(device, &mesh.vertices[0], static_cast<UINT>(mesh.vertices.size()));
+            mesh.indexBuffer.Create(device, &mesh.indices[0], mesh.trianglesCount * 3);
+
 
             model.meshes.push_back(mesh); // Store mesh in model's meshes vector.
         }
@@ -348,7 +352,7 @@ void MD5Model::Update(ID3D11DeviceContext* deviceContext, float deltaTime)
             DirectX::XMStoreFloat3(&model.meshes[k].vertices[i].normal, DirectX::XMVector3Normalize(DirectX::XMLoadFloat3(&model.meshes[k].vertices[i].normal)));
         }
 
-        model.meshes[k].vertexBuffer->SetData(deviceContext, &model.meshes[k].vertices[0], static_cast<UINT>(model.meshes[k].vertices.size()));
+        model.meshes[k].vertexBuffer.SetData(deviceContext, &model.meshes[k].vertices[0], static_cast<UINT>(model.meshes[k].vertices.size()));
     }
 }
 
@@ -361,11 +365,11 @@ void MD5Model::Render(ID3D11DeviceContext* deviceContext)
 {
     for (int i = 0; i < model.numMeshes; i++)
     {
-        deviceContext->IASetIndexBuffer(model.meshes[i].indexBuffer->Get(), DXGI_FORMAT_R32_UINT, 0);
+        deviceContext->IASetIndexBuffer(model.meshes[i].indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 
-        UINT stride = model.meshes[i].vertexBuffer->Stride();
+        UINT stride = model.meshes[i].vertexBuffer.Stride();
         UINT offset = 0;
-        deviceContext->IASetVertexBuffers(0, 1, model.meshes[i].vertexBuffer->GetAddressOf(), &stride, &offset);
+        deviceContext->IASetVertexBuffers(0, 1, model.meshes[i].vertexBuffer.GetAddressOf(), &stride, &offset);
 
         shader.SetTexture(deviceContext, model.meshes[i].texture.Get());
         shader.RenderShader(deviceContext, static_cast<UINT>(model.meshes[i].indices.size()));

@@ -14,7 +14,7 @@ class VertexBuffer
             Create(device, data, vertexCount);
         }
 
-        VertexBuffer(VertexBuffer const&) = delete;
+        VertexBuffer(VertexBuffer const&) = default;
         VertexBuffer& operator=(VertexBuffer const&) = delete;
 
         void Create(_In_ ID3D11Device* device, _In_ T* data, UINT vertexCount)

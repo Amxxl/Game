@@ -14,7 +14,7 @@ class DynamicVertexBuffer
             Create(device, data, vertexCount);
         }
 
-        DynamicVertexBuffer(DynamicVertexBuffer const&) = delete;
+        DynamicVertexBuffer(DynamicVertexBuffer const&) = default;
         DynamicVertexBuffer& operator=(DynamicVertexBuffer const&) = delete;
 
         void Create(_In_ ID3D11Device* device, T* data, UINT vertexCount)

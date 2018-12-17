@@ -35,21 +35,6 @@
     <Filter Include="Graphics\Buffers">
       <UniqueIdentifier>{afc3f87d-f1e4-4c43-bc6e-9581c2f726f1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Graphics\Buffers\Vertex">
-      <UniqueIdentifier>{dd8b5cfe-c7ed-4d09-a70f-c727ad05f897}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Graphics\Buffers\Index">
-      <UniqueIdentifier>{a0de050d-a990-4726-a934-4833d8a04020}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Graphics\Buffers\Constant">
-      <UniqueIdentifier>{47a55836-1f41-4189-b696-5a2283f5cadf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Graphics\Buffers\Constant\Types">
-      <UniqueIdentifier>{22597b25-27c1-4bdf-a6ba-ad69142990d7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Graphics\Buffers\Vertex\Types">
-      <UniqueIdentifier>{319bdef6-a9d8-4427-84b0-cf68fa7fa0ee}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Assets\Models">
       <UniqueIdentifier>{95107d52-2e76-449d-b2d0-6eafb2b0e416}</UniqueIdentifier>
     </Filter>
@@ -64,6 +49,21 @@
     </Filter>
     <Filter Include="Assets\Images">
       <UniqueIdentifier>{2c843e4a-9af7-4b38-9bb2-f6a92087244f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Buffers\ConstantBuffer">
+      <UniqueIdentifier>{47a55836-1f41-4189-b696-5a2283f5cadf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Buffers\ConstantBuffer\Types">
+      <UniqueIdentifier>{22597b25-27c1-4bdf-a6ba-ad69142990d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Buffers\IndexBuffer">
+      <UniqueIdentifier>{a0de050d-a990-4726-a934-4833d8a04020}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Buffers\VertexBuffer">
+      <UniqueIdentifier>{dd8b5cfe-c7ed-4d09-a70f-c727ad05f897}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Buffers\VertexBuffer\Types">
+      <UniqueIdentifier>{319bdef6-a9d8-4427-84b0-cf68fa7fa0ee}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -119,22 +119,22 @@
       <Filter>Game\MD5Model</Filter>
     </ClInclude>
     <ClInclude Include="ConstantBufferTypes.h">
-      <Filter>Graphics\Buffers\Constant\Types</Filter>
+      <Filter>Graphics\Buffers\ConstantBuffer\Types</Filter>
     </ClInclude>
     <ClInclude Include="ConstantBuffer.h">
-      <Filter>Graphics\Buffers\Constant</Filter>
+      <Filter>Graphics\Buffers\ConstantBuffer</Filter>
     </ClInclude>
     <ClInclude Include="VertexBuffer.h">
-      <Filter>Graphics\Buffers\Vertex</Filter>
+      <Filter>Graphics\Buffers\VertexBuffer</Filter>
     </ClInclude>
     <ClInclude Include="DynamicVertexBuffer.h">
-      <Filter>Graphics\Buffers\Vertex</Filter>
+      <Filter>Graphics\Buffers\VertexBuffer</Filter>
     </ClInclude>
     <ClInclude Include="VertexBufferTypes.h">
-      <Filter>Graphics\Buffers\Vertex\Types</Filter>
+      <Filter>Graphics\Buffers\VertexBuffer\Types</Filter>
     </ClInclude>
     <ClInclude Include="IndexBuffer.h">
-      <Filter>Graphics\Buffers\Index</Filter>
+      <Filter>Graphics\Buffers\IndexBuffer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -188,22 +188,22 @@
       <Filter>Game\MD5Model</Filter>
     </ClCompile>
     <ClCompile Include="ConstantBufferTypes.cpp">
-      <Filter>Graphics\Buffers\Constant\Types</Filter>
+      <Filter>Graphics\Buffers\ConstantBuffer\Types</Filter>
     </ClCompile>
     <ClCompile Include="ConstantBuffer.cpp">
-      <Filter>Graphics\Buffers\Constant</Filter>
+      <Filter>Graphics\Buffers\ConstantBuffer</Filter>
     </ClCompile>
     <ClCompile Include="VertexBuffer.cpp">
-      <Filter>Graphics\Buffers\Vertex</Filter>
+      <Filter>Graphics\Buffers\VertexBuffer</Filter>
     </ClCompile>
     <ClCompile Include="DynamicVertexBuffer.cpp">
-      <Filter>Graphics\Buffers\Vertex</Filter>
+      <Filter>Graphics\Buffers\VertexBuffer</Filter>
     </ClCompile>
     <ClCompile Include="VertexBufferTypes.cpp">
-      <Filter>Graphics\Buffers\Vertex\Types</Filter>
+      <Filter>Graphics\Buffers\VertexBuffer\Types</Filter>
     </ClCompile>
     <ClCompile Include="IndexBuffer.cpp">
-      <Filter>Graphics\Buffers\Index</Filter>
+      <Filter>Graphics\Buffers\IndexBuffer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
