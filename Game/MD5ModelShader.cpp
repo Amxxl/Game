@@ -68,8 +68,6 @@ void MD5ModelShader::SetTexture(ID3D11DeviceContext* deviceContext, ID3D11Shader
     if (device == nullptr)
         return;
 
-    //DirectX::CreateWICTextureFromFile(device, fileName.c_str(), nullptr, texture.ReleaseAndGetAddressOf());
-
     deviceContext->PSSetShaderResources(0, 1, &texture);
 }
 

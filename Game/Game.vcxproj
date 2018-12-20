@@ -165,7 +165,7 @@
     <ClInclude Include="DynamicVertexBuffer.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="IndexBuffer.h" />
-    <ClInclude Include="MD5Animation.h" />
+    <ClInclude Include="MD5Loader.h" />
     <ClInclude Include="MD5Model.h" />
     <ClInclude Include="MD5ModelShader.h" />
     <ClInclude Include="MD5Vertex.h" />
@@ -191,7 +191,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="IndexBuffer.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="MD5Animation.cpp" />
+    <ClCompile Include="MD5Loader.cpp" />
     <ClCompile Include="MD5Model.cpp" />
     <ClCompile Include="MD5ModelShader.cpp" />
     <ClCompile Include="MD5Vertex.cpp" />

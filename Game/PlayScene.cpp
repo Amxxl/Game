@@ -84,7 +84,7 @@ bool PlayScene::Load(ID3D11DeviceContext1* deviceContext)
 
     m_deviceContext = deviceContext;
 
-    model.LoadModel(deviceContext, L"guard.md5mesh");
+    model.LoadMesh(deviceContext, L"guard.md5mesh");
     model.LoadAnim(L"guard.md5anim");
 
     return true;
@@ -130,7 +130,7 @@ void PlayScene::Update(DX::StepTimer const& timer)
     else
         cameraSpeed = 15.0f;
 
-    model.Update(m_deviceContext, deltaTime);
+    model.Update(m_deviceContext, deltaTime, 0);
 
     MouseData::SetRelativePos(0, 0);
     sceneGraph->Update(timer);
@@ -144,10 +144,9 @@ void PlayScene::Render()
     terrain.SetMatrices(m_deviceContext, m_world, camera.GetViewMatrix(), camera.GetProjectionMatrix());
     terrain.Render(m_deviceContext);
 
-    model.SetMatrices(m_deviceContext, m_world * DirectX::XMMatrixScaling(0.02f, 0.02f, 0.02f) * DirectX::XMMatrixTranslation(5.0f, 0.0f, 5.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix());
-    model.Render(m_deviceContext);
+    model.Draw(m_deviceContext, m_world * DirectX::XMMatrixScaling(0.02f, 0.02f, 0.02f) * DirectX::XMMatrixTranslation(5.0f, 0.0f, 5.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix());
 
-   // water->Draw(m_world * XMMatrixTranslation(256.0f, -15.0f, 256.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix(), XMVectorSet(0.0f, 0.0f, 1.0f, 0.9f), waterTexture.Get());
+    //water->Draw(m_world * XMMatrixTranslation(256.0f, -15.0f, 256.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix(), XMVectorSet(0.0f, 0.0f, 1.0f, 0.9f), waterTexture.Get());
 
     sceneGraph->Render();
 }

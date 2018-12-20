@@ -12,292 +12,65 @@ MD5Model::MD5Model()
 
 MD5Model::~MD5Model()
 {
-    /*
-    for (int i = 0; i < model.meshes.size(); ++i)
-    {
-        delete model.meshes[i].vertexBuffer;
-        model.meshes[i].vertexBuffer = nullptr;
-
-        delete model.meshes[i].indexBuffer;
-        model.meshes[i].indexBuffer = nullptr;
-    }*/
     model.meshes.clear();
 }
 
-bool MD5Model::LoadModel(ID3D11DeviceContext* deviceContext, std::wstring const& fileName)
+bool MD5Model::LoadMesh(ID3D11DeviceContext* deviceContext, std::wstring const& fileName)
 {
-    ID3D11Device* device = DX::GetDevice(deviceContext);
-    if (device == nullptr)
+    if (!axec::MD5Loader::LoadMD5Mesh(deviceContext, fileName, model))
         return false;
-
-    std::wifstream fileIn(fileName.c_str());
-    if (!fileIn.is_open())
-        return false;
-
-    std::wstring data;
-
-    while (!fileIn.eof())
-    {
-        fileIn >> data;
-
-        if (data == L"MD5Version")
-        {
-            // Check version of .md5mesh file.
-            int MD5Version = 0;
-            fileIn >> MD5Version;
-
-            // MD5 Version must be 10.
-            if (MD5Version != 10)
-                return false;
-        }
-        else if (data == L"commandline")
-        {
-            std::getline(fileIn, data); // Ignore the rest of this line.
-        }
-        else if (data == L"numJoints")
-        {
-            fileIn >> model.numJoints; // Store number of joints.
-        }
-        else if (data == L"numMeshes")
-        {
-            fileIn >> model.numMeshes; // Store number of meshes.
-        }
-        else if (data == L"joints")
-        {
-            Joint joint;
-
-            fileIn >> data; // Skip the "{"
-
-            for (int i = 0; i < model.numJoints; i++)
-            {
-                fileIn >> joint.m_Name;
-
-                // Sometimes the names might contain spaces. If that is the case, we need to continue
-                // to read the name until we get to the closing " (quatation mark).
-                if (joint.m_Name[joint.m_Name.size() - 1] != '"')
-                {
-                    wchar_t character;
-                    bool found = false;
-                    while (!found)
-                    {
-                        character = fileIn.get();
-
-                        if (character == '"')
-                            found = true;
-
-                        joint.m_Name += character;
-                    }
-                }
-
-                fileIn >> joint.m_ParentId; // Store Parent joint Id.
-                fileIn >> data; // Skip the "("
-
-                // Store position of this joint.
-                fileIn >> joint.m_Pos.x >> joint.m_Pos.z >> joint.m_Pos.y;
-                fileIn >> data >> data; // Skip the ")" and "("
-
-                // Store orientation of this joint
-                fileIn >> joint.m_Orient.x >> joint.m_Orient.z >> joint.m_Orient.y;
-
-                // Remove quotation marks from joints name.
-                joint.m_Name.erase(0, 1);
-                joint.m_Name.erase(joint.m_Name.size() - 1, 1);
-
-                // Compute the w axis of the quaternion.
-                this->QuaternionComputeW(joint.m_Orient);
-
-                std::getline(fileIn, data); // Skip rest of this lane.
-                model.joints.push_back(joint); // Store the joint into joints vector.
-            }
-
-            fileIn >> data; // Skip the "}"
-        }
-        else if (data == L"mesh")
-        {
-            Mesh mesh;
-            int numVerts, numTris, numWeights;
-
-            fileIn >> data; // Skip the "{"
-
-            fileIn >> data;
-            
-            while (data != L"}") // Read until "}"
-            {
-                if (data == L"shader")
-                {
-                    std::wstring filePath;
-                    fileIn >> filePath;
-
-                    // Take spaces into account if file path has a space in it.
-                    if (filePath[filePath.size() - 1] != '"')
-                    {
-                        wchar_t character;
-                        bool found = false;
-
-                        while (!found)
-                        {
-                            character = fileIn.get();
-
-                            if (character == '"')
-                                found = true;
-
-                            filePath += character;
-                        }
-                    }
-
-                    // Remove the quotation marks from texture path
-                    filePath.erase(0, 1);
-                    filePath.erase(filePath.size() - 1, 1);
-
-                    mesh.m_Shader = filePath;
-
-                    // Load texture.
-                    DirectX::CreateWICTextureFromFile(device, mesh.m_Shader.c_str(), nullptr, mesh.texture.ReleaseAndGetAddressOf());
-
-                    std::getline(fileIn, data); // Skip rest of this line.
-                }
-                else if (data == L"numverts")
-                {
-                    fileIn >> numVerts;
-                    std::getline(fileIn, data); // Skip rest of this line.
-
-                    for (int i = 0; i < numVerts; i++)
-                    {
-                        MD5Vertex vertex;
-
-                        fileIn >> data >> data >> data; // Skip "vert # ("
-
-                        // Store texture coordinates
-                        fileIn >> vertex.textureCoordinate.x >> vertex.textureCoordinate.y;
-
-                        fileIn >> data; // Skip ")"
-                        fileIn >> vertex.StartWeight; // Index of first weight this vert will be weighted to
-                        fileIn >> vertex.WeightCount; // Number of weights for this vertex.
-
-                        std::getline(fileIn, data); // Skip rest of this lane.
-
-                        mesh.vertices.push_back(vertex); // Push back this vertex into mesh vertices vector.
-                    }
-                }
-                else if (data == L"numtris")
-                {
-                    fileIn >> numTris;
-                    mesh.trianglesCount = numTris;
-
-                    std::getline(fileIn, data); // Skip rest of this lane.
-
-                    for (int i = 0; i < numTris; i++)
-                    {
-                        DWORD index;
-                        fileIn >> data >> data; // Skip "tri #".
-
-                        for (int k = 0; k < 3; k++)
-                        {
-                            fileIn >> index;
-                            mesh.indices.push_back(index);
-                        }
-
-                        std::getline(fileIn, data); // Skip rest of this lane.
-                    }
-                }
-                else if (data == L"numweights")
-                {
-                    fileIn >> numWeights;
-
-                    std::getline(fileIn, data); // Skip rest of this lane.
-
-                    for (int i = 0; i < numWeights; i++)
-                    {
-                        Weight weight;
-                        fileIn >> data >> data; // Skip "weight #"
-
-                        fileIn >> weight.m_JointId;
-                        fileIn >> weight.m_Bias;
-                        fileIn >> data; // Skip "(".
-
-                        // Store weight's pos in joint's local space
-                        fileIn >> weight.m_Pos.x >> weight.m_Pos.z >> weight.m_Pos.y;
-
-                        std::getline(fileIn, data); // Skip rest of this lane.
-
-                        mesh.m_Weights.push_back(weight); // Push back weight into mesh weight vector.
-                    }
-                }
-                else
-                    std::getline(fileIn, data); // Skip anything else.
-
-                fileIn >> data; // Skip "}".
-            }
-
-            PrepareMesh(mesh);
-            PrepareNormals(mesh);
-
-            // Create vertex and index buffers for this mesh.
-           // mesh.vertexBuffer = new DynamicVertexBuffer<MD5Vertex>(device, &mesh.vertices[0], static_cast<UINT>(mesh.vertices.size()));
-           // mesh.indexBuffer = new IndexBuffer<DWORD>(device, &mesh.indices[0], mesh.trianglesCount * 3);
-            mesh.vertexBuffer.Create(device, &mesh.vertices[0], static_cast<UINT>(mesh.vertices.size()));
-            mesh.indexBuffer.Create(device, &mesh.indices[0], mesh.trianglesCount * 3);
-
-
-            model.meshes.push_back(mesh); // Store mesh in model's meshes vector.
-        }
-    }
 
     shader.InitializeShaders(deviceContext);
-
     return true;
 }
 
 bool MD5Model::LoadAnim(std::wstring const& fileName)
 {
-    if (model.animation.LoadAnimation(fileName))
-    {
-        // Check to make sure the animation is appropriate for this model.
-        model.HasAnimation = CheckAnimation(model.animation);
-    }
-    return false;
+    if (!axec::MD5Loader::LoadMD5Anim(fileName, model))
+        return false;
+    return true;
 }
 
-void MD5Model::Update(ID3D11DeviceContext* deviceContext, float deltaTime)
+void MD5Model::Update(ID3D11DeviceContext* deviceContext, float deltaTime, int index)
 {
-    model.animation.currAnimTime += deltaTime;
+    model.animations[index].currAnimTime += deltaTime;
 
-    if (model.animation.currAnimTime > model.animation.totalAnimTime)
-        model.animation.currAnimTime = 0.0f;
+    if (model.animations[index].currAnimTime > model.animations[index].totalAnimTime)
+        model.animations[index].currAnimTime = 0.0f;
 
     // Which frame are we on
-    float currentFrame = model.animation.currAnimTime * model.animation.frameRate;
+    float currentFrame = model.animations[index].currAnimTime * model.animations[index].frameRate;
     int frame0 = static_cast<int>(floorf(currentFrame));
     int frame1 = frame0 + 1;
 
     // Make sure we don't go over the number of frames.
-    if (frame0 == model.animation.numFrames - 1)
+    if (frame0 == model.animations[index].numFrames - 1)
         frame1 = 0;
 
     float interpolation = currentFrame - frame0; // Get the remainder (in time) between frame0 and frame1 to use as interpolation factor.
 
-    std::vector<MD5Animation::Joint> interpolatedSkeleton; // Create a frame skeleton to store the interpolated skeletons in
+    std::vector<axec::Joint> interpolatedSkeleton; // Create a frame skeleton to store the interpolated skeletons in
 
     // Compute the interpolated skeleton.
-    for (int i = 0; i < model.animation.numJoints; i++)
+    for (int i = 0; i < model.animations[index].numJoints; i++)
     {
-        MD5Animation::Joint tempJoint;
-        MD5Animation::Joint joint0 = model.animation.frameSkeleton[frame0][i];
-        MD5Animation::Joint joint1 = model.animation.frameSkeleton[frame1][i];
+        axec::Joint tempJoint;
+        axec::Joint joint0 = model.animations[index].frameSkeleton[frame0][i];
+        axec::Joint joint1 = model.animations[index].frameSkeleton[frame1][i];
 
-        tempJoint.m_iParentId = joint0.m_iParentId;
+        tempJoint.parentId = joint0.parentId;
 
         // Turn the two quaternions into XMVECTORs for easy computations.
-        DirectX::XMVECTOR joint0Orient = DirectX::XMVectorSet(joint0.m_Orient.x, joint0.m_Orient.y, joint0.m_Orient.z, joint0.m_Orient.w);
-        DirectX::XMVECTOR joint1Orient = DirectX::XMVectorSet(joint1.m_Orient.x, joint1.m_Orient.y, joint1.m_Orient.z, joint1.m_Orient.w);
+        DirectX::XMVECTOR joint0Orient = DirectX::XMVectorSet(joint0.orientation.x, joint0.orientation.y, joint0.orientation.z, joint0.orientation.w);
+        DirectX::XMVECTOR joint1Orient = DirectX::XMVectorSet(joint1.orientation.x, joint1.orientation.y, joint1.orientation.z, joint1.orientation.w);
 
         // Interpolate positions
-        tempJoint.m_Pos.x = joint0.m_Pos.x + (interpolation * (joint1.m_Pos.x - joint0.m_Pos.x));
-        tempJoint.m_Pos.y = joint0.m_Pos.y + (interpolation * (joint1.m_Pos.y - joint0.m_Pos.y));
-        tempJoint.m_Pos.z = joint0.m_Pos.z + (interpolation * (joint1.m_Pos.z - joint0.m_Pos.z));
+        tempJoint.position.x = joint0.position.x + (interpolation * (joint1.position.x - joint0.position.x));
+        tempJoint.position.y = joint0.position.y + (interpolation * (joint1.position.y - joint0.position.y));
+        tempJoint.position.z = joint0.position.z + (interpolation * (joint1.position.z - joint0.position.z));
 
         // Interpolate orientations using spherical interpolation (Slerp).
-        DirectX::XMStoreFloat4(&tempJoint.m_Orient, DirectX::XMQuaternionSlerp(joint0Orient, joint1Orient, interpolation));
+        DirectX::XMStoreFloat4(&tempJoint.orientation, DirectX::XMQuaternionSlerp(joint0Orient, joint1Orient, interpolation));
 
         interpolatedSkeleton.push_back(tempJoint); // Push the joint back into our interpolated skeleton.
     }
@@ -313,12 +86,12 @@ void MD5Model::Update(ID3D11DeviceContext* deviceContext, float deltaTime)
             // Sum up the joints and weights information to get vertex's position and normal.
             for (int j = 0; j < tempVert.WeightCount; ++j)
             {
-                Weight tempWeight = model.meshes[k].m_Weights[tempVert.StartWeight + j];
-                MD5Animation::Joint tempJoint = interpolatedSkeleton[tempWeight.m_JointId];
+                axec::Weight tempWeight = model.meshes[k].weights[tempVert.StartWeight + j];
+                axec::Joint tempJoint = interpolatedSkeleton[tempWeight.jointId];
 
                 // Convert joint orientation and weight pos to vectors for easier computation.
-                DirectX::XMVECTOR tempJointOrientation = DirectX::XMVectorSet(tempJoint.m_Orient.x, tempJoint.m_Orient.y, tempJoint.m_Orient.z, tempJoint.m_Orient.w);
-                DirectX::XMVECTOR tempWeightPos = DirectX::XMVectorSet(tempWeight.m_Pos.x, tempWeight.m_Pos.y, tempWeight.m_Pos.z, 0.0f);
+                DirectX::XMVECTOR tempJointOrientation = DirectX::XMVectorSet(tempJoint.orientation.x, tempJoint.orientation.y, tempJoint.orientation.z, tempJoint.orientation.w);
+                DirectX::XMVECTOR tempWeightPos = DirectX::XMVectorSet(tempWeight.position.x, tempWeight.position.y, tempWeight.position.z, 0.0f);
 
                 // We will need to use the conjugate of the joint orientation quaternion
                 DirectX::XMVECTOR tempJointOrientationConjugate = DirectX::XMQuaternionInverse(tempJointOrientation);
@@ -329,22 +102,22 @@ void MD5Model::Update(ID3D11DeviceContext* deviceContext, float deltaTime)
                 DirectX::XMStoreFloat3(&rotatedPoint, DirectX::XMQuaternionMultiply(DirectX::XMQuaternionMultiply(tempJointOrientation, tempWeightPos), tempJointOrientationConjugate));
 
                 // Now move the vertices position from joint space (0, 0, 0) to the joints position in world space, taking the weights bias into account
-                tempVert.position.x += (tempJoint.m_Pos.x + rotatedPoint.x) * tempWeight.m_Bias;
-                tempVert.position.y += (tempJoint.m_Pos.y + rotatedPoint.y) * tempWeight.m_Bias;
-                tempVert.position.z += (tempJoint.m_Pos.z + rotatedPoint.z) * tempWeight.m_Bias;
+                tempVert.position.x += (tempJoint.position.x + rotatedPoint.x) * tempWeight.bias;
+                tempVert.position.y += (tempJoint.position.y + rotatedPoint.y) * tempWeight.bias;
+                tempVert.position.z += (tempJoint.position.z + rotatedPoint.z) * tempWeight.bias;
 
                 // Compute the normals for this frames skeleton using the weight normals from before
                 // We can compute the normals the same way we compute the vertices position,
                 // only we don't have to translate them (just rotate).
-                DirectX::XMVECTOR tempWeightNormal = DirectX::XMVectorSet(tempWeight.m_Normal.x, tempWeight.m_Normal.y, tempWeight.m_Normal.z, 0.0f);
+                DirectX::XMVECTOR tempWeightNormal = DirectX::XMVectorSet(tempWeight.normal.x, tempWeight.normal.y, tempWeight.normal.z, 0.0f);
 
                 // Rotate the normal
                 DirectX::XMStoreFloat3(&rotatedPoint, DirectX::XMQuaternionMultiply(DirectX::XMQuaternionMultiply(tempJointOrientation, tempWeightNormal), tempJointOrientationConjugate));
 
                 // Add to vertices normal and take weight bias into account
-                tempVert.normal.x -= rotatedPoint.x * tempWeight.m_Bias;
-                tempVert.normal.y -= rotatedPoint.y * tempWeight.m_Bias;
-                tempVert.normal.z -= rotatedPoint.z * tempWeight.m_Bias;
+                tempVert.normal.x -= rotatedPoint.x * tempWeight.bias;
+                tempVert.normal.y -= rotatedPoint.y * tempWeight.bias;
+                tempVert.normal.z -= rotatedPoint.z * tempWeight.bias;
             }
 
             model.meshes[k].vertices[i].position = tempVert.position;
@@ -356,13 +129,10 @@ void MD5Model::Update(ID3D11DeviceContext* deviceContext, float deltaTime)
     }
 }
 
-void MD5Model::SetMatrices(ID3D11DeviceContext* deviceContext, DirectX::XMMATRIX world, DirectX::XMMATRIX view, DirectX::XMMATRIX proj)
+void MD5Model::Draw(ID3D11DeviceContext* deviceContext, DirectX::XMMATRIX world, DirectX::XMMATRIX view, DirectX::XMMATRIX proj)
 {
     shader.SetShaderParameters(deviceContext, world, view, proj);
-}
-
-void MD5Model::Render(ID3D11DeviceContext* deviceContext)
-{
+    
     for (int i = 0; i < model.numMeshes; i++)
     {
         deviceContext->IASetIndexBuffer(model.meshes[i].indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
@@ -374,154 +144,4 @@ void MD5Model::Render(ID3D11DeviceContext* deviceContext)
         shader.SetTexture(deviceContext, model.meshes[i].texture.Get());
         shader.RenderShader(deviceContext, static_cast<UINT>(model.meshes[i].indices.size()));
     }
-}
-
-void MD5Model::PrepareMesh(Mesh& mesh)
-{
-    // Find each vertex position using the joint and weight.
-    for (int i = 0; i < mesh.vertices.size(); ++i)
-    {
-        MD5Vertex vertex = mesh.vertices[i];
-        vertex.position = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
-
-        for (int j = 0; j < vertex.WeightCount; ++j)
-        {
-            Weight weight = mesh.m_Weights[vertex.StartWeight + j];
-            Joint joint = model.joints[weight.m_JointId];
-
-            DirectX::XMVECTOR tempJointOrientation = DirectX::XMVectorSet(joint.m_Orient.x, joint.m_Orient.y, joint.m_Orient.z, joint.m_Orient.w);
-            DirectX::XMVECTOR tempWeightPos = DirectX::XMVectorSet(weight.m_Pos.x, weight.m_Pos.y, weight.m_Pos.z, 0.0f);
-
-            DirectX::XMVECTOR tempJointOrientationConjugate = DirectX::XMVectorSet(-joint.m_Orient.x, -joint.m_Orient.y, -joint.m_Orient.z, joint.m_Orient.w);
-
-            DirectX::XMFLOAT3 rotatedPoint;
-            DirectX::XMStoreFloat3(&rotatedPoint, DirectX::XMQuaternionMultiply(DirectX::XMQuaternionMultiply(tempJointOrientation, tempWeightPos), tempJointOrientationConjugate));
-
-            vertex.position.x += (joint.m_Pos.x + rotatedPoint.x) * weight.m_Bias;
-            vertex.position.y += (joint.m_Pos.y + rotatedPoint.y) * weight.m_Bias;
-            vertex.position.z += (joint.m_Pos.z + rotatedPoint.z) * weight.m_Bias;
-        }
-
-        // Put the vertex position into vertices for this mesh.
-        mesh.vertices[i].position = vertex.position;
-    }
-}
-
-// Calculate vertex normals using normal averaging.
-void MD5Model::PrepareNormals(Mesh& mesh)
-{
-    using namespace DirectX;
-    std::vector<XMFLOAT3> tempNormal;
-
-    // normalized and unormalized normals.
-    XMFLOAT3 unnormalized = XMFLOAT3(0.0f, 0.0f, 0.0f);
-
-    // Used to get vectors (sides) from the position of the verts
-    float vecX, vecY, vecZ;
-
-    // Two edges of our triangle
-    XMVECTOR edge1 = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
-    XMVECTOR edge2 = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
-
-    // Compute face normals
-    for (unsigned int i = 0; i < mesh.trianglesCount; ++i)
-    {
-        // Get the vector describing one edge of our triangle (edge, 0, 2).
-        vecX = mesh.vertices[mesh.indices[(i * 3)]].position.x - mesh.vertices[mesh.indices[(i * 3) + 2]].position.x;
-        vecY = mesh.vertices[mesh.indices[(i * 3)]].position.y - mesh.vertices[mesh.indices[(i * 3) + 2]].position.y;
-        vecZ = mesh.vertices[mesh.indices[(i * 3)]].position.z - mesh.vertices[mesh.indices[(i * 3) + 2]].position.z;
-        edge1 = XMVectorSet(vecX, vecY, vecZ, 0.0f); // Create our first edge.
-
-        // Get the vector describing another edge of our triangle (edge 2, 1).
-        vecX = mesh.vertices[mesh.indices[(i * 3) + 2]].position.x - mesh.vertices[mesh.indices[(i * 3) + 1]].position.x;
-        vecY = mesh.vertices[mesh.indices[(i * 3) + 2]].position.y - mesh.vertices[mesh.indices[(i * 3) + 1]].position.y;
-        vecZ = mesh.vertices[mesh.indices[(i * 3) + 2]].position.z - mesh.vertices[mesh.indices[(i * 3) + 1]].position.z;
-        edge2 = XMVectorSet(vecX, vecY, vecZ, 0.0f); // Create our second edge.
-
-        // Cross multiply the two edge vectors to get the un-normalized face normal.
-        XMStoreFloat3(&unnormalized, XMVector3Cross(edge1, edge2));
-
-        tempNormal.push_back(unnormalized);
-    }
-
-    // Compute vertex normals (normal Averaging).
-    XMVECTOR normalSum = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
-    int facesUsing = 0;
-    float tX, tY, tZ; // temp axis variables.
-
-    // Go through each vertex
-    for (unsigned int i = 0; i < mesh.vertices.size(); ++i)
-    {
-        // Check which triangles use this vertex
-        for (unsigned int j = 0; j < mesh.trianglesCount; ++j)
-        {
-            if (mesh.indices[j * 3] == i || mesh.indices[(j * 3) + 1] == i || mesh.indices[(j * 3) + 2] == i)
-            {
-                tX = XMVectorGetX(normalSum) + tempNormal[j].x;
-                tY = XMVectorGetY(normalSum) + tempNormal[j].y;
-                tZ = XMVectorGetZ(normalSum) + tempNormal[j].z;
-
-                // If a face is using the vertex, add the unnormalized face normal to the normal Sum.
-                normalSum = XMVectorSet(tX, tY, tZ, 0.0f);
-
-                facesUsing++;
-            }
-        }
-
-        // Get the actual normal by dividing the normalSum by the number of faces sharing the vertex.
-        normalSum = normalSum / static_cast<float>(facesUsing);
-
-        // Normalize the normalSum vector
-        normalSum = XMVector3Normalize(normalSum);
-
-        // Store the normal in our current vertex
-        mesh.vertices[i].normal.x = -XMVectorGetX(normalSum);
-        mesh.vertices[i].normal.y = -XMVectorGetY(normalSum);
-        mesh.vertices[i].normal.z = -XMVectorGetZ(normalSum);
-
-        MD5Vertex vertex = mesh.vertices[i]; // Get the current vertex
-
-        // Create the joint space normal for easy normal calculations in animation.
-        //mesh.jointSpaceNormals.push_back(XMFLOAT3(0.0f, 0.0f, 0.0f)); // Push back a blank normal
-        
-        XMVECTOR normal = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f); // Clear normal
-
-        for (int k = 0; k < vertex.WeightCount; k++)
-        {
-            Joint joint = model.joints[mesh.m_Weights[vertex.StartWeight + k].m_JointId];
-            XMVECTOR jointOrientation = XMVectorSet(joint.m_Orient.x, joint.m_Orient.y, joint.m_Orient.z, joint.m_Orient.w);
-
-            // Calculate normal based off joints orientation (turn into joint space).
-            normal = XMQuaternionMultiply(XMQuaternionMultiply(XMQuaternionInverse(jointOrientation), normalSum), jointOrientation);
-
-            XMStoreFloat3(&mesh.m_Weights[vertex.StartWeight + k].m_Normal, XMVector3Normalize(normal));
-        }
-
-        // Clear normalSum, facesUsing for next vertex
-        normalSum = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
-        facesUsing = 0;
-    }
-}
-
-bool MD5Model::CheckAnimation(MD5Animation const& animation) const
-{
-    if (model.numJoints != animation.GetNumJoints())
-        return false;
-
-    // Check to make sure the joints match up
-    for (unsigned int i = 0; i < model.joints.size(); ++i)
-    {
-        Joint const& meshJoint = model.joints[i];
-        MD5Animation::JointInfo const& animJoint = animation.GetJointInfo(i);
-
-        if (meshJoint.m_Name != animJoint.m_Name || meshJoint.m_ParentId != animJoint.m_ParentId)
-            return false;
-    }
-    return true;
-}
-
-void MD5Model::QuaternionComputeW(DirectX::XMFLOAT4& q)
-{
-    float t = 1.0f - (q.x * q.x) - (q.y * q.y) - (q.z * q.z);
-    t < 0.0f ? q.w = 0.0f : q.w = -sqrtf(t);
 }

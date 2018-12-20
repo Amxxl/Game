@@ -115,9 +115,6 @@
     <ClInclude Include="MD5Model.h">
       <Filter>Game\MD5Model</Filter>
     </ClInclude>
-    <ClInclude Include="MD5Animation.h">
-      <Filter>Game\MD5Model</Filter>
-    </ClInclude>
     <ClInclude Include="ConstantBufferTypes.h">
       <Filter>Graphics\Buffers\ConstantBuffer\Types</Filter>
     </ClInclude>
@@ -135,6 +132,9 @@
     </ClInclude>
     <ClInclude Include="IndexBuffer.h">
       <Filter>Graphics\Buffers\IndexBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="MD5Loader.h">
+      <Filter>Game\MD5Model</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -184,9 +184,6 @@
     <ClCompile Include="MD5Model.cpp">
       <Filter>Game\MD5Model</Filter>
     </ClCompile>
-    <ClCompile Include="MD5Animation.cpp">
-      <Filter>Game\MD5Model</Filter>
-    </ClCompile>
     <ClCompile Include="ConstantBufferTypes.cpp">
       <Filter>Graphics\Buffers\ConstantBuffer\Types</Filter>
     </ClCompile>
@@ -204,6 +201,9 @@
     </ClCompile>
     <ClCompile Include="IndexBuffer.cpp">
       <Filter>Graphics\Buffers\IndexBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="MD5Loader.cpp">
+      <Filter>Game\MD5Model</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
