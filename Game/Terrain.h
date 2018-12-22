@@ -30,8 +30,7 @@ class Terrain
         };
 
         void Initialize(ID3D11DeviceContext* deviceContext);
-        void SetMatrices(ID3D11DeviceContext* deviceContext, DirectX::XMMATRIX world, DirectX::XMMATRIX view, DirectX::XMMATRIX projection);
-        void Render(ID3D11DeviceContext* deviceContext);
+        void Draw(ID3D11DeviceContext* deviceContext, DirectX::XMMATRIX world, DirectX::XMMATRIX view, DirectX::XMMATRIX projection);
 
     private:
         bool LoadRawHeightMap(char const* fileName);
@@ -49,7 +48,6 @@ class Terrain
         int m_vertexCount, m_indexCount;
         float m_heightScale;
         HeightMapType* m_heightMap;
-        //VertexBuffer<DirectX::VertexPositionNormalColorTexture> vertexBuffer;
         VertexBuffer<DirectX::VertexPositionNormalColorDualTexture> vertexBuffer;
         IndexBuffer<DWORD> indexBuffer;
         TerrainShader shader;

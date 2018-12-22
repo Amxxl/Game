@@ -1,5 +1,9 @@
-Texture2D shaderTexture : register(t0);
-Texture2D shaderTexture1 : register(t1);
+Texture2D alphaTexture : register(t0);
+Texture2D diffuseTexture1 : register(t1);
+Texture2D diffuseTexture2 : register(t2);
+Texture2D diffuseTexture3 : register(t3);
+Texture2D diffuseTexture4 : register(t4);
+
 SamplerState SampleType;
 
 cbuffer LightBuffer
@@ -21,29 +25,29 @@ struct PixelInputType
 
 float4 TerrainPixelShader(PixelInputType input) : SV_TARGET
 {
-    float4 textureColor;
+    float4 alphaMap;
     float4 textureColor1;
-    float3 lightDir;
-    float lightIntensity;
+    float4 textureColor2;
+    float4 textureColor3;
+    float4 textureColor4;
+    float4 baseColor;
     float4 color;
 
     // Sample the pixel color from the texture using the sampler at this texture coordinate location.
-    textureColor = shaderTexture.Sample(SampleType, input.tex);
-    textureColor1 = shaderTexture1.Sample(SampleType, input.tex1);
+    textureColor1 = diffuseTexture1.Sample(SampleType, input.tex);
+    textureColor2 = diffuseTexture2.Sample(SampleType, input.tex);
+    textureColor3 = diffuseTexture3.Sample(SampleType, input.tex);
+    textureColor4 = diffuseTexture4.Sample(SampleType, input.tex);
 
-    color = ambientColor;
-    lightDir = -lightDirection;
-    lightIntensity = saturate(dot(input.normal, lightDir));
-    
-    if (lightIntensity > 0.0f)
-    {
-        color += (diffuseColor * lightIntensity);
-    }
+    // Sample the alpha map using second set of texture coordinates.
+    alphaMap = alphaTexture.Sample(SampleType, input.tex1);
 
-    color = saturate(color);
-    color = color * textureColor * textureColor1;
+    // Set the base color to the first color texture.
+    baseColor = textureColor1;
 
-    // Combine the color map value into the texture color.
-    //textureColor = saturate(textureColor * input.color);
+    color = lerp(baseColor, textureColor2, alphaMap.r);
+    color = lerp(color, textureColor3, alphaMap.g);
+    color = lerp(color, textureColor4, alphaMap.b);
+
     return color;
 }

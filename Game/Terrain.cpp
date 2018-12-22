@@ -37,8 +37,6 @@ void Terrain::Initialize(ID3D11DeviceContext* deviceContext)
     this->SetTextureCoordinates1();
     this->CalculateNormals();
 
-    //DirectX::VertexPositionColorTexture* vertices;
-    //DirectX::VertexPositionNormalColorTexture* vertices;
     DirectX::VertexPositionNormalColorDualTexture* vertices;
     unsigned long* indices;
     int index, index1, index2, index3, index4;
@@ -51,7 +49,6 @@ void Terrain::Initialize(ID3D11DeviceContext* deviceContext)
     m_indexCount = m_vertexCount;
 
     // Create the vertex array.
-    //vertices = new DirectX::VertexPositionNormalColorTexture[m_vertexCount];
     vertices = new DirectX::VertexPositionNormalColorDualTexture[m_vertexCount];
     indices = new unsigned long[m_indexCount];
 
@@ -178,20 +175,19 @@ void Terrain::Initialize(ID3D11DeviceContext* deviceContext)
     indexBuffer.Create(device, indices, m_indexCount);
 
     delete[] vertices;
-    vertices = 0;
+    vertices = nullptr;
     delete[] indices;
-    indices = 0;
+    indices = nullptr;
+
+    delete[] m_heightMap;
+    m_heightMap = nullptr;
 
     shader.InitializeShaders(deviceContext);
 }
 
-void Terrain::SetMatrices(ID3D11DeviceContext* deviceContext, DirectX::XMMATRIX world, DirectX::XMMATRIX view, DirectX::XMMATRIX projection)
+void Terrain::Draw(ID3D11DeviceContext* deviceContext, DirectX::XMMATRIX world, DirectX::XMMATRIX view, DirectX::XMMATRIX projection)
 {
     shader.SetShaderParameters(deviceContext, world, view, projection);
-}
-
-void Terrain::Render(ID3D11DeviceContext* deviceContext)
-{
     unsigned int offset = 0;
 
     deviceContext->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), vertexBuffer.StridePtr(), &offset);
@@ -439,7 +435,7 @@ void Terrain::CalculateNormals()
 
     // Release the temporary normals.
     delete[] normals;
-    normals = 0;
+    normals = nullptr;
 }
 
 bool Terrain::LoadRawHeightMap(char const* fileName)
@@ -481,7 +477,7 @@ bool Terrain::LoadRawHeightMap(char const* fileName)
 
     // Release the bitmap image data.
     delete[] rawImage;
-    rawImage = 0;
+    rawImage = nullptr;
 
     return false;
 }

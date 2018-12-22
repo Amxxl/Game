@@ -8,6 +8,8 @@
 
 PlayScene PlayScene::s_instance;
 
+using namespace DirectX;
+
 PlayScene::PlayScene()
 {
     paused = false;
@@ -69,7 +71,7 @@ bool PlayScene::Load(ID3D11DeviceContext1* deviceContext)
     sceneGraph->AddNode(new NodeDisplayFPS());
     camera.SetProjectionValues(90.0f, 800.0f / 600.0f, 0.1f, 1000.0f);
     camera.SetPosition(2.0f, 10.0f, 4.0f);
-    camera.SetLookAtPos(DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f));
+    camera.SetLookAtPos(DirectX::XMFLOAT3(5.0f, 0.0f, 5.0f));
 
     sky = DirectX::GeometricPrimitive::CreateSphere(deviceContext, 1200.0f, 32, false, true);
     water = DirectX::GeometricPrimitive::CreateBox(deviceContext, DirectX::XMFLOAT3(512.0f, 50.0f, 512.0f));
@@ -84,8 +86,13 @@ bool PlayScene::Load(ID3D11DeviceContext1* deviceContext)
 
     m_deviceContext = deviceContext;
 
-    model.LoadMesh(deviceContext, L"guard.md5mesh");
-    model.LoadAnim(L"guard.md5anim");
+    model.LoadMesh(deviceContext, L"wraith.md5mesh");
+    model.LoadAnim(L"idle.md5anim");
+    model.LoadAnim(L"walk.md5anim");
+    model.LoadAnim(L"run.md5anim");
+    model.LoadAnim(L"attack1.md5anim");
+    model.LoadAnim(L"attack2.md5anim");
+    model.LoadAnim(L"attack3.md5anim");
 
     return true;
 }
@@ -123,14 +130,35 @@ void PlayScene::Update(DX::StepTimer const& timer)
 
     auto mouse = Mouse::Get().GetState();
 
-    camera.AdjustRotation(MouseData::GetRelativeY() * 0.01f, -MouseData::GetRelativeX() * 0.01f, 0.0f);
+    camera.AdjustRotation(MouseData::GetRelativeY() * 0.01f, MouseData::GetRelativeX() * 0.01f, 0.0f);
 
     if (keyboard.LeftShift)
         cameraSpeed = 40.0f;
     else
         cameraSpeed = 15.0f;
 
-    model.Update(m_deviceContext, deltaTime, 0);
+    static int anim_index = 0;
+
+
+    if (keyboard.NumPad0)
+        anim_index = 0;
+
+    if (keyboard.NumPad1)
+        anim_index = 1;
+
+    if (keyboard.NumPad2)
+        anim_index = 2;
+
+    if (keyboard.NumPad3)
+        anim_index = 3;
+
+    if (keyboard.NumPad4)
+        anim_index = 4;
+
+    if (keyboard.NumPad5)
+        anim_index = 5;
+
+    model.Update(m_deviceContext, deltaTime, anim_index);
 
     MouseData::SetRelativePos(0, 0);
     sceneGraph->Update(timer);
@@ -141,10 +169,9 @@ void PlayScene::Render()
     m_world = XMMatrixIdentity();
 
     sky->Draw(m_world * XMMatrixTranslation(camera.GetPositionFloat3().x, camera.GetPositionFloat3().y, camera.GetPositionFloat3().z), camera.GetViewMatrix(), camera.GetProjectionMatrix(), Colors::White, skyTexture.Get());
-    terrain.SetMatrices(m_deviceContext, m_world, camera.GetViewMatrix(), camera.GetProjectionMatrix());
-    terrain.Render(m_deviceContext);
-
-    model.Draw(m_deviceContext, m_world * DirectX::XMMatrixScaling(0.02f, 0.02f, 0.02f) * DirectX::XMMatrixTranslation(5.0f, 0.0f, 5.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix());
+    
+    terrain.Draw(m_deviceContext, m_world, camera.GetViewMatrix(), camera.GetProjectionMatrix());
+    model.Draw(m_deviceContext, m_world * DirectX::XMMatrixScaling(0.04f, 0.04f, 0.04f) * DirectX::XMMatrixTranslation(5.0f, 0.0f, 5.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix());
 
     //water->Draw(m_world * XMMatrixTranslation(256.0f, -15.0f, 256.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix(), XMVectorSet(0.0f, 0.0f, 1.0f, 0.9f), waterTexture.Get());
 

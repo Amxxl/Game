@@ -367,7 +367,13 @@ bool MD5Loader::LoadMD5Anim(std::wstring const& fileName, md5_model_t& model)
 
     // Make sure the joints exists in the model, and the parentId's match up.
     if (!CheckAnimation(model, animation))
+    {
+        if (model.animations.empty())
+            model.HasAnimations = false;
         return false;
+    }
+
+    model.HasAnimations = true;
 
     // Add animation to the model.
     model.animations.push_back(animation);
@@ -429,13 +435,13 @@ void MD5Loader::PrepareNormals(md5_mesh_t& mesh, md5_model_t& model)
         vecZ = mesh.vertices[mesh.indices[(i * 3)]].position.z - mesh.vertices[mesh.indices[(i * 3) + 2]].position.z;
         edge1 = XMVectorSet(vecX, vecY, vecZ, 0.0f); // Create our first edge.
 
-                                                     // Get the vector describing another edge of our triangle (edge 2, 1).
+        // Get the vector describing another edge of our triangle (edge 2, 1).
         vecX = mesh.vertices[mesh.indices[(i * 3) + 2]].position.x - mesh.vertices[mesh.indices[(i * 3) + 1]].position.x;
         vecY = mesh.vertices[mesh.indices[(i * 3) + 2]].position.y - mesh.vertices[mesh.indices[(i * 3) + 1]].position.y;
         vecZ = mesh.vertices[mesh.indices[(i * 3) + 2]].position.z - mesh.vertices[mesh.indices[(i * 3) + 1]].position.z;
         edge2 = XMVectorSet(vecX, vecY, vecZ, 0.0f); // Create our second edge.
 
-                                                     // Cross multiply the two edge vectors to get the un-normalized face normal.
+        // Cross multiply the two edge vectors to get the un-normalized face normal.
         XMStoreFloat3(&unnormalized, XMVector3Cross(edge1, edge2));
 
         tempNormal.push_back(unnormalized);
@@ -446,7 +452,7 @@ void MD5Loader::PrepareNormals(md5_mesh_t& mesh, md5_model_t& model)
     int facesUsing = 0;
     float tX, tY, tZ; // temp axis variables.
 
-                      // Go through each vertex
+    // Go through each vertex
     for (unsigned int i = 0; i < mesh.vertices.size(); ++i)
     {
         // Check which triangles use this vertex
@@ -509,7 +515,7 @@ void MD5Loader::BuildFrameSkeleton(md5_anim_t& animation, FrameData const& frame
     {
         unsigned int j = 0; // Keep track of position in frameData array.
 
-                            // Start the frames joint with the base frame's joint
+        // Start the frames joint with the base frame's joint
         Joint joint = animation.baseFrameJoints[i];
         joint.parentId = animation.jointInfo[i].parentId;
 

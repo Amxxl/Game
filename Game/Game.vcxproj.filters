@@ -136,6 +136,15 @@
     <ClInclude Include="MD5Loader.h">
       <Filter>Game\MD5Model</Filter>
     </ClInclude>
+    <ClInclude Include="Color.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Frustum.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -204,6 +213,15 @@
     </ClCompile>
     <ClCompile Include="MD5Loader.cpp">
       <Filter>Game\MD5Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Color.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Frustum.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

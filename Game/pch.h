@@ -54,8 +54,9 @@
 #include <dxgidebug.h>
 #endif
 
-#pragma warning(disable: 4100) // Disable unreferenced parameters warning.
+#pragma warning(disable: 4100) // Disable warning: unreferenced parameter.
 #pragma warning(disable: 4458) // Disable same named class members warning.
+#pragma warning(disable: 4324) // Disable warning: structure was padded due to alignment specifier.
 
 // DirectXTK headers
 //#include "Audio.h"

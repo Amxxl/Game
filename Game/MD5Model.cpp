@@ -33,6 +33,9 @@ bool MD5Model::LoadAnim(std::wstring const& fileName)
 
 void MD5Model::Update(ID3D11DeviceContext* deviceContext, float deltaTime, int index)
 {
+    if (!model.HasAnimations)
+        return;
+
     model.animations[index].currAnimTime += deltaTime;
 
     if (model.animations[index].currAnimTime > model.animations[index].totalAnimTime)

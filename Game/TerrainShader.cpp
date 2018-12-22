@@ -37,9 +37,12 @@ void TerrainShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, Dire
     // Helper to get device.
     ID3D11Device* device = DX::GetDevice(deviceContext);
 
-    // Load texture
-    DirectX::CreateWICTextureFromFile(device, L"terrain.png", nullptr, texture.ReleaseAndGetAddressOf());
-    DirectX::CreateWICTextureFromFile(device, L"terrain.jpg", nullptr, texture1.ReleaseAndGetAddressOf());
+    // Load textures
+    DirectX::CreateWICTextureFromFile(device, L"color.png", nullptr, texture0.ReleaseAndGetAddressOf());
+    DirectX::CreateWICTextureFromFile(device, L"snow.png", nullptr, texture1.ReleaseAndGetAddressOf());
+    DirectX::CreateWICTextureFromFile(device, L"ice.png", nullptr, texture2.ReleaseAndGetAddressOf());
+    DirectX::CreateWICTextureFromFile(device, L"path.png", nullptr, texture3.ReleaseAndGetAddressOf());
+    DirectX::CreateWICTextureFromFile(device, L"snowy.png", nullptr, texture4.ReleaseAndGetAddressOf());
 
     constantBuffer.Create(device);
 
@@ -62,8 +65,11 @@ void TerrainShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, Dire
     lightBuffer.SetData(deviceContext, light);
 
     deviceContext->PSSetConstantBuffers(0, 1, lightBuffer.GetAddressOf());
-    deviceContext->PSSetShaderResources(0, 1, texture.GetAddressOf());
+    deviceContext->PSSetShaderResources(0, 1, texture0.GetAddressOf());
     deviceContext->PSSetShaderResources(1, 1, texture1.GetAddressOf());
+    deviceContext->PSSetShaderResources(2, 1, texture2.GetAddressOf());
+    deviceContext->PSSetShaderResources(3, 1, texture3.GetAddressOf());
+    deviceContext->PSSetShaderResources(4, 1, texture4.GetAddressOf());
 }
 
 void TerrainShader::RenderShader(ID3D11DeviceContext* deviceContext, int numIndices)
@@ -76,7 +82,7 @@ void TerrainShader::RenderShader(ID3D11DeviceContext* deviceContext, int numIndi
     deviceContext->PSSetSamplers(0, 1, &samplerState);
     deviceContext->PSSetSamplers(1, 1, &samplerState);
 
-    ID3D11RasterizerState* raster = states->CullCounterClockwise();
+    ID3D11RasterizerState* raster = states->CullClockwise();
     deviceContext->RSSetState(raster);
 
     deviceContext->DrawIndexed(numIndices, 0, 0);

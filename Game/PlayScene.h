@@ -68,7 +68,7 @@ class PlayScene : public Scene
         Terrain terrain;
         MD5Model model;
         Camera camera;
-        XMMATRIX m_world;
+        DirectX::XMMATRIX m_world;
 
         int mouse_x;
         int mouse_y;
