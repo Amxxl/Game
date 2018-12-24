@@ -20,9 +20,6 @@
     <Filter Include="Graphics">
       <UniqueIdentifier>{0d65af47-998c-4fd2-a345-f8a988e3d53c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\World">
-      <UniqueIdentifier>{d8b2dca3-4a68-4720-8c71-d05bd05bdf37}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Assets\Shaders">
       <UniqueIdentifier>{31f9c28e-180b-4810-a8a9-4b797f1d7695}</UniqueIdentifier>
     </Filter>
@@ -65,6 +62,12 @@
     <Filter Include="Graphics\Buffers\VertexBuffer\Types">
       <UniqueIdentifier>{319bdef6-a9d8-4427-84b0-cf68fa7fa0ee}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Terrain">
+      <UniqueIdentifier>{d8b2dca3-4a68-4720-8c71-d05bd05bdf37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Resources">
+      <UniqueIdentifier>{7bf3f75d-18a8-4f3a-9112-42cfcbfce357}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene.h">
@@ -88,17 +91,14 @@
     <ClInclude Include="SceneNode.h">
       <Filter>Game\Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="NodeDisplayFPS.h">
-      <Filter>Game\Scenes</Filter>
-    </ClInclude>
     <ClInclude Include="PlayScene.h">
       <Filter>Game\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="Terrain.h">
-      <Filter>Game\World</Filter>
+      <Filter>Game\Terrain</Filter>
     </ClInclude>
     <ClInclude Include="TerrainShader.h">
-      <Filter>Game\World</Filter>
+      <Filter>Game\Terrain</Filter>
     </ClInclude>
     <ClInclude Include="DeviceResources.h">
       <Filter>Graphics</Filter>
@@ -145,6 +145,15 @@
     <ClInclude Include="GameObject.h">
       <Filter>Game</Filter>
     </ClInclude>
+    <ClInclude Include="QuadTree.h">
+      <Filter>Game\Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderableGameObject.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Graphics\Resources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -166,17 +175,14 @@
     <ClCompile Include="SceneNode.cpp">
       <Filter>Game\Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="NodeDisplayFPS.cpp">
-      <Filter>Game\Scenes</Filter>
-    </ClCompile>
     <ClCompile Include="PlayScene.cpp">
       <Filter>Game\Scenes</Filter>
     </ClCompile>
     <ClCompile Include="Terrain.cpp">
-      <Filter>Game\World</Filter>
+      <Filter>Game\Terrain</Filter>
     </ClCompile>
     <ClCompile Include="TerrainShader.cpp">
-      <Filter>Game\World</Filter>
+      <Filter>Game\Terrain</Filter>
     </ClCompile>
     <ClCompile Include="DeviceResources.cpp">
       <Filter>Graphics</Filter>
@@ -222,6 +228,15 @@
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
       <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="QuadTree.cpp">
+      <Filter>Game\Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderableGameObject.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Graphics\Resources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

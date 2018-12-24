@@ -30,21 +30,23 @@ void TerrainShader::InitializeShaders(ID3D11DeviceContext* deviceContext)
     DX::ThrowIfFailed(device->CreateInputLayout(DirectX::VertexPositionNormalColorDualTexture::InputElements, DirectX::VertexPositionNormalColorDualTexture::InputElementCount, TerrainShaders::TerrainVertexShaderBytecode, sizeof(TerrainShaders::TerrainVertexShaderBytecode), inputLayout.GetAddressOf()));
 
     states = std::make_unique<DirectX::CommonStates>(device);
+
+    // Load textures
+    DirectX::CreateWICTextureFromFile(device, L"color.png", nullptr, texture0.ReleaseAndGetAddressOf());
+    //DirectX::CreateWICTextureFromFile(device, L"snow.png", nullptr, texture1.ReleaseAndGetAddressOf());
+    DirectX::CreateDDSTextureFromFile(device, L"snow.dds", nullptr, texture1.ReleaseAndGetAddressOf());
+    DirectX::CreateWICTextureFromFile(device, L"ice.png", nullptr, texture2.ReleaseAndGetAddressOf());
+    DirectX::CreateDDSTextureFromFile(device, L"path.dds", nullptr, texture3.ReleaseAndGetAddressOf());
+    DirectX::CreateWICTextureFromFile(device, L"snowy.png", nullptr, texture4.ReleaseAndGetAddressOf());
+
+    constantBuffer.Create(device);
+    lightBuffer.Create(device);
 }
 
 void TerrainShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, DirectX::XMMATRIX worldMatrix, DirectX::XMMATRIX viewMatrix, DirectX::XMMATRIX projectionMatrix)
 {
     // Helper to get device.
-    ID3D11Device* device = DX::GetDevice(deviceContext);
-
-    // Load textures
-    DirectX::CreateWICTextureFromFile(device, L"color.png", nullptr, texture0.ReleaseAndGetAddressOf());
-    DirectX::CreateWICTextureFromFile(device, L"snow.png", nullptr, texture1.ReleaseAndGetAddressOf());
-    DirectX::CreateWICTextureFromFile(device, L"ice.png", nullptr, texture2.ReleaseAndGetAddressOf());
-    DirectX::CreateWICTextureFromFile(device, L"path.png", nullptr, texture3.ReleaseAndGetAddressOf());
-    DirectX::CreateWICTextureFromFile(device, L"snowy.png", nullptr, texture4.ReleaseAndGetAddressOf());
-
-    constantBuffer.Create(device);
+    //ID3D11Device* device = DX::GetDevice(deviceContext);
 
     MatrixBufferType matrixBuffer;
     matrixBuffer.world = DirectX::XMMatrixTranspose(worldMatrix);
@@ -52,10 +54,7 @@ void TerrainShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, Dire
     matrixBuffer.projection = DirectX::XMMatrixTranspose(projectionMatrix);
     constantBuffer.SetData(deviceContext, matrixBuffer);
 
-
     deviceContext->VSSetConstantBuffers(0, 1, constantBuffer.GetAddressOf());
-
-    lightBuffer.Create(device);
 
     LightBufferType light;
     light.ambientColor = DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);

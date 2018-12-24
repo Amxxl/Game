@@ -10,10 +10,11 @@ class Frustum
         Frustum();
         ~Frustum();
 
-        void ConstructFrustum(float screenDepth, DirectX::XMFLOAT4X4 projectionMatrix, DirectX::XMFLOAT4X4 const& viewMatrix, DirectX::XMMATRIX& world);
+        void ConstructFrustum(float screenDepth, DirectX::XMMATRIX projectionMatrix, DirectX::XMMATRIX const& viewMatrix, DirectX::XMMATRIX& world);
 
         bool CheckPoint(DirectX::XMFLOAT3 const& point) const;
         bool CheckSphere(DirectX::XMFLOAT3 const& center, float radius) const;
+        bool CheckCube(DirectX::XMFLOAT3 const& center, float radius) const;
 
         DirectX::XMFLOAT4 const& GetNearPlane() const { return m_planesNorm[0]; }
         DirectX::XMFLOAT4 const& GetFarPlane() const { return m_planesNorm[1]; }

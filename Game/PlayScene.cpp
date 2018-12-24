@@ -68,7 +68,6 @@ bool PlayScene::Load(ID3D11DeviceContext1* deviceContext)
 {
     sceneGraph = new SceneNode();
 
-    sceneGraph->AddNode(new NodeDisplayFPS());
     camera.SetProjectionValues(90.0f, 800.0f / 600.0f, 0.1f, 1000.0f);
     camera.SetPosition(2.0f, 10.0f, 4.0f);
     camera.SetLookAtPos(DirectX::XMFLOAT3(5.0f, 0.0f, 5.0f));
@@ -84,15 +83,11 @@ bool PlayScene::Load(ID3D11DeviceContext1* deviceContext)
 
     terrain.Initialize(deviceContext);
 
+    quadTree.Initialize(&terrain, deviceContext);
+
     m_deviceContext = deviceContext;
 
-    model.LoadMesh(deviceContext, L"wraith.md5mesh");
-    model.LoadAnim(L"idle.md5anim");
-    model.LoadAnim(L"walk.md5anim");
-    model.LoadAnim(L"run.md5anim");
-    model.LoadAnim(L"attack1.md5anim");
-    model.LoadAnim(L"attack2.md5anim");
-    model.LoadAnim(L"attack3.md5anim");
+    player.Initialize(deviceContext);
 
     return true;
 }
@@ -114,14 +109,23 @@ void PlayScene::Update(DX::StepTimer const& timer)
     static float cameraSpeed = 15.0f;
 
     if (keyboard.W)
+    {
         camera.AdjustPosition(camera.GetForwardVector() * deltaTime * cameraSpeed);
+    }
     else if (keyboard.S)
+    {
         camera.AdjustPosition(camera.GetBackwardVector() * deltaTime * cameraSpeed);
+    }
 
+    
     if (keyboard.A)
+    {
         camera.AdjustPosition(camera.GetLeftVector() * deltaTime * cameraSpeed);
+    }
     else if (keyboard.D)
+    {
         camera.AdjustPosition(camera.GetRightVector() * deltaTime * cameraSpeed);
+    }
 
     if (keyboard.Space)
         camera.AdjustPosition(0.0f, deltaTime * cameraSpeed, 0.0f);
@@ -131,6 +135,7 @@ void PlayScene::Update(DX::StepTimer const& timer)
     auto mouse = Mouse::Get().GetState();
 
     camera.AdjustRotation(MouseData::GetRelativeY() * 0.01f, MouseData::GetRelativeX() * 0.01f, 0.0f);
+    
 
     if (keyboard.LeftShift)
         cameraSpeed = 40.0f;
@@ -158,10 +163,11 @@ void PlayScene::Update(DX::StepTimer const& timer)
     if (keyboard.NumPad5)
         anim_index = 5;
 
-    model.Update(m_deviceContext, deltaTime, anim_index);
-
+    player.Update(m_deviceContext, deltaTime, anim_index);
+  
     MouseData::SetRelativePos(0, 0);
     sceneGraph->Update(timer);
+    m_fps = static_cast<float>(timer.GetFramesPerSecond());
 }
 
 void PlayScene::Render()
@@ -170,9 +176,28 @@ void PlayScene::Render()
 
     sky->Draw(m_world * XMMatrixTranslation(camera.GetPositionFloat3().x, camera.GetPositionFloat3().y, camera.GetPositionFloat3().z), camera.GetViewMatrix(), camera.GetProjectionMatrix(), Colors::White, skyTexture.Get());
     
-    terrain.Draw(m_deviceContext, m_world, camera.GetViewMatrix(), camera.GetProjectionMatrix());
-    model.Draw(m_deviceContext, m_world * DirectX::XMMatrixScaling(0.04f, 0.04f, 0.04f) * DirectX::XMMatrixTranslation(5.0f, 0.0f, 5.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix());
+    frustum.ConstructFrustum(1000.0f, camera.GetProjectionMatrix(), camera.GetViewMatrix(), m_world);
+    quadTree.Draw(m_deviceContext, &frustum, m_world, camera.GetViewMatrix(), camera.GetProjectionMatrix());
 
+    ImGui_ImplDX11_NewFrame();
+    ImGui_ImplWin32_NewFrame();
+    ImGui::NewFrame();
+
+    ImGui::Begin("Debug");
+
+    std::ostringstream ss("");
+    ss << "Frames per second: " << m_fps;
+    ImGui::Text(ss.str().c_str());
+
+    ss.str("");
+    ss << "Draw count: " << quadTree.GetDrawCount();
+    ImGui::Text(ss.str().c_str());
+    ImGui::End();
+    ImGui::Render();
+    ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+
+    //model.Draw(m_deviceContext, m_world * DirectX::XMMatrixScaling(0.04f, 0.04f, 0.04f) * DirectX::XMMatrixTranslation(5.0f, 0.0f, 5.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix());
+    player.Draw(m_deviceContext, camera.GetViewMatrix(), camera.GetProjectionMatrix());
     //water->Draw(m_world * XMMatrixTranslation(256.0f, -15.0f, 256.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix(), XMVectorSet(0.0f, 0.0f, 1.0f, 0.9f), waterTexture.Get());
 
     sceneGraph->Render();

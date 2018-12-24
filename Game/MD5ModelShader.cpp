@@ -33,6 +33,9 @@ void MD5ModelShader::InitializeShaders(ID3D11DeviceContext* deviceContext)
     DX::ThrowIfFailed(device->CreateInputLayout(MD5Vertex::InputElements, MD5Vertex::InputElementCount, MD5ModelShaders::MD5ModelVertexShaderBytecode, sizeof(MD5ModelShaders::MD5ModelVertexShaderBytecode), inputLayout.GetAddressOf()));
 
     states = std::make_unique<DirectX::CommonStates>(device);
+
+    constantBuffer.Create(device);
+    lightBuffer.Create(device);
 }
 
 void MD5ModelShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, DirectX::XMMATRIX world, DirectX::XMMATRIX view, DirectX::XMMATRIX proj)
@@ -40,8 +43,6 @@ void MD5ModelShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, Dir
     ID3D11Device* device = DX::GetDevice(deviceContext);
     if (device == nullptr)
         return;
-
-    constantBuffer.Create(device);
 
     MatrixBufferType matrixBuffer;
     matrixBuffer.world = DirectX::XMMatrixTranspose(world);
@@ -51,7 +52,6 @@ void MD5ModelShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, Dir
 
     deviceContext->VSSetConstantBuffers(0, 1, constantBuffer.GetAddressOf());
 
-    lightBuffer.Create(device);
     LightBufferType light;
     light.ambientColor = DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
     light.diffuseColor = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);

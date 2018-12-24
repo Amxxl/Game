@@ -9,6 +9,11 @@ Terrain::Terrain()
 
 Terrain::~Terrain()
 {
+    if (m_vertices != nullptr)
+    {
+        delete[] m_vertices;
+        m_vertices = nullptr;
+    }
     if (m_heightMap != nullptr)
     {
         delete[] m_heightMap;
@@ -19,16 +24,9 @@ Terrain::~Terrain()
 void Terrain::Initialize(ID3D11DeviceContext* deviceContext)
 {
     DX::ExecutionTimer execTime;
-    ID3D11Device* device = nullptr;
-    deviceContext->GetDevice(&device);
 
-    if (device == nullptr)
-        return;
-
-    states = std::make_unique<DirectX::CommonStates>(device);
-
-    m_terrainWidth = 256;
-    m_terrainHeight = 256;
+    m_terrainWidth = 512;
+    m_terrainHeight = 512;
     m_heightScale = 1200.0f;
 
     this->LoadRawHeightMap("terrain.raw");
@@ -37,20 +35,14 @@ void Terrain::Initialize(ID3D11DeviceContext* deviceContext)
     this->SetTextureCoordinates1();
     this->CalculateNormals();
 
-    DirectX::VertexPositionNormalColorDualTexture* vertices;
-    unsigned long* indices;
     int index, index1, index2, index3, index4;
     float u, v;
 
     // Calculate the number of vertices in the terrain mesh.
     m_vertexCount = (m_terrainWidth - 1) * (m_terrainHeight - 1) * 6;
-    
-    // Set index count to be same as vertex count.
-    m_indexCount = m_vertexCount;
 
     // Create the vertex array.
-    vertices = new DirectX::VertexPositionNormalColorDualTexture[m_vertexCount];
-    indices = new unsigned long[m_indexCount];
+    m_vertices = new DirectX::VertexPositionNormalColorDualTexture[m_vertexCount];
 
     // Initialize the index to the vertex array.
     index = 0;
@@ -76,12 +68,11 @@ void Terrain::Initialize(ID3D11DeviceContext* deviceContext)
 
             // Now create two triangles for that quad.
             // Triangle 1 - Upper left.
-            vertices[index].position = DirectX::XMFLOAT3(m_heightMap[index1].x, m_heightMap[index1].y, m_heightMap[index1].z);
-            vertices[index].normal = DirectX::XMFLOAT3(m_heightMap[index1].nx, m_heightMap[index1].ny, m_heightMap[index1].nz);
-            vertices[index].color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-            vertices[index].textureCoordinate0 = DirectX::XMFLOAT2(u, v);
-            vertices[index].textureCoordinate1 = DirectX::XMFLOAT2(m_heightMap[index1].u1, m_heightMap[index1].v1);
-            indices[index] = index;
+            m_vertices[index].position = DirectX::XMFLOAT3(m_heightMap[index1].x, m_heightMap[index1].y, m_heightMap[index1].z);
+            m_vertices[index].normal = DirectX::XMFLOAT3(m_heightMap[index1].nx, m_heightMap[index1].ny, m_heightMap[index1].nz);
+            m_vertices[index].color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+            m_vertices[index].textureCoordinate0 = DirectX::XMFLOAT2(u, v);
+            m_vertices[index].textureCoordinate1 = DirectX::XMFLOAT2(m_heightMap[index1].u1, m_heightMap[index1].v1);
             index++;
 
 
@@ -94,12 +85,11 @@ void Terrain::Initialize(ID3D11DeviceContext* deviceContext)
             if (v == 1.0f) { v = 0.0f; }
 
             // Triangle 1 - Upper right.
-            vertices[index].position = DirectX::XMFLOAT3(m_heightMap[index2].x, m_heightMap[index2].y, m_heightMap[index2].z);
-            vertices[index].normal = DirectX::XMFLOAT3(m_heightMap[index2].nx, m_heightMap[index2].ny, m_heightMap[index2].nz);
-            vertices[index].color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-            vertices[index].textureCoordinate0 = DirectX::XMFLOAT2(u, v);
-            vertices[index].textureCoordinate1 = DirectX::XMFLOAT2(m_heightMap[index2].u1, m_heightMap[index2].v1);
-            indices[index] = index;
+            m_vertices[index].position = DirectX::XMFLOAT3(m_heightMap[index2].x, m_heightMap[index2].y, m_heightMap[index2].z);
+            m_vertices[index].normal = DirectX::XMFLOAT3(m_heightMap[index2].nx, m_heightMap[index2].ny, m_heightMap[index2].nz);
+            m_vertices[index].color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+            m_vertices[index].textureCoordinate0 = DirectX::XMFLOAT2(u, v);
+            m_vertices[index].textureCoordinate1 = DirectX::XMFLOAT2(m_heightMap[index2].u1, m_heightMap[index2].v1);
             index++;
 
 
@@ -111,12 +101,11 @@ void Terrain::Initialize(ID3D11DeviceContext* deviceContext)
             if (v == 0.0f) { v = 1.0f; }
 
             // Triangle 1 - Bottom left.
-            vertices[index].position = DirectX::XMFLOAT3(m_heightMap[index3].x, m_heightMap[index3].y, m_heightMap[index3].z);
-            vertices[index].normal = DirectX::XMFLOAT3(m_heightMap[index3].nx, m_heightMap[index3].ny, m_heightMap[index3].nz);
-            vertices[index].color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-            vertices[index].textureCoordinate0 = DirectX::XMFLOAT2(u, v);
-            vertices[index].textureCoordinate1 = DirectX::XMFLOAT2(m_heightMap[index3].u1, m_heightMap[index3].v1);
-            indices[index] = index;
+            m_vertices[index].position = DirectX::XMFLOAT3(m_heightMap[index3].x, m_heightMap[index3].y, m_heightMap[index3].z);
+            m_vertices[index].normal = DirectX::XMFLOAT3(m_heightMap[index3].nx, m_heightMap[index3].ny, m_heightMap[index3].nz);
+            m_vertices[index].color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+            m_vertices[index].textureCoordinate0 = DirectX::XMFLOAT2(u, v);
+            m_vertices[index].textureCoordinate1 = DirectX::XMFLOAT2(m_heightMap[index3].u1, m_heightMap[index3].v1);
             index++;
 
             // Bottom left.
@@ -127,12 +116,11 @@ void Terrain::Initialize(ID3D11DeviceContext* deviceContext)
             if (v == 0.0f) { v = 1.0f; }
 
             // Triangle 2 - Bottom left.
-            vertices[index].position = DirectX::XMFLOAT3(m_heightMap[index3].x, m_heightMap[index3].y, m_heightMap[index3].z);
-            vertices[index].normal = DirectX::XMFLOAT3(m_heightMap[index3].nx, m_heightMap[index3].ny, m_heightMap[index3].nz);
-            vertices[index].color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-            vertices[index].textureCoordinate0 = DirectX::XMFLOAT2(u, v);
-            vertices[index].textureCoordinate1 = DirectX::XMFLOAT2(m_heightMap[index3].u1, m_heightMap[index3].v1);
-            indices[index] = index;
+            m_vertices[index].position = DirectX::XMFLOAT3(m_heightMap[index3].x, m_heightMap[index3].y, m_heightMap[index3].z);
+            m_vertices[index].normal = DirectX::XMFLOAT3(m_heightMap[index3].nx, m_heightMap[index3].ny, m_heightMap[index3].nz);
+            m_vertices[index].color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+            m_vertices[index].textureCoordinate0 = DirectX::XMFLOAT2(u, v);
+            m_vertices[index].textureCoordinate1 = DirectX::XMFLOAT2(m_heightMap[index3].u1, m_heightMap[index3].v1);
             index++;
 
             // Upper right.
@@ -144,12 +132,11 @@ void Terrain::Initialize(ID3D11DeviceContext* deviceContext)
             if (v == 1.0f) { v = 0.0f; }
 
             // Triangle 2 - Upper right.
-            vertices[index].position = DirectX::XMFLOAT3(m_heightMap[index2].x, m_heightMap[index2].y, m_heightMap[index2].z);
-            vertices[index].normal = DirectX::XMFLOAT3(m_heightMap[index2].nx, m_heightMap[index2].ny, m_heightMap[index2].nz);
-            vertices[index].color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-            vertices[index].textureCoordinate0 = DirectX::XMFLOAT2(u, v);
-            vertices[index].textureCoordinate1 = DirectX::XMFLOAT2(m_heightMap[index2].u1, m_heightMap[index2].v1);
-            indices[index] = index;
+            m_vertices[index].position = DirectX::XMFLOAT3(m_heightMap[index2].x, m_heightMap[index2].y, m_heightMap[index2].z);
+            m_vertices[index].normal = DirectX::XMFLOAT3(m_heightMap[index2].nx, m_heightMap[index2].ny, m_heightMap[index2].nz);
+            m_vertices[index].color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+            m_vertices[index].textureCoordinate0 = DirectX::XMFLOAT2(u, v);
+            m_vertices[index].textureCoordinate1 = DirectX::XMFLOAT2(m_heightMap[index2].u1, m_heightMap[index2].v1);
             index++;
 
             // Bottom right.
@@ -161,42 +148,19 @@ void Terrain::Initialize(ID3D11DeviceContext* deviceContext)
             if (v == 0.0f) { v = 1.0f; }
 
             // Triangle 2 - Bottom right.
-            vertices[index].position = DirectX::XMFLOAT3(m_heightMap[index4].x, m_heightMap[index4].y, m_heightMap[index4].z);
-            vertices[index].normal = DirectX::XMFLOAT3(m_heightMap[index4].nx, m_heightMap[index4].ny, m_heightMap[index4].nz);
-            vertices[index].color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-            vertices[index].textureCoordinate0 = DirectX::XMFLOAT2(u, v);
-            vertices[index].textureCoordinate1 = DirectX::XMFLOAT2(m_heightMap[index4].u1, m_heightMap[index4].v1);
-            indices[index] = index;
+            m_vertices[index].position = DirectX::XMFLOAT3(m_heightMap[index4].x, m_heightMap[index4].y, m_heightMap[index4].z);
+            m_vertices[index].normal = DirectX::XMFLOAT3(m_heightMap[index4].nx, m_heightMap[index4].ny, m_heightMap[index4].nz);
+            m_vertices[index].color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+            m_vertices[index].textureCoordinate0 = DirectX::XMFLOAT2(u, v);
+            m_vertices[index].textureCoordinate1 = DirectX::XMFLOAT2(m_heightMap[index4].u1, m_heightMap[index4].v1);
             index++;
         }
     }
-
-    vertexBuffer.Create(device, vertices, m_vertexCount);
-    indexBuffer.Create(device, indices, m_indexCount);
-
-    delete[] vertices;
-    vertices = nullptr;
-    delete[] indices;
-    indices = nullptr;
-
-    delete[] m_heightMap;
-    m_heightMap = nullptr;
-
-    shader.InitializeShaders(deviceContext);
 }
 
-void Terrain::Draw(ID3D11DeviceContext* deviceContext, DirectX::XMMATRIX world, DirectX::XMMATRIX view, DirectX::XMMATRIX projection)
+void Terrain::CopyVertexArray(void* vertexList)
 {
-    shader.SetShaderParameters(deviceContext, world, view, projection);
-    unsigned int offset = 0;
-
-    deviceContext->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), vertexBuffer.StridePtr(), &offset);
-    deviceContext->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
-    deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-    deviceContext->RSSetState(states->CullCounterClockwise());
-
-    shader.RenderShader(deviceContext, m_indexCount);
+    memcpy(vertexList, m_vertices, sizeof(DirectX::VertexPositionNormalColorDualTexture) * m_vertexCount);
 }
 
 void Terrain::SetTerrainCoordinates()

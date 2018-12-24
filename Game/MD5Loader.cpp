@@ -220,6 +220,7 @@ bool MD5Loader::LoadMD5Mesh(ID3D11DeviceContext* deviceContext, std::wstring con
             model.meshes.push_back(mesh); // Store mesh in model's meshes vector.
         }
     }
+    return true;
 }
 
 bool MD5Loader::LoadMD5Anim(std::wstring const& fileName, md5_model_t& model)

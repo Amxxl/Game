@@ -9,13 +9,17 @@
 
 #include "Scene.h"
 
+#include "imgui.h"
+#include "imgui_impl_dx11.h"
+#include "imgui_impl_win32.h"
+
 #include "GeometricPrimitive.h"
 #include "Camera.h"
-
-#include "NodeDisplayFPS.h"
 #include "Terrain.h"
+#include "QuadTree.h"
+#include "Frustum.h"
 
-#include "MD5Model.h"
+#include "RenderableGameObject.h"
 
 class PlayScene : public Scene
 {
@@ -66,12 +70,16 @@ class PlayScene : public Scene
         ID3D11DeviceContext* m_deviceContext = nullptr;
 
         Terrain terrain;
-        MD5Model model;
+        QuadTree quadTree;
+        Frustum frustum;
+        RenderableGameObject player;
         Camera camera;
         DirectX::XMMATRIX m_world;
 
         int mouse_x;
         int mouse_y;
+
+        float m_fps;
 
     private:
         bool paused;

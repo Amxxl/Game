@@ -12,9 +12,16 @@ Frustum::~Frustum()
 {
 }
 
-void Frustum::ConstructFrustum(float screenDepth, XMFLOAT4X4 projectionMatrix, XMFLOAT4X4 const& viewMatrix, XMMATRIX& world)
+void Frustum::ConstructFrustum(float screenDepth, XMMATRIX projMatrix, XMMATRIX const& vMatrix, XMMATRIX& world)
 {
+    XMFLOAT4X4 projectionMatrix;
+    XMStoreFloat4x4(&projectionMatrix, projMatrix);
+
+    XMFLOAT4X4 viewMatrix;
+    XMStoreFloat4x4(&viewMatrix, vMatrix);
+
     view = viewMatrix;
+
 
     float zMinimum, r;
     XMFLOAT4X4 matrix;
@@ -95,4 +102,39 @@ bool Frustum::CheckSphere(XMFLOAT3 const& center, float radius) const
     }
 
     return false;
+}
+
+bool Frustum::CheckCube(DirectX::XMFLOAT3 const& center, float radius) const
+{
+    // Check if any one point of the cube is in the view frustum.
+    for (unsigned int i = 0; i < 6; ++i)
+    {
+        if (XMVectorGetX(XMPlaneDotCoord(XMLoadFloat4(&m_planesNorm[i]), XMLoadFloat3(&XMFLOAT3(center.x - radius, center.y - radius, center.z - radius)))) >= 0.0f)
+            continue;
+
+        if (XMVectorGetX(XMPlaneDotCoord(XMLoadFloat4(&m_planesNorm[i]), XMLoadFloat3(&XMFLOAT3(center.x + radius, center.y - radius, center.z - radius)))) >= 0.0f)
+            continue;
+
+        if (XMVectorGetX(XMPlaneDotCoord(XMLoadFloat4(&m_planesNorm[i]), XMLoadFloat3(&XMFLOAT3(center.x - radius, center.y + radius, center.z - radius)))) >= 0.0f)
+            continue;
+
+        if (XMVectorGetX(XMPlaneDotCoord(XMLoadFloat4(&m_planesNorm[i]), XMLoadFloat3(&XMFLOAT3(center.x + radius, center.y + radius, center.z - radius)))) >= 0.0f)
+            continue;
+
+        if (XMVectorGetX(XMPlaneDotCoord(XMLoadFloat4(&m_planesNorm[i]), XMLoadFloat3(&XMFLOAT3(center.x - radius, center.y - radius, center.z + radius)))) >= 0.0f)
+            continue;
+
+        if (XMVectorGetX(XMPlaneDotCoord(XMLoadFloat4(&m_planesNorm[i]), XMLoadFloat3(&XMFLOAT3(center.x + radius, center.y - radius, center.z + radius)))) >= 0.0f)
+            continue;
+
+        if (XMVectorGetX(XMPlaneDotCoord(XMLoadFloat4(&m_planesNorm[i]), XMLoadFloat3(&XMFLOAT3(center.x - radius, center.y + radius, center.z + radius)))) >= 0.0f)
+            continue;
+
+        if (XMVectorGetX(XMPlaneDotCoord(XMLoadFloat4(&m_planesNorm[i]), XMLoadFloat3(&XMFLOAT3(center.x + radius, center.y + radius, center.z + radius)))) >= 0.0f)
+            continue;
+
+        return false;
+    }
+
+    return true;
 }

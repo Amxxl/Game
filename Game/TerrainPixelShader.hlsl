@@ -33,7 +33,7 @@ float4 TerrainPixelShader(PixelInputType input) : SV_TARGET
     float4 baseColor;
     float4 color;
 
-    // Sample the pixel color from the texture using the sampler at this texture coordinate location.
+    // Sample the pixel color from the texture using the sampler at first set of texture coordinates.
     textureColor1 = diffuseTexture1.Sample(SampleType, input.tex);
     textureColor2 = diffuseTexture2.Sample(SampleType, input.tex);
     textureColor3 = diffuseTexture3.Sample(SampleType, input.tex);
