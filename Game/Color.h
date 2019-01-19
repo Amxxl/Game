@@ -10,8 +10,8 @@ namespace axec//alibur
     {
         public:
             Color() : color(0) {}
-            Color(unsigned int color) : color(color) {}
-            Color(unsigned char r, unsigned char g, unsigned char b, unsigned char a = 255)
+            Color(uint32 color) : color(color) {}
+            Color(uint8 r, uint8 g, uint8 b, uint8 a = 255)
             {
                 rgba[0] = r;
                 rgba[1] = g;
@@ -23,26 +23,32 @@ namespace axec//alibur
             bool operator==(Color const& rhs) { return color == rhs.color; }
             bool operator!=(Color const& rhs) { return color != rhs.color; }
 
-            constexpr unsigned char GetR() const { return rgba[0]; }
-            void SetR(unsigned char r) { rgba[0] = r; }
+            constexpr uint8 GetR() const { return rgba[0]; }
+            void SetR(uint8 r) { rgba[0] = r; }
 
-            constexpr unsigned char GetG() const { return rgba[1]; }
-            void SetG(unsigned char g) { rgba[1] = g; }
+            constexpr uint8 GetG() const { return rgba[1]; }
+            void SetG(uint8 g) { rgba[1] = g; }
 
-            constexpr unsigned char GetB() const { return rgba[2]; }
-            void SetB(unsigned char b) { rgba[2] = b; }
+            constexpr uint8 GetB() const { return rgba[2]; }
+            void SetB(uint8 b) { rgba[2] = b; }
 
-            constexpr unsigned char GetA() const { return rgba[3]; }
-            void SetA(unsigned char a) { rgba[3] = a; }
+            constexpr uint8 GetA() const { return rgba[3]; }
+            void SetA(uint8 a) { rgba[3] = a; }
 
-            constexpr unsigned int GetColor() const { return color; }
-            void SetColor(unsigned int color) { this->color = color; }
+            constexpr uint32 GetColor() const { return color; }
+            void SetColor(uint32 color) { this->color = color; }
 
         private:
             union
             {
-                unsigned char rgba[4];
-                unsigned int color;
+                uint8 rgba[4];
+                uint32 color;
             };
+    };
+
+    enum class Colors : unsigned int
+    {
+        BLACK = 0x000000ff,
+        WHITE = 0xffffffff
     };
 }

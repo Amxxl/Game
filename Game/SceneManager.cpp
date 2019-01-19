@@ -107,7 +107,7 @@ void SceneManager::SwapScene(Scene* scene)
     }
 
     // Store and load new scene
-    scenes.push_back(scene);
+    scenes.emplace_back(scene);
     scenes.back()->Load(m_deviceContext);
 }
 
@@ -118,7 +118,7 @@ void SceneManager::PushScene(Scene* scene)
         scenes.back()->Pause();
 
     // Store and load new scene
-    scenes.push_back(scene);
+    scenes.emplace_back(scene);
     scenes.back()->Load(m_deviceContext);
 }
 

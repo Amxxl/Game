@@ -23,11 +23,9 @@ Terrain::~Terrain()
 
 void Terrain::Initialize(ID3D11DeviceContext* deviceContext)
 {
-    DX::ExecutionTimer execTime;
-
     m_terrainWidth = 512;
     m_terrainHeight = 512;
-    m_heightScale = 1200.0f;
+    m_heightScale = 400.0f;
 
     this->LoadRawHeightMap("terrain.raw");
     this->SetTerrainCoordinates();
@@ -47,9 +45,9 @@ void Terrain::Initialize(ID3D11DeviceContext* deviceContext)
     // Initialize the index to the vertex array.
     index = 0;
 
-    for (int j = 0; j < (m_terrainHeight - 1); ++j)
+    for (uint16 j = 0; j < (m_terrainHeight - 1); ++j)
     {
-        for (int i = 0; i < (m_terrainWidth - 1); ++i)
+        for (uint16 i = 0; i < (m_terrainWidth - 1); ++i)
         {
             // Get the indexes to the four points of the quad.
             index1 = (m_terrainHeight * (j + 1)) + i;       // Upper left.
@@ -245,9 +243,9 @@ void Terrain::SetTextureCoordinates1()
 {
     int index1, index2, index3, index4;
 
-    for (int j = 0; j < m_terrainHeight - 1; ++j)
+    for (uint16 j = 0; j < m_terrainHeight - 1; ++j)
     {
-        for (int i = 0; i < m_terrainWidth - 1; ++i)
+        for (uint16 i = 0; i < m_terrainWidth - 1; ++i)
         {
             // Get the indexes to the four points of the quad.
             index1 = (m_terrainHeight * (j + 1)) + i;       // Upper left.
@@ -275,7 +273,7 @@ void Terrain::SetTextureCoordinates1()
 
 void Terrain::CalculateNormals()
 {
-    int index1, index2, index3, index, count;
+    uint32 index1, index2, index3, index, count;
     float vertex1[3], vertex2[3], vertex3[3], vector1[3], vector2[3], sum[3], length;
     VectorType* normals;
 
@@ -283,9 +281,9 @@ void Terrain::CalculateNormals()
     normals = new VectorType[(m_terrainHeight - 1) * (m_terrainWidth - 1)];
 
     // Go through all the faces in the mesh and calculate their normals.
-    for (int j = 0; j < (m_terrainHeight - 1); ++j)
+    for (uint16 j = 0; j < (m_terrainHeight - 1); ++j)
     {
-        for (int i = 0; i < (m_terrainWidth - 1); ++i)
+        for (uint16 i = 0; i < (m_terrainWidth - 1); ++i)
         {
             index1 = (j * m_terrainHeight) + i;
             index2 = (j * m_terrainHeight) + (i + 1);
@@ -323,9 +321,9 @@ void Terrain::CalculateNormals()
 
     // Now go through all the vertices and take an average of each face normal 	
     // that the vertex touches to get the averaged normal for that vertex.
-    for (int j = 0; j < m_terrainHeight; ++j)
+    for (uint16 j = 0; j < m_terrainHeight; ++j)
     {
-        for (int i = 0; i < m_terrainWidth; ++i)
+        for (uint16 i = 0; i < m_terrainWidth; ++i)
         {
             // Initialize the sum.
             sum[0] = 0.0f;
@@ -404,12 +402,8 @@ void Terrain::CalculateNormals()
 
 bool Terrain::LoadRawHeightMap(char const* fileName)
 {
-    int i, j, index;
-    unsigned int imageSize;
-    unsigned short* rawImage;
-
     // Calculate the size of the raw image data.
-    imageSize = m_terrainWidth * m_terrainHeight;
+    uint32 const imageSize = m_terrainWidth * m_terrainHeight;
 
     // Create the float array to hold the height map data.
     m_heightMap = new HeightMapType[imageSize];
@@ -422,17 +416,17 @@ bool Terrain::LoadRawHeightMap(char const* fileName)
         return false;
 
     // Read raw data from file.
-    rawImage = new unsigned short[imageSize];
+    uint16* rawImage = new uint16[imageSize];
     File.seekg(0, std::ios::beg);
-    File.read((char*)rawImage, imageSize * sizeof(unsigned short));
+    File.read(reinterpret_cast<int8*>(rawImage), imageSize * sizeof(uint16));
     File.close();
 
     // Copy the image data into the height map array.
-    for (j = 0; j < m_terrainHeight; j++)
+    for (uint16 j = 0; j < m_terrainHeight; ++j)
     {
-        for (i = 0; i < m_terrainWidth; i++)
+        for (uint16 i = 0; i < m_terrainWidth; ++i)
         {
-            index = (m_terrainWidth * j) + i;
+            uint32 const index = (m_terrainWidth * j) + i;
 
             // Store the height at this point in the height map array.
             m_heightMap[index].y = static_cast<float>(rawImage[index]);

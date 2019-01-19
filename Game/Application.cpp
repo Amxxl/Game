@@ -3,7 +3,7 @@
 //
 
 #include "pch.h"
-#include "Game.h"
+#include "Application.h"
 
 
 using namespace DirectX;
@@ -11,14 +11,14 @@ using namespace DirectX::SimpleMath;
 
 using Microsoft::WRL::ComPtr;
 
-Game::Game() noexcept(false)
+Application::Application() noexcept(false)
 {
     m_deviceResources = std::make_unique<DX::DeviceResources>();
     m_deviceResources->RegisterDeviceNotify(this);
 }
 
 // Initialize the Direct3D resources required to run.
-void Game::Initialize(HWND window, int width, int height)
+void Application::Initialize(HWND window, int width, int height)
 {
     m_deviceResources->SetWindow(window, width, height);
     m_deviceResources->CreateDeviceResources();
@@ -55,7 +55,7 @@ void Game::Initialize(HWND window, int width, int height)
 
 #pragma region Frame Update
 // Executes the basic game loop.
-void Game::Tick()
+void Application::Tick()
 {
     m_timer.Tick([&]()
     {
@@ -66,7 +66,7 @@ void Game::Tick()
 }
 
 // Updates the world.
-void Game::Update(DX::StepTimer const& timer)
+void Application::Update(DX::StepTimer const& timer)
 {
     // TODO: Add your game logic here.
     auto kb = m_keyboard->GetState();
@@ -81,7 +81,7 @@ void Game::Update(DX::StepTimer const& timer)
 
 #pragma region Frame Render
 // Draws the scene.
-void Game::Render()
+void Application::Render()
 {
     // Don't try to render anything before the first Update.
     if (m_timer.GetFrameCount() == 0)
@@ -104,7 +104,7 @@ void Game::Render()
 }
 
 // Helper method to clear the back buffers.
-void Game::Clear()
+void Application::Clear()
 {
     m_deviceResources->PIXBeginEvent(L"Clear");
 
@@ -127,25 +127,25 @@ void Game::Clear()
 
 #pragma region Message Handlers
 // Message handlers
-void Game::OnActivated()
+void Application::OnActivated()
 {
     // TODO: Game is becoming active window.
     m_sceneManager->OnActivated();
 }
 
-void Game::OnDeactivated()
+void Application::OnDeactivated()
 {
     // TODO: Game is becoming background window.
     m_sceneManager->OnDeactivated();
 }
 
-void Game::OnSuspending()
+void Application::OnSuspending()
 {
     // TODO: Game is being power-suspended (or minimized).
     m_sceneManager->OnSuspending();
 }
 
-void Game::OnResuming()
+void Application::OnResuming()
 {
     m_timer.ResetElapsedTime();
 
@@ -153,14 +153,14 @@ void Game::OnResuming()
     m_sceneManager->OnResuming();
 }
 
-void Game::OnWindowMoved()
+void Application::OnWindowMoved()
 {
     auto r = m_deviceResources->GetOutputSize();
     m_deviceResources->WindowSizeChanged(r.right, r.bottom);
     m_sceneManager->OnWindowMoved();
 }
 
-void Game::OnWindowSizeChanged(int width, int height)
+void Application::OnWindowSizeChanged(int width, int height)
 {
     if (!m_deviceResources->WindowSizeChanged(width, height))
         return;
@@ -173,7 +173,7 @@ void Game::OnWindowSizeChanged(int width, int height)
 }
 
 // Properties
-void Game::GetDefaultSize(int& width, int& height) const
+void Application::GetDefaultSize(int& width, int& height) const
 {
     // TODO: Change to desired default window size (note minimum size is 320x200).
     width = 800;
@@ -183,7 +183,7 @@ void Game::GetDefaultSize(int& width, int& height) const
 
 #pragma region Direct3D Resources
 // These are the resources that depend on the device.
-void Game::CreateDeviceDependentResources()
+void Application::CreateDeviceDependentResources()
 {
     auto device = m_deviceResources->GetD3DDevice();
     auto context = m_deviceResources->GetD3DDeviceContext();
@@ -196,19 +196,19 @@ void Game::CreateDeviceDependentResources()
 }
 
 // Allocate all memory resources that change on a window SizeChanged event.
-void Game::CreateWindowSizeDependentResources()
+void Application::CreateWindowSizeDependentResources()
 {
     // TODO: Initialize windows-size dependent objects here.
     m_sceneManager->CreateWindowSizeDependentResources();
 }
 
-void Game::OnDeviceLost()
+void Application::OnDeviceLost()
 {
     // TODO: Add Direct3D resource cleanup here.
     m_sceneManager->OnDeviceLost();
 }
 
-void Game::OnDeviceRestored()
+void Application::OnDeviceRestored()
 {
     CreateDeviceDependentResources();
     CreateWindowSizeDependentResources();

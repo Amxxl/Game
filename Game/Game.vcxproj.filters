@@ -8,29 +8,17 @@
       <UniqueIdentifier>2c184148-7a0a-4261-bd1a-5b29d30f8dcd</UniqueIdentifier>
       <Extensions>ico;cur;bmp;dds;dlg;fbx;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tga;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Input">
-      <UniqueIdentifier>{290517e8-aeb4-4ae3-8917-e15e2f08b3b1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game">
       <UniqueIdentifier>{d58d3153-bb18-4f5d-b0f3-26bd68f02123}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Scenes">
       <UniqueIdentifier>{b2048a84-39ee-40b3-99a1-cb667f3a758e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Graphics">
-      <UniqueIdentifier>{0d65af47-998c-4fd2-a345-f8a988e3d53c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Assets\Shaders">
       <UniqueIdentifier>{31f9c28e-180b-4810-a8a9-4b797f1d7695}</UniqueIdentifier>
     </Filter>
-    <Filter Include="System">
-      <UniqueIdentifier>{b4a5e20e-73f0-42ff-a636-ff58c1c498dc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\MD5Model">
       <UniqueIdentifier>{1ad24ecb-6b22-4a55-ab97-de09f683ea53}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Graphics\Buffers">
-      <UniqueIdentifier>{afc3f87d-f1e4-4c43-bc6e-9581c2f726f1}</UniqueIdentifier>
     </Filter>
     <Filter Include="Assets\Models">
       <UniqueIdentifier>{95107d52-2e76-449d-b2d0-6eafb2b0e416}</UniqueIdentifier>
@@ -47,26 +35,29 @@
     <Filter Include="Assets\Images">
       <UniqueIdentifier>{2c843e4a-9af7-4b38-9bb2-f6a92087244f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Graphics\Buffers\ConstantBuffer">
-      <UniqueIdentifier>{47a55836-1f41-4189-b696-5a2283f5cadf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Graphics\Buffers\ConstantBuffer\Types">
-      <UniqueIdentifier>{22597b25-27c1-4bdf-a6ba-ad69142990d7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Graphics\Buffers\IndexBuffer">
-      <UniqueIdentifier>{a0de050d-a990-4726-a934-4833d8a04020}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Graphics\Buffers\VertexBuffer">
-      <UniqueIdentifier>{dd8b5cfe-c7ed-4d09-a70f-c727ad05f897}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Graphics\Buffers\VertexBuffer\Types">
-      <UniqueIdentifier>{319bdef6-a9d8-4427-84b0-cf68fa7fa0ee}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Terrain">
       <UniqueIdentifier>{d8b2dca3-4a68-4720-8c71-d05bd05bdf37}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Graphics\Resources">
-      <UniqueIdentifier>{7bf3f75d-18a8-4f3a-9112-42cfcbfce357}</UniqueIdentifier>
+    <Filter Include="Game\OBJModel">
+      <UniqueIdentifier>{7ff96838-a825-4520-8f8e-4aae74993516}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{b31bf13c-2680-4b6b-bad5-200b1118fa55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics">
+      <UniqueIdentifier>{0d65af47-998c-4fd2-a345-f8a988e3d53c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Buffers">
+      <UniqueIdentifier>{afc3f87d-f1e4-4c43-bc6e-9581c2f726f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Input">
+      <UniqueIdentifier>{290517e8-aeb4-4ae3-8917-e15e2f08b3b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\System">
+      <UniqueIdentifier>{b4a5e20e-73f0-42ff-a636-ff58c1c498dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Buffers\Types">
+      <UniqueIdentifier>{9c922392-46d0-4ea6-93f6-4d05396a07ec}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -77,13 +68,10 @@
       <Filter>Game\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="MouseData.h">
-      <Filter>Input</Filter>
+      <Filter>Engine\Input</Filter>
     </ClInclude>
     <ClInclude Include="pch.h">
       <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="Game.h">
-      <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Game</Filter>
@@ -101,10 +89,10 @@
       <Filter>Game\Terrain</Filter>
     </ClInclude>
     <ClInclude Include="DeviceResources.h">
-      <Filter>Graphics</Filter>
+      <Filter>Engine\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="StepTimer.h">
-      <Filter>System</Filter>
+      <Filter>Engine\System</Filter>
     </ClInclude>
     <ClInclude Include="MD5Vertex.h">
       <Filter>Game\MD5Model</Filter>
@@ -115,32 +103,14 @@
     <ClInclude Include="MD5Model.h">
       <Filter>Game\MD5Model</Filter>
     </ClInclude>
-    <ClInclude Include="ConstantBufferTypes.h">
-      <Filter>Graphics\Buffers\ConstantBuffer\Types</Filter>
-    </ClInclude>
-    <ClInclude Include="ConstantBuffer.h">
-      <Filter>Graphics\Buffers\ConstantBuffer</Filter>
-    </ClInclude>
-    <ClInclude Include="VertexBuffer.h">
-      <Filter>Graphics\Buffers\VertexBuffer</Filter>
-    </ClInclude>
-    <ClInclude Include="DynamicVertexBuffer.h">
-      <Filter>Graphics\Buffers\VertexBuffer</Filter>
-    </ClInclude>
-    <ClInclude Include="VertexBufferTypes.h">
-      <Filter>Graphics\Buffers\VertexBuffer\Types</Filter>
-    </ClInclude>
-    <ClInclude Include="IndexBuffer.h">
-      <Filter>Graphics\Buffers\IndexBuffer</Filter>
-    </ClInclude>
     <ClInclude Include="MD5Loader.h">
       <Filter>Game\MD5Model</Filter>
     </ClInclude>
     <ClInclude Include="Color.h">
-      <Filter>Graphics</Filter>
+      <Filter>Engine\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Frustum.h">
-      <Filter>Graphics</Filter>
+      <Filter>Engine\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
       <Filter>Game</Filter>
@@ -151,8 +121,38 @@
     <ClInclude Include="RenderableGameObject.h">
       <Filter>Game</Filter>
     </ClInclude>
+    <ClInclude Include="IntegerTypes.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="OBJ_Loader.h">
+      <Filter>Game\OBJModel</Filter>
+    </ClInclude>
+    <ClInclude Include="IndexBuffer.h">
+      <Filter>Engine\Graphics\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="DynamicVertexBuffer.h">
+      <Filter>Engine\Graphics\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexBuffer.h">
+      <Filter>Engine\Graphics\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="ConstantBuffer.h">
+      <Filter>Engine\Graphics\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="ConstantBufferTypes.h">
+      <Filter>Engine\Graphics\Buffers\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexBufferTypes.h">
+      <Filter>Engine\Graphics\Buffers\Types</Filter>
+    </ClInclude>
     <ClInclude Include="Texture.h">
-      <Filter>Graphics\Resources</Filter>
+      <Filter>Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Window.h">
+      <Filter>Engine\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Application.h">
+      <Filter>Engine\System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -164,13 +164,10 @@
       <Filter>Game\Scenes</Filter>
     </ClCompile>
     <ClCompile Include="MouseData.cpp">
-      <Filter>Input</Filter>
+      <Filter>Engine\Input</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp">
       <Filter>Common</Filter>
-    </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="SceneNode.cpp">
       <Filter>Game\Scenes</Filter>
@@ -185,7 +182,7 @@
       <Filter>Game\Terrain</Filter>
     </ClCompile>
     <ClCompile Include="DeviceResources.cpp">
-      <Filter>Graphics</Filter>
+      <Filter>Engine\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>Game</Filter>
@@ -199,32 +196,14 @@
     <ClCompile Include="MD5Model.cpp">
       <Filter>Game\MD5Model</Filter>
     </ClCompile>
-    <ClCompile Include="ConstantBufferTypes.cpp">
-      <Filter>Graphics\Buffers\ConstantBuffer\Types</Filter>
-    </ClCompile>
-    <ClCompile Include="ConstantBuffer.cpp">
-      <Filter>Graphics\Buffers\ConstantBuffer</Filter>
-    </ClCompile>
-    <ClCompile Include="VertexBuffer.cpp">
-      <Filter>Graphics\Buffers\VertexBuffer</Filter>
-    </ClCompile>
-    <ClCompile Include="DynamicVertexBuffer.cpp">
-      <Filter>Graphics\Buffers\VertexBuffer</Filter>
-    </ClCompile>
-    <ClCompile Include="VertexBufferTypes.cpp">
-      <Filter>Graphics\Buffers\VertexBuffer\Types</Filter>
-    </ClCompile>
-    <ClCompile Include="IndexBuffer.cpp">
-      <Filter>Graphics\Buffers\IndexBuffer</Filter>
-    </ClCompile>
     <ClCompile Include="MD5Loader.cpp">
       <Filter>Game\MD5Model</Filter>
     </ClCompile>
     <ClCompile Include="Color.cpp">
-      <Filter>Graphics</Filter>
+      <Filter>Engine\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Frustum.cpp">
-      <Filter>Graphics</Filter>
+      <Filter>Engine\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
       <Filter>Game</Filter>
@@ -235,8 +214,23 @@
     <ClCompile Include="RenderableGameObject.cpp">
       <Filter>Game</Filter>
     </ClCompile>
+    <ClCompile Include="StepTimer.cpp">
+      <Filter>Engine\System</Filter>
+    </ClCompile>
+    <ClCompile Include="ConstantBufferTypes.cpp">
+      <Filter>Engine\Graphics\Buffers\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexBufferTypes.cpp">
+      <Filter>Engine\Graphics\Buffers\Types</Filter>
+    </ClCompile>
     <ClCompile Include="Texture.cpp">
-      <Filter>Graphics\Resources</Filter>
+      <Filter>Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Window.cpp">
+      <Filter>Engine\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Application.cpp">
+      <Filter>Engine\System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

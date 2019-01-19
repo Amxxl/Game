@@ -72,7 +72,7 @@ bool PlayScene::Load(ID3D11DeviceContext1* deviceContext)
     camera.SetPosition(2.0f, 10.0f, 4.0f);
     camera.SetLookAtPos(DirectX::XMFLOAT3(5.0f, 0.0f, 5.0f));
 
-    sky = DirectX::GeometricPrimitive::CreateSphere(deviceContext, 1200.0f, 32, false, true);
+    sky = DirectX::GeometricPrimitive::CreateSphere(deviceContext, 2000.0f, 16, true, true);
     water = DirectX::GeometricPrimitive::CreateBox(deviceContext, DirectX::XMFLOAT3(512.0f, 50.0f, 512.0f));
 
     ID3D11Device* device = nullptr;
@@ -88,6 +88,18 @@ bool PlayScene::Load(ID3D11DeviceContext1* deviceContext)
     m_deviceContext = deviceContext;
 
     player.Initialize(deviceContext);
+
+    effect = std::make_unique<DirectX::BasicEffect>(device);
+    effect->SetAmbientLightColor(XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f));
+    effect->SetTextureEnabled(true);
+    effect->SetPerPixelLighting(true);
+    effect->SetLightingEnabled(true);
+    effect->SetLightEnabled(0, true);
+    effect->SetLightDiffuseColor(0, Colors::White);
+    effect->SetLightDirection(0, SimpleMath::Vector3::UnitY);
+    effect->SetTexture(skyTexture.Get());
+
+    sky->CreateInputLayout(effect.get(), inputLayout.ReleaseAndGetAddressOf());
 
     return true;
 }
@@ -135,7 +147,6 @@ void PlayScene::Update(DX::StepTimer const& timer)
     auto mouse = Mouse::Get().GetState();
 
     camera.AdjustRotation(MouseData::GetRelativeY() * 0.01f, MouseData::GetRelativeX() * 0.01f, 0.0f);
-    
 
     if (keyboard.LeftShift)
         cameraSpeed = 40.0f;
@@ -164,7 +175,7 @@ void PlayScene::Update(DX::StepTimer const& timer)
         anim_index = 5;
 
     player.Update(m_deviceContext, deltaTime, anim_index);
-  
+
     MouseData::SetRelativePos(0, 0);
     sceneGraph->Update(timer);
     m_fps = static_cast<float>(timer.GetFramesPerSecond());
@@ -174,8 +185,13 @@ void PlayScene::Render()
 {
     m_world = XMMatrixIdentity();
 
-    sky->Draw(m_world * XMMatrixTranslation(camera.GetPositionFloat3().x, camera.GetPositionFloat3().y, camera.GetPositionFloat3().z), camera.GetViewMatrix(), camera.GetProjectionMatrix(), Colors::White, skyTexture.Get());
-    
+    //sky->Draw(m_world * XMMatrixTranslation(camera.GetPositionFloat3().x, camera.GetPositionFloat3().y, camera.GetPositionFloat3().z), camera.GetViewMatrix(), camera.GetProjectionMatrix(), Colors::White, skyTexture.Get());
+    effect->SetWorld(m_world * XMMatrixTranslation(camera.GetPositionFloat3().x, camera.GetPositionFloat3().y, camera.GetPositionFloat3().z));
+    effect->SetView(camera.GetViewMatrix());
+    effect->SetProjection(camera.GetProjectionMatrix());
+
+    sky->Draw(effect.get(), inputLayout.Get());
+
     frustum.ConstructFrustum(1000.0f, camera.GetProjectionMatrix(), camera.GetViewMatrix(), m_world);
     quadTree.Draw(m_deviceContext, &frustum, m_world, camera.GetViewMatrix(), camera.GetProjectionMatrix());
 

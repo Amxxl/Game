@@ -83,6 +83,8 @@
 #include <chrono>
 #include <sstream>
 
+#include "IntegerTypes.h"
+
 namespace DX
 {
     // Helper class for COM exceptions

@@ -1,5 +1,5 @@
 //
-// DynamicVertexBuffer.h
+// DynamicVertexBuffer.h - Helper to create dynamic vertex buffer.
 //
 
 #pragma once
@@ -9,7 +9,7 @@ class DynamicVertexBuffer
 {
     public:
         DynamicVertexBuffer() = default;
-        explicit DynamicVertexBuffer(_In_ ID3D11Device* device, T* data, UINT vertexCount)
+        explicit DynamicVertexBuffer(_In_ ID3D11Device* device, T* data, uint32 vertexCount)
         {
             Create(device, data, vertexCount);
         }
@@ -17,7 +17,7 @@ class DynamicVertexBuffer
         DynamicVertexBuffer(DynamicVertexBuffer const&) = default;
         DynamicVertexBuffer& operator=(DynamicVertexBuffer const&) = delete;
 
-        void Create(_In_ ID3D11Device* device, T* data, UINT vertexCount)
+        void Create(_In_ ID3D11Device* device, T* data, uint32 vertexCount)
         {
             this->vertexCount = vertexCount;
 
@@ -37,7 +37,7 @@ class DynamicVertexBuffer
         }
 
         // Writes new data into vertex buffer.
-        void SetData(_In_ ID3D11DeviceContext* deviceContext, T* data, UINT vertexCount)
+        void SetData(_In_ ID3D11DeviceContext* deviceContext, T* data, uint32 vertexCount)
         {
             assert(buffer);
             this->vertexCount = vertexCount;
@@ -56,12 +56,12 @@ class DynamicVertexBuffer
         ID3D11Buffer* Get() const { return buffer.Get(); }
         ID3D11Buffer* const* GetAddressOf() const { return buffer.GetAddressOf(); }
         
-        UINT VertexCount() const { return vertexCount; }
-        UINT const Stride() const { return stride; }
-        UINT const* StridePtr() const { return &stride; }
+        uint32 VertexCount() const { return vertexCount; }
+        uint32 const Stride() const { return stride; }
+        uint32 const* StridePtr() const { return &stride; }
 
     private:
         Microsoft::WRL::ComPtr<ID3D11Buffer> buffer;
-        UINT stride = static_cast<UINT>(sizeof(T));
-        UINT vertexCount = 0;
+        uint32 stride = static_cast<uint32>(sizeof(T));
+        uint32 vertexCount = 0;
 };

@@ -31,4 +31,3 @@ class Frustum
         DirectX::XMFLOAT4X4 view;
 
 };
-

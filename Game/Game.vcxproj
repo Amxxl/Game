@@ -169,14 +169,16 @@
     <ClInclude Include="DeviceResources.h" />
     <ClInclude Include="DynamicVertexBuffer.h" />
     <ClInclude Include="Frustum.h" />
-    <ClInclude Include="Game.h" />
+    <ClInclude Include="Application.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="IndexBuffer.h" />
+    <ClInclude Include="IntegerTypes.h" />
     <ClInclude Include="MD5Loader.h" />
     <ClInclude Include="MD5Model.h" />
     <ClInclude Include="MD5ModelShader.h" />
     <ClInclude Include="MD5Vertex.h" />
     <ClInclude Include="MouseData.h" />
+    <ClInclude Include="OBJ_Loader.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="QuadTree.h" />
@@ -190,18 +192,16 @@
     <ClInclude Include="Texture.h" />
     <ClInclude Include="VertexBuffer.h" />
     <ClInclude Include="VertexBufferTypes.h" />
+    <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Color.cpp" />
-    <ClCompile Include="ConstantBuffer.cpp" />
     <ClCompile Include="ConstantBufferTypes.cpp" />
     <ClCompile Include="DeviceResources.cpp" />
-    <ClCompile Include="DynamicVertexBuffer.cpp" />
     <ClCompile Include="Frustum.cpp" />
-    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Application.cpp" />
     <ClCompile Include="GameObject.cpp" />
-    <ClCompile Include="IndexBuffer.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MD5Loader.cpp" />
     <ClCompile Include="MD5Model.cpp" />
@@ -220,11 +220,12 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SceneNode.cpp" />
+    <ClCompile Include="StepTimer.cpp" />
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="TerrainShader.cpp" />
     <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="VertexBuffer.cpp" />
     <ClCompile Include="VertexBufferTypes.cpp" />
+    <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />

@@ -19,7 +19,6 @@ QuadTree::~QuadTree()
 
 bool QuadTree::Initialize(Terrain* terrain, ID3D11DeviceContext* deviceContext)
 {
-    DX::ExecutionTimer timer;
     int vertexCount;
     float centerX, centerZ, width;
 

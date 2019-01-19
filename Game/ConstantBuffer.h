@@ -1,5 +1,5 @@
 //
-// ConstantBuffer.h
+// ConstantBuffer.h - Helper to create constant buffer.
 //
 
 #pragma once
@@ -21,7 +21,7 @@ class ConstantBuffer
         {
             D3D11_BUFFER_DESC desc = {};
 
-            desc.ByteWidth = static_cast<UINT>(sizeof(T));
+            desc.ByteWidth = static_cast<uint32>(sizeof(T));
             desc.Usage = D3D11_USAGE_DYNAMIC;
             desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
             desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;

@@ -1,5 +1,5 @@
 //
-// IndexBuffer.h
+// IndexBuffer.h - Helper to create index buffer.
 //
 
 #pragma once
@@ -9,7 +9,7 @@ class IndexBuffer
 {
     public:
         IndexBuffer() = default;
-        explicit IndexBuffer(_In_ ID3D11Device* device, _In_ T* data, UINT indexCount)
+        explicit IndexBuffer(_In_ ID3D11Device* device, _In_ T* data, uint32 indexCount)
         {
             Create(device, data, indexCount);
         }
@@ -17,7 +17,7 @@ class IndexBuffer
         IndexBuffer(IndexBuffer const&) = default;
         IndexBuffer& operator=(IndexBuffer const&) = delete;
 
-        void Create(_In_ ID3D11Device* device, _In_ T* data, UINT indexCount)
+        void Create(_In_ ID3D11Device* device, _In_ T* data, uint32 indexCount)
         {
             this->indexCount = indexCount;
             
@@ -37,10 +37,9 @@ class IndexBuffer
 
         ID3D11Buffer* Get() const { return buffer.Get(); }
         ID3D11Buffer* const* GetAddressOf() const { return buffer.GetAddressOf(); }
-        UINT IndexCount() const { return indexCount; }
+        uint32 IndexCount() const { return indexCount; }
 
     private:
         Microsoft::WRL::ComPtr<ID3D11Buffer> buffer;
-        UINT indexCount = 0;
+        uint32 indexCount = 0;
 };
-

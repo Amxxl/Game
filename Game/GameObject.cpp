@@ -128,7 +128,7 @@ void GameObject::SetLookAtPos(XMFLOAT3 lookAtPos)
     lookAtPos.x = this->pos.x - lookAtPos.x;
     lookAtPos.y = this->pos.y - lookAtPos.y;
     lookAtPos.z = this->pos.z - lookAtPos.z;
-
+    
     float pitch = 0.0f;
     if (lookAtPos.y != 0.0f)
     {

@@ -33,11 +33,10 @@ void TerrainShader::InitializeShaders(ID3D11DeviceContext* deviceContext)
 
     // Load textures
     DirectX::CreateWICTextureFromFile(device, L"color.png", nullptr, texture0.ReleaseAndGetAddressOf());
-    //DirectX::CreateWICTextureFromFile(device, L"snow.png", nullptr, texture1.ReleaseAndGetAddressOf());
-    DirectX::CreateDDSTextureFromFile(device, L"snow.dds", nullptr, texture1.ReleaseAndGetAddressOf());
-    DirectX::CreateWICTextureFromFile(device, L"ice.png", nullptr, texture2.ReleaseAndGetAddressOf());
-    DirectX::CreateDDSTextureFromFile(device, L"path.dds", nullptr, texture3.ReleaseAndGetAddressOf());
-    DirectX::CreateWICTextureFromFile(device, L"snowy.png", nullptr, texture4.ReleaseAndGetAddressOf());
+    DirectX::CreateDDSTextureFromFile(device, L"base.dds", nullptr, texture1.ReleaseAndGetAddressOf());
+    DirectX::CreateWICTextureFromFile(device, L"red.dds", nullptr, texture2.ReleaseAndGetAddressOf());
+    DirectX::CreateDDSTextureFromFile(device, L"green.dds", nullptr, texture3.ReleaseAndGetAddressOf());
+    DirectX::CreateWICTextureFromFile(device, L"blue.dds", nullptr, texture4.ReleaseAndGetAddressOf());
 
     constantBuffer.Create(device);
     lightBuffer.Create(device);

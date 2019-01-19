@@ -62,6 +62,9 @@ class PlayScene : public Scene
     private:
         std::unique_ptr<DirectX::GeometricPrimitive> sky;
         Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> skyTexture;
+        std::unique_ptr<DirectX::BasicEffect> effect;
+        Microsoft::WRL::ComPtr<ID3D11InputLayout> inputLayout;
+
 
         std::unique_ptr<DirectX::GeometricPrimitive> water;
         Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> waterTexture;

@@ -1,23 +1,21 @@
+
 //
 // Main.cpp
 //
 
 #include "pch.h"
-#include "Game.h"
+#include "Application.h"
 #include "MouseData.h"
 
-#ifndef HID_USAGE_PAGE_GENERIC
-#define HID_USAGE_PAGE_GENERIC ((USHORT)0x01)
-#endif
-#ifndef HID_USAGE_GENERIC_MOUSE
-#define HID_USAGE_GENERIC_MOUSE ((USHORT)0x02)
-#endif
+
+constexpr static uint16 HID_USAGE_PAGE_GENERIC = static_cast<uint16>(0x01);
+constexpr static uint16 HID_USAGE_GENERIC_MOUSE = static_cast<uint16>(0x02);
 
 using namespace DirectX;
 
 namespace
 {
-    std::unique_ptr<Game> g_game;
+    std::unique_ptr<Application> g_app;
 };
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
@@ -42,21 +40,21 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     if (FAILED(hr))
         return 1;
 
-    g_game = std::make_unique<Game>();
+    g_app = std::make_unique<Application>();
 
     // Register class and create window
     {
         // Register class
         WNDCLASSEX wcex;
         wcex.cbSize = sizeof(WNDCLASSEX);
-        wcex.style = CS_HREDRAW | CS_VREDRAW;
+        wcex.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
         wcex.lpfnWndProc = WndProc;
         wcex.cbClsExtra = 0;
         wcex.cbWndExtra = 0;
         wcex.hInstance = hInstance;
         wcex.hIcon = LoadIcon(hInstance, L"IDI_ICON");
         wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
-        wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 3);
+        wcex.hbrBackground = reinterpret_cast<HBRUSH>(COLOR_WINDOW + 3);
         wcex.lpszMenuName = nullptr;
         wcex.lpszClassName = L"GameWindowClass";
         wcex.hIconSm = LoadIcon(wcex.hInstance, L"IDI_ICON");
@@ -65,7 +63,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 
         // Create window
         int w, h, x, y;
-        g_game->GetDefaultSize(w, h);
+        g_app->GetDefaultSize(w, h);
 
         RECT rc = { 0, 0, static_cast<LONG>(w), static_cast<LONG>(h) };
         AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
@@ -77,6 +75,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 
         HWND hwnd = CreateWindowEx(0, L"GameWindowClass", L"Game", WS_OVERLAPPEDWINDOW,
             x, y, w, h, nullptr, nullptr, hInstance, nullptr);
+
         // TODO: Change to CreateWindowEx(WS_EX_TOPMOST, L"GameWindowClass", L"Game", WS_POPUP,
         // to default to fullscreen.
 
@@ -86,11 +85,11 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
         ShowWindow(hwnd, nCmdShow);
         // TODO: Change nCmdShow to SW_SHOWMAXIMIZED to default to fullscreen.
 
-        SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(g_game.get()) );
+        SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(g_app.get()));
 
         GetClientRect(hwnd, &rc);
 
-        g_game->Initialize(hwnd, rc.right - rc.left, rc.bottom - rc.top);
+        g_app->Initialize(hwnd, rc.right - rc.left, rc.bottom - rc.top);
 
         RAWINPUTDEVICE rid;
         rid.usUsagePage = HID_USAGE_PAGE_GENERIC;
@@ -116,11 +115,11 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
         }
         else
         {
-            g_game->Tick();
+            g_app->Tick();
         }
     }
 
-    g_game.reset();
+    g_app.reset();
 
     CoUninitialize();
 
@@ -144,14 +143,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     static bool s_fullscreen = false;
     // TODO: Set s_fullscreen to true if defaulting to fullscreen.
 
-    auto game = reinterpret_cast<Game*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
+    auto application = reinterpret_cast<Application*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
 
     switch (message)
     {
     case WM_PAINT:
-        if (s_in_sizemove && game)
+        if (s_in_sizemove && application)
         {
-            game->Tick();
+            application->Tick();
         }
         else
         {
@@ -161,9 +160,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         break;
 
     case WM_MOVE:
-        if (game)
+        if (application)
         {
-            game->OnWindowMoved();
+            application->OnWindowMoved();
         }
         break;
 
@@ -173,21 +172,21 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             if (!s_minimized)
             {
                 s_minimized = true;
-                if (!s_in_suspend && game)
-                    game->OnSuspending();
+                if (!s_in_suspend && application)
+                    application->OnSuspending();
                 s_in_suspend = true;
             }
         }
         else if (s_minimized)
         {
             s_minimized = false;
-            if (s_in_suspend && game)
-                game->OnResuming();
+            if (s_in_suspend && application)
+                application->OnResuming();
             s_in_suspend = false;
         }
-        else if (!s_in_sizemove && game)
+        else if (!s_in_sizemove && application)
         {
-            game->OnWindowSizeChanged(LOWORD(lParam), HIWORD(lParam));
+            application->OnWindowSizeChanged(LOWORD(lParam), HIWORD(lParam));
         }
         break;
 
@@ -197,12 +196,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
     case WM_EXITSIZEMOVE:
         s_in_sizemove = false;
-        if (game)
+        if (application)
         {
             RECT rc;
             GetClientRect(hWnd, &rc);
 
-            game->OnWindowSizeChanged(rc.right - rc.left, rc.bottom - rc.top);
+            application->OnWindowSizeChanged(rc.right - rc.left, rc.bottom - rc.top);
         }
         break;
 
@@ -215,12 +214,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         break;
 
     case WM_ACTIVATEAPP:
-        if (game)
+        if (application)
         {
             if (wParam)
-                game->OnActivated();
+                application->OnActivated();
             else
-                game->OnDeactivated();
+                application->OnDeactivated();
         }
         Keyboard::ProcessMessage(message, wParam, lParam);
         Mouse::ProcessMessage(message, wParam, lParam);
@@ -263,16 +262,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         switch (wParam)
         {
         case PBT_APMQUERYSUSPEND:
-            if (!s_in_suspend && game)
-                game->OnSuspending();
+            if (!s_in_suspend && application)
+                application->OnSuspending();
             s_in_suspend = true;
             return TRUE;
 
         case PBT_APMRESUMESUSPEND:
             if (!s_minimized)
             {
-                if (s_in_suspend && game)
-                    game->OnResuming();
+                if (s_in_suspend && application)
+                    application->OnResuming();
                 s_in_suspend = false;
             }
             return TRUE;
@@ -297,8 +296,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
                 int width = 800;
                 int height = 600;
-                if (game)
-                    game->GetDefaultSize(width, height);
+                if (application)
+                    application->GetDefaultSize(width, height);
 
                 ShowWindow(hWnd, SW_SHOWNORMAL);
 
