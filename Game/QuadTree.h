@@ -8,7 +8,7 @@
 #include "IndexBuffer.h"
 #include "Terrain.h"
 #include "TerrainShader.h"
-#include "Frustum.h"
+#include "FrustumCuller.h"
 
 class QuadTree
 {

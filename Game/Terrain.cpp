@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "Terrain.h"
-#include <Windows.h>
 
 Terrain::Terrain()
 {
@@ -27,7 +26,7 @@ void Terrain::Initialize(ID3D11DeviceContext* deviceContext)
     m_terrainHeight = 512;
     m_heightScale = 400.0f;
 
-    this->LoadRawHeightMap("terrain.raw");
+    this->LoadRawHeightMap("Data/terrain.raw");
     this->SetTerrainCoordinates();
     this->SetTextureCoordinates();
     this->SetTextureCoordinates1();

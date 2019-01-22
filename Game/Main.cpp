@@ -6,6 +6,7 @@
 #include "pch.h"
 #include "Application.h"
 #include "MouseData.h"
+#include "Window.h"
 
 
 constexpr static uint16 HID_USAGE_PAGE_GENERIC = static_cast<uint16>(0x01);
@@ -41,6 +42,9 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
         return 1;
 
     g_app = std::make_unique<Application>();
+
+
+    Window window(L"Shitty", 800, 600);
 
     // Register class and create window
     {
@@ -106,7 +110,8 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 
     // Main message loop
     MSG msg = {};
-    while (WM_QUIT != msg.message)
+
+    while (msg.message != WM_QUIT)
     {
         if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
         {

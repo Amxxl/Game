@@ -13,13 +13,13 @@ RenderableGameObject::~RenderableGameObject()
 
 void RenderableGameObject::Initialize(ID3D11DeviceContext* deviceContext)
 {
-    model.LoadMesh(deviceContext, L"wraith.md5mesh");
-    model.LoadAnim(L"idle.md5anim");
-    model.LoadAnim(L"walk.md5anim");
-    model.LoadAnim(L"run.md5anim");
-    model.LoadAnim(L"attack1.md5anim");
-    model.LoadAnim(L"attack2.md5anim");
-    model.LoadAnim(L"attack3.md5anim");
+    model.LoadMesh(deviceContext, L"Data/wraith.md5mesh");
+    model.LoadAnim(L"Data/idle.md5anim");
+    model.LoadAnim(L"Data/walk.md5anim");
+    model.LoadAnim(L"Data/run.md5anim");
+    model.LoadAnim(L"Data/attack1.md5anim");
+    model.LoadAnim(L"Data/attack2.md5anim");
+    model.LoadAnim(L"Data/attack3.md5anim");
 
     SetPosition(5.0f, 0.0f, 5.0f);
     SetRotation(0.0f, 0.0f, 0.0f);
@@ -37,7 +37,7 @@ void RenderableGameObject::Draw(ID3D11DeviceContext* deviceContext, DirectX::XMM
 
 void RenderableGameObject::UpdateMatrix()
 {
-    this->worldMatrix = DirectX::XMMatrixRotationRollPitchYaw(this->rot.x, this->rot.y, this->rot.z) * DirectX::XMMatrixScaling(0.10f, 0.10f, 0.10f) * DirectX::XMMatrixTranslation(this->pos.x, this->pos.y, this->pos.z);
+    this->worldMatrix = DirectX::XMMatrixRotationRollPitchYaw(this->rot.x, this->rot.y, this->rot.z) * DirectX::XMMatrixScaling(0.15f, 0.15f, 0.15f) * DirectX::XMMatrixTranslation(this->pos.x, this->pos.y, this->pos.z);
     DirectX::XMMATRIX vecRotationMatrix = DirectX::XMMatrixRotationRollPitchYaw(0.0f, this->rot.y, 0.0f);
     this->vec_forward = XMVector3TransformCoord(this->DEFAULT_FORWARD_VECTOR, vecRotationMatrix);
     this->vec_backward = XMVector3TransformCoord(this->DEFAULT_BACKWARD_VECTOR, vecRotationMatrix);

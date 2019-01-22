@@ -32,11 +32,11 @@ void TerrainShader::InitializeShaders(ID3D11DeviceContext* deviceContext)
     states = std::make_unique<DirectX::CommonStates>(device);
 
     // Load textures
-    DirectX::CreateWICTextureFromFile(device, L"color.png", nullptr, texture0.ReleaseAndGetAddressOf());
-    DirectX::CreateDDSTextureFromFile(device, L"base.dds", nullptr, texture1.ReleaseAndGetAddressOf());
-    DirectX::CreateWICTextureFromFile(device, L"red.dds", nullptr, texture2.ReleaseAndGetAddressOf());
-    DirectX::CreateDDSTextureFromFile(device, L"green.dds", nullptr, texture3.ReleaseAndGetAddressOf());
-    DirectX::CreateWICTextureFromFile(device, L"blue.dds", nullptr, texture4.ReleaseAndGetAddressOf());
+    DirectX::CreateWICTextureFromFile(device, L"Data/color.png", nullptr, texture0.ReleaseAndGetAddressOf());
+    DirectX::CreateDDSTextureFromFile(device, L"Data/base.dds", nullptr, texture1.ReleaseAndGetAddressOf());
+    DirectX::CreateWICTextureFromFile(device, L"Data/red.dds", nullptr, texture2.ReleaseAndGetAddressOf());
+    DirectX::CreateDDSTextureFromFile(device, L"Data/green.dds", nullptr, texture3.ReleaseAndGetAddressOf());
+    DirectX::CreateWICTextureFromFile(device, L"Data/blue.dds", nullptr, texture4.ReleaseAndGetAddressOf());
 
     constantBuffer.Create(device);
     lightBuffer.Create(device);

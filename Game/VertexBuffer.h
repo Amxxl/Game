@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include "pch.h"
+
 template<typename T>
 class VertexBuffer
 {
@@ -15,7 +17,7 @@ class VertexBuffer
         }
 
         VertexBuffer(VertexBuffer const&) = default;
-        VertexBuffer& operator=(VertexBuffer const&) = delete;
+        VertexBuffer& operator=(VertexBuffer const&) = default;
 
         void Create(_In_ ID3D11Device* device, _In_ T* data, uint32 vertexCount)
         {

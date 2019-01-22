@@ -109,9 +109,6 @@
     <ClInclude Include="Color.h">
       <Filter>Engine\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Frustum.h">
-      <Filter>Engine\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="GameObject.h">
       <Filter>Game</Filter>
     </ClInclude>
@@ -154,9 +151,17 @@
     <ClInclude Include="Application.h">
       <Filter>Engine\System</Filter>
     </ClInclude>
+    <ClInclude Include="FrustumCuller.h">
+      <Filter>Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Main.cpp" />
     <ClCompile Include="Scene.cpp">
       <Filter>Game\Scenes</Filter>
     </ClCompile>
@@ -202,9 +207,6 @@
     <ClCompile Include="Color.cpp">
       <Filter>Engine\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Frustum.cpp">
-      <Filter>Engine\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="GameObject.cpp">
       <Filter>Game</Filter>
     </ClCompile>
@@ -231,6 +233,16 @@
     </ClCompile>
     <ClCompile Include="Application.cpp">
       <Filter>Engine\System</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="FrustumCuller.cpp">
+      <Filter>Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

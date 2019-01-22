@@ -15,7 +15,7 @@ class IndexBuffer
         }
 
         IndexBuffer(IndexBuffer const&) = default;
-        IndexBuffer& operator=(IndexBuffer const&) = delete;
+        IndexBuffer& operator=(IndexBuffer const&) = default;
 
         void Create(_In_ ID3D11Device* device, _In_ T* data, uint32 indexCount)
         {

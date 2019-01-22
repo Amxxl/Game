@@ -129,7 +129,8 @@ bool MD5Loader::LoadMD5Mesh(ID3D11DeviceContext* deviceContext, std::wstring con
                     filePath.erase(0, 1);
                     filePath.erase(filePath.size() - 1, 1);
 
-                    mesh.shader = filePath;
+                    mesh.shader = L"Data/";
+                    mesh.shader += filePath;
 
                     // Load texture.
                     DirectX::CreateWICTextureFromFile(device, mesh.shader.c_str(), nullptr, mesh.texture.ReleaseAndGetAddressOf());

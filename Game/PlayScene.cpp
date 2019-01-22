@@ -78,8 +78,8 @@ bool PlayScene::Load(ID3D11DeviceContext1* deviceContext)
     ID3D11Device* device = nullptr;
     deviceContext->GetDevice(&device);
 
-    DirectX::CreateWICTextureFromFile(device, L"sky.jpg", nullptr, skyTexture.ReleaseAndGetAddressOf());
-    DirectX::CreateWICTextureFromFile(device, L"water.jpg", nullptr, waterTexture.ReleaseAndGetAddressOf());
+    DirectX::CreateWICTextureFromFile(device, L"Data/sky.jpg", nullptr, skyTexture.ReleaseAndGetAddressOf());
+    DirectX::CreateWICTextureFromFile(device, L"Data/water.jpg", nullptr, waterTexture.ReleaseAndGetAddressOf());
 
     terrain.Initialize(deviceContext);
 
@@ -88,6 +88,7 @@ bool PlayScene::Load(ID3D11DeviceContext1* deviceContext)
     m_deviceContext = deviceContext;
 
     player.Initialize(deviceContext);
+    player.SetPosition(30.0f, 3.0f, 19.0f);
 
     effect = std::make_unique<DirectX::BasicEffect>(device);
     effect->SetAmbientLightColor(XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f));
@@ -100,6 +101,9 @@ bool PlayScene::Load(ID3D11DeviceContext1* deviceContext)
     effect->SetTexture(skyTexture.Get());
 
     sky->CreateInputLayout(effect.get(), inputLayout.ReleaseAndGetAddressOf());
+
+    model.Initialize("Data/10446_Palm_Tree_v1_max2010_iteration-2.obj", device, deviceContext);
+    mdl.Initialize("Data/WoodenCabinObj.obj", device, deviceContext);
 
     return true;
 }
@@ -195,6 +199,23 @@ void PlayScene::Render()
     frustum.ConstructFrustum(1000.0f, camera.GetProjectionMatrix(), camera.GetViewMatrix(), m_world);
     quadTree.Draw(m_deviceContext, &frustum, m_world, camera.GetViewMatrix(), camera.GetProjectionMatrix());
 
+    //model.Draw(m_deviceContext, m_world * DirectX::XMMatrixScaling(0.04f, 0.04f, 0.04f) * DirectX::XMMatrixTranslation(5.0f, 0.0f, 5.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix());
+    //model.Draw(m_world * DirectX::XMMatrixScaling(0.08f, 0.08f, 0.08f) * DirectX::XMMatrixRotationX(3.1415f / 2.0f) * DirectX::XMMatrixTranslation(100.0f, 0.0f, 100.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix());
+    
+    for (int x = 0; x < 5; ++x)
+    {
+        for (int z = 0; z < 5; ++z)
+        {
+            model.Draw(m_world * DirectX::XMMatrixScaling(0.08f, 0.08f, 0.08f) * DirectX::XMMatrixRotationX(3.1415f / 2.0f) * DirectX::XMMatrixTranslation(100.0f * x, 0.0f, 100.0f * z), camera.GetViewMatrix(), camera.GetProjectionMatrix());
+        }
+    }
+    
+    player.Draw(m_deviceContext, camera.GetViewMatrix(), camera.GetProjectionMatrix());
+    //water->Draw(m_world * XMMatrixTranslation(256.0f, -15.0f, 256.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix(), XMVectorSet(0.0f, 0.0f, 1.0f, 0.9f), waterTexture.Get());
+
+
+    mdl.Draw(m_world * DirectX::XMMatrixTranslation(50.0f, 0.0f, 50.0f) * XMMatrixScaling(0.5f, 0.5f, 0.5f), camera.GetViewMatrix(), camera.GetProjectionMatrix());
+
     ImGui_ImplDX11_NewFrame();
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
@@ -211,10 +232,6 @@ void PlayScene::Render()
     ImGui::End();
     ImGui::Render();
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-
-    //model.Draw(m_deviceContext, m_world * DirectX::XMMatrixScaling(0.04f, 0.04f, 0.04f) * DirectX::XMMatrixTranslation(5.0f, 0.0f, 5.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix());
-    player.Draw(m_deviceContext, camera.GetViewMatrix(), camera.GetProjectionMatrix());
-    //water->Draw(m_world * XMMatrixTranslation(256.0f, -15.0f, 256.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix(), XMVectorSet(0.0f, 0.0f, 1.0f, 0.9f), waterTexture.Get());
 
     sceneGraph->Render();
 }

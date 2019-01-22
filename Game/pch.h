@@ -48,6 +48,8 @@
 #include <stdexcept>
 #include <fstream>
 
+#include "IntegerTypes.h"
+
 #include <stdio.h>
 
 #ifdef _DEBUG
@@ -82,8 +84,6 @@
 
 #include <chrono>
 #include <sstream>
-
-#include "IntegerTypes.h"
 
 namespace DX
 {

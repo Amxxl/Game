@@ -17,8 +17,8 @@
 #include "Camera.h"
 #include "Terrain.h"
 #include "QuadTree.h"
-#include "Frustum.h"
-
+#include "FrustumCuller.h"
+#include "Model.h"
 #include "RenderableGameObject.h"
 
 class PlayScene : public Scene
@@ -76,6 +76,8 @@ class PlayScene : public Scene
         QuadTree quadTree;
         Frustum frustum;
         RenderableGameObject player;
+        Model model;
+        Model mdl;
         Camera camera;
         DirectX::XMMATRIX m_world;
 

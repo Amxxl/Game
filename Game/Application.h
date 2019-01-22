@@ -1,5 +1,5 @@
 //
-// Game.h
+// Application.h
 //
 
 #pragma once
@@ -14,8 +14,7 @@
 #include "imgui_impl_win32.h"
 #include "imgui_impl_dx11.h"
 
-// A basic game implementation that creates a D3D11 device and
-// provides a game loop.
+
 class Application : public DX::IDeviceNotify
 {
     public:
@@ -40,7 +39,7 @@ class Application : public DX::IDeviceNotify
         void OnWindowSizeChanged(int width, int height);
 
         // Properties
-        void GetDefaultSize( int& width, int& height ) const;
+        void GetDefaultSize(int& width, int& height) const;
 
     private:
         void Update(DX::StepTimer const& timer);
