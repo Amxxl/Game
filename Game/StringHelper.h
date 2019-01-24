@@ -7,4 +7,3 @@ class StringHelper
         static std::string GetDirectoryFromPath(std::string const& filePath);
         static std::string GetFileExtension(std::string const& fileName);
 };
-

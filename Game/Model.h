@@ -28,4 +28,3 @@ class Model
         ID3D11DeviceContext* deviceContext;
         std::string directory = "";
 };
-

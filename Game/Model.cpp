@@ -171,7 +171,7 @@ std::vector<Texture> Model::LoadMaterialTextures(aiMaterial* pMaterial, aiTextur
                     return materialTextures;
                 }
 
-                materialTextures.push_back(Texture(device, Color(aiColor.r * 255, aiColor.g * 255, aiColor.b * 255), textureType));
+                materialTextures.push_back(Texture(device, Color(static_cast<uint8>(aiColor.r * 255), static_cast<uint8>(aiColor.g * 255), static_cast<uint8>(aiColor.b * 255)), textureType));
                 return materialTextures;
             }
         }

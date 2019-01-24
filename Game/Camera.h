@@ -23,4 +23,3 @@ class Camera : public GameObject
         DirectX::XMMATRIX viewMatrix;
         DirectX::XMMATRIX projectionMatrix;
 };
-

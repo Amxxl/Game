@@ -44,9 +44,6 @@ void TerrainShader::InitializeShaders(ID3D11DeviceContext* deviceContext)
 
 void TerrainShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, DirectX::XMMATRIX worldMatrix, DirectX::XMMATRIX viewMatrix, DirectX::XMMATRIX projectionMatrix)
 {
-    // Helper to get device.
-    //ID3D11Device* device = DX::GetDevice(deviceContext);
-
     MatrixBufferType matrixBuffer;
     matrixBuffer.world = DirectX::XMMatrixTranspose(worldMatrix);
     matrixBuffer.view = DirectX::XMMatrixTranspose(viewMatrix);

@@ -1,5 +1,5 @@
 //
-// Window.cpp
+// Window.cpp - It is not used now.
 //
 
 #include "pch.h"

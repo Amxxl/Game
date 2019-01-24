@@ -294,9 +294,6 @@
     <Image Include="sky.jpg">
       <Filter>Assets\Images</Filter>
     </Image>
-    <Image Include="water.jpg">
-      <Filter>Assets\Images</Filter>
-    </Image>
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="settings.manifest">

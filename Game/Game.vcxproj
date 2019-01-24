@@ -256,7 +256,6 @@
     <Image Include="sky.jpg" />
     <Image Include="terrain.jpg" />
     <Image Include="terrain.png" />
-    <Image Include="water.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="settings.manifest" />

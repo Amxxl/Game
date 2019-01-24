@@ -6,11 +6,7 @@
 #include "Application.h"
 #include "Color.h"
 
-
-//using namespace DirectX;
-//using namespace DirectX::SimpleMath;
-
-using Microsoft::WRL::ComPtr;
+//using Microsoft::WRL::ComPtr;
 
 Application::Application() noexcept(false)
 {

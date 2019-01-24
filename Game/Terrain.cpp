@@ -5,7 +5,6 @@ Terrain::Terrain()
 {
 }
 
-
 Terrain::~Terrain()
 {
     if (m_vertices != nullptr)
@@ -264,10 +263,8 @@ void Terrain::SetTextureCoordinates1()
 
             m_heightMap[index4].u1 = 1.0f / m_terrainWidth * i;
             m_heightMap[index4].v1 = 1.0f / m_terrainHeight * j;
-
         }
     }
-
 }
 
 void Terrain::CalculateNormals()

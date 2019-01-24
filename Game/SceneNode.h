@@ -23,4 +23,3 @@ class SceneNode
         std::vector<SceneNode*> nodes;
         SceneNode* native;
 };
-

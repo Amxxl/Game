@@ -21,4 +21,3 @@ class RenderableGameObject : public GameObject
         DirectX::XMMATRIX worldMatrix = DirectX::XMMatrixIdentity();
         MD5Model model;
 };
-
