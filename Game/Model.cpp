@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "Model.h"
-
+#include "StringHelper.h"
 
 Model::Model()
 {
@@ -15,13 +15,12 @@ bool Model::Initialize(std::string const& filePath, ID3D11Device* device, ID3D11
 {
     this->device = device;
     this->deviceContext = deviceContext;
-    LoadModel(filePath);
-
-
-    DirectX::CreateWICTextureFromFile(device, L"Data/WoodCabinDif.jpg", nullptr, texture.ReleaseAndGetAddressOf());
+    
+    if (!LoadModel(filePath))
+        return false;
 
     shader.InitializeShaders(deviceContext);
-    return false;
+    return true;
 }
 
 void Model::Draw(DirectX::XMMATRIX world, DirectX::XMMATRIX view, DirectX::XMMATRIX proj)
@@ -30,7 +29,6 @@ void Model::Draw(DirectX::XMMATRIX world, DirectX::XMMATRIX view, DirectX::XMMAT
 
     for (uint32 i = 0; i < meshes.size(); ++i)
     {
-        shader.SetTexture(deviceContext, texture.Get());
         meshes[i].Draw();
         shader.RenderShader(deviceContext, meshes[i].GetIndexCount());
     }
@@ -38,6 +36,7 @@ void Model::Draw(DirectX::XMMATRIX world, DirectX::XMMATRIX view, DirectX::XMMAT
 
 bool Model::LoadModel(std::string const &filePath)
 {
+    directory = StringHelper::GetDirectoryFromPath(filePath);
     Assimp::Importer importer;
 
     aiScene const* pScene = importer.ReadFile(filePath, aiProcess_Triangulate |
@@ -47,7 +46,7 @@ bool Model::LoadModel(std::string const &filePath)
         return false;
 
     this->ProcessNode(pScene->mRootNode, pScene);
-    return false;
+    return true;
 }
 
 void Model::ProcessNode(aiNode* node, aiScene const* scene)
@@ -99,5 +98,106 @@ Mesh Model::ProcessMesh(aiMesh * mesh, aiScene const * scene)
             indices.push_back(face.mIndices[j]);
     }
 
-    return Mesh(device, deviceContext, vertices, indices);
+    std::vector<Texture> textures;
+    aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+    std::vector<Texture> diffuseTextures = LoadMaterialTextures(material, aiTextureType::aiTextureType_DIFFUSE, scene);
+    textures.insert(textures.end(), diffuseTextures.begin(), diffuseTextures.end());
+
+    return Mesh(device, deviceContext, vertices, indices, textures);
+}
+
+TextureStorageType Model::DetermineTextureStorageType(aiScene const* pScene, aiMaterial* pMat, unsigned int index, aiTextureType textureType)
+{
+    if (pMat->GetTextureCount(textureType) == 0)
+        return TextureStorageType::None;
+
+    aiString path;
+    pMat->GetTexture(textureType, index, &path);
+    std::string texturePath = path.C_Str();
+
+    // Check if texture is an embedded indexed texture by seeing if the file path is an index #
+    if (texturePath[0] == '*')
+    {
+        if (pScene->mTextures[0]->mHeight == 0)
+        {
+            return TextureStorageType::EmbeddedIndexCompressed;
+        }
+        else
+        {
+            assert("SUPPORT DOES NOT EXIST YET FOR INDEXED NON COMPRESSED TEXTURES!" && 0);
+            return TextureStorageType::EmbeddedIndexNonCompressed;
+        }
+    }
+    // Check if texture is an embedded texture but not indexed (path will be the texture's name instead of #)
+    if (auto pTex = pScene->GetEmbeddedTexture(texturePath.c_str()))
+    {
+        if (pTex->mHeight == 0)
+        {
+            return TextureStorageType::EmbeddedCompressed;
+        }
+        else
+        {
+            assert("SUPPORT DOES NOT EXISTS YET FOR EMBEDDED NON COMPRESSED TEXTURES!" && 0);
+            return TextureStorageType::EmbeddedIndexNonCompressed;
+        }
+    }
+    //Lastly check if texture is a filepath by checking for period before extension name.
+    if (texturePath.find('.') != std::string::npos)
+    {
+        return TextureStorageType::Disk;
+    }
+    return TextureStorageType::None; // No texture exists
+}
+
+std::vector<Texture> Model::LoadMaterialTextures(aiMaterial* pMaterial, aiTextureType textureType, aiScene const* pScene)
+{
+    std::vector<Texture> materialTextures;
+    TextureStorageType storeType = TextureStorageType::Invalid;
+    unsigned int textureCount = pMaterial->GetTextureCount(textureType);
+
+    if (textureCount == 0) // If there are no textures.
+    {
+        storeType = TextureStorageType::None;
+        aiColor3D aiColor(0.0f, 0.0f, 0.0f);
+
+        switch (textureType)
+        {
+            case aiTextureType::aiTextureType_DIFFUSE:
+            {
+                pMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, aiColor);
+                if (aiColor.IsBlack())
+                {
+                    materialTextures.push_back(Texture(device, Colors::UnloadedTextureColor, textureType));
+                    return materialTextures;
+                }
+
+                materialTextures.push_back(Texture(device, Color(aiColor.r * 255, aiColor.g * 255, aiColor.b * 255), textureType));
+                return materialTextures;
+            }
+        }
+    }
+    else
+    {
+        for (UINT i = 0; i < textureCount; ++i)
+        {
+            aiString path;
+            pMaterial->GetTexture(textureType, i, &path);
+            storeType = DetermineTextureStorageType(pScene, pMaterial, i, textureType);
+
+            switch (storeType)
+            {
+                case TextureStorageType::Disk:
+                    std::string fileName = directory + '\\' + path.C_Str();
+                    Texture diskTexture(device, fileName, textureType);
+                    materialTextures.push_back(diskTexture);
+                    break;
+            }
+        }
+    }
+
+    if (materialTextures.size() == 0)
+    {
+        materialTextures.push_back(Texture(device, Colors::UnhandledTextureColor, textureType));
+    }
+    return materialTextures;
 }

@@ -65,9 +65,6 @@ class PlayScene : public Scene
         std::unique_ptr<DirectX::BasicEffect> effect;
         Microsoft::WRL::ComPtr<ID3D11InputLayout> inputLayout;
 
-
-        std::unique_ptr<DirectX::GeometricPrimitive> water;
-        Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> waterTexture;
         std::unique_ptr<DirectX::CommonStates> state;
 
         ID3D11DeviceContext* m_deviceContext = nullptr;

@@ -38,9 +38,6 @@
     <Filter Include="Game\Terrain">
       <UniqueIdentifier>{d8b2dca3-4a68-4720-8c71-d05bd05bdf37}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\OBJModel">
-      <UniqueIdentifier>{7ff96838-a825-4520-8f8e-4aae74993516}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine">
       <UniqueIdentifier>{b31bf13c-2680-4b6b-bad5-200b1118fa55}</UniqueIdentifier>
     </Filter>
@@ -121,9 +118,6 @@
     <ClInclude Include="IntegerTypes.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="OBJ_Loader.h">
-      <Filter>Game\OBJModel</Filter>
-    </ClInclude>
     <ClInclude Include="IndexBuffer.h">
       <Filter>Engine\Graphics\Buffers</Filter>
     </ClInclude>
@@ -159,6 +153,9 @@
     </ClInclude>
     <ClInclude Include="Mesh.h">
       <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="StringHelper.h">
+      <Filter>Engine\System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -243,6 +240,9 @@
     </ClCompile>
     <ClCompile Include="Mesh.cpp">
       <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="StringHelper.cpp">
+      <Filter>Engine\System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

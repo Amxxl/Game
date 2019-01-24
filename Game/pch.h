@@ -40,7 +40,7 @@
 #endif
 
 #include <DirectXMath.h>
-#include <DirectXColors.h>
+//#include <DirectXColors.h>
 
 #include <algorithm>
 #include <exception>
@@ -91,7 +91,7 @@ namespace DX
     class com_exception : public std::exception
     {
     public:
-        com_exception(HRESULT hr) : result(hr) {}
+        com_exception(HRESULT hr) : result(hr) { }
 
         virtual char const* what() const override
         {

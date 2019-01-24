@@ -4,10 +4,11 @@
 
 #include "pch.h"
 #include "Application.h"
+#include "Color.h"
 
 
-using namespace DirectX;
-using namespace DirectX::SimpleMath;
+//using namespace DirectX;
+//using namespace DirectX::SimpleMath;
 
 using Microsoft::WRL::ComPtr;
 
@@ -48,8 +49,8 @@ void Application::Initialize(HWND window, int width, int height)
     ImGui_ImplDX11_Init(m_deviceResources->GetD3DDevice(), m_deviceResources->GetD3DDeviceContext());
     ImGui::StyleColorsDark();
 
-    m_keyboard = std::make_unique<Keyboard>();
-    m_mouse = std::make_unique<Mouse>();
+    m_keyboard = std::make_unique<DirectX::Keyboard>();
+    m_mouse = std::make_unique<DirectX::Mouse>();
     m_mouse->SetWindow(window);
 }
 
@@ -113,7 +114,8 @@ void Application::Clear()
     auto renderTarget = m_deviceResources->GetRenderTargetView();
     auto depthStencil = m_deviceResources->GetDepthStencilView();
 
-    context->ClearRenderTargetView(renderTarget, Colors::Black);
+    float color[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+    context->ClearRenderTargetView(renderTarget, color);
     context->ClearDepthStencilView(depthStencil, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
     context->OMSetRenderTargets(1, &renderTarget, depthStencil);
 

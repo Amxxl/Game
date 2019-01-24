@@ -4,6 +4,7 @@
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
 #include "ConstantBuffer.h"
+#include "Texture.h"
 
 #include "assimp/Importer.hpp"
 #include "assimp/postprocess.h"
@@ -12,7 +13,7 @@
 class Mesh
 {
     public:
-        Mesh(ID3D11Device* device, ID3D11DeviceContext* deviceContext, std::vector<MD5Vertex>& vertices, std::vector<DWORD>& indices);
+        Mesh(ID3D11Device* device, ID3D11DeviceContext* deviceContext, std::vector<MD5Vertex>& vertices, std::vector<DWORD>& indices, std::vector<Texture>& textures);
         Mesh(Mesh const& mesh);
 
         void Draw();
@@ -22,5 +23,6 @@ class Mesh
     private:
         VertexBuffer<MD5Vertex> vertexBuffer;
         IndexBuffer<DWORD> indexBuffer;
+        std::vector<Texture> textures;
         ID3D11DeviceContext* deviceContext;
 };

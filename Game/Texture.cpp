@@ -4,25 +4,60 @@
 
 #include "pch.h"
 #include "Texture.h"
+#include "StringHelper.h"
 
-using namespace axec;
 
-Texture::Texture()
+Texture::Texture(ID3D11Device* device, Color const& color, aiTextureType type)
 {
+    Create1x1ColorTexture(device, color, type);
 }
 
-
-Texture::~Texture()
+Texture::Texture(ID3D11Device* device, uint16 width, uint16 height, Color const* color, aiTextureType type)
 {
+    CreateColorTexture(device, width, height, color, type);
 }
 
-bool Texture::Create(ID3D11Device* device, uint16 width, uint16 height, Color const* color)
+Texture::Texture(ID3D11Device* device, std::string const& filePath, aiTextureType type)
 {
+    this->type = type;
+    if (StringHelper::GetFileExtension(filePath) == ".dds")
+    {
+        HRESULT hr = DirectX::CreateDDSTextureFromFile(device, StringHelper::StringToWide(filePath).c_str(), texture.GetAddressOf(), textureView.GetAddressOf());
+        
+        if (FAILED(hr))
+        {
+            Create1x1ColorTexture(device, Colors::UnloadedTextureColor, type);
+        }
+    }
+    else if (StringHelper::GetFileExtension(filePath) == ".tga")
+    {
+        // @todo: Load targa textures here.
+    }
+    else
+    {
+        HRESULT hr = DirectX::CreateWICTextureFromFile(device, StringHelper::StringToWide(filePath).c_str(), texture.GetAddressOf(), textureView.GetAddressOf());
+        
+        if (FAILED(hr))
+        {
+            Create1x1ColorTexture(device, Colors::UnloadedTextureColor, type);
+        }
+    }
+}
+
+void Texture::Create1x1ColorTexture(ID3D11Device* device, Color const& color, aiTextureType type)
+{
+    CreateColorTexture(device, 1, 1, &color, type);
+}
+
+void Texture::CreateColorTexture(ID3D11Device* device, uint16 width, uint16 height, Color const* color, aiTextureType type)
+{
+    this->type = type;
+
     CD3D11_TEXTURE2D_DESC textureDesc(DXGI_FORMAT_R8G8B8A8_UNORM, width, height);
 
     D3D11_SUBRESOURCE_DATA initialData = { };
     initialData.pSysMem = color;
-    initialData.SysMemSlicePitch = sizeof(Color);
+    initialData.SysMemPitch = sizeof(Color);
 
     ID3D11Texture2D* texture2D = nullptr;
     DX::ThrowIfFailed(
@@ -35,6 +70,4 @@ bool Texture::Create(ID3D11Device* device, uint16 width, uint16 height, Color co
     DX::ThrowIfFailed(
         device->CreateShaderResourceView(texture.Get(), &srvDesc, textureView.GetAddressOf())
     );
-
-    return false;
 }

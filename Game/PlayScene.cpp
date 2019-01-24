@@ -73,13 +73,11 @@ bool PlayScene::Load(ID3D11DeviceContext1* deviceContext)
     camera.SetLookAtPos(DirectX::XMFLOAT3(5.0f, 0.0f, 5.0f));
 
     sky = DirectX::GeometricPrimitive::CreateSphere(deviceContext, 2000.0f, 16, true, true);
-    water = DirectX::GeometricPrimitive::CreateBox(deviceContext, DirectX::XMFLOAT3(512.0f, 50.0f, 512.0f));
 
     ID3D11Device* device = nullptr;
     deviceContext->GetDevice(&device);
 
     DirectX::CreateWICTextureFromFile(device, L"Data/sky.jpg", nullptr, skyTexture.ReleaseAndGetAddressOf());
-    DirectX::CreateWICTextureFromFile(device, L"Data/water.jpg", nullptr, waterTexture.ReleaseAndGetAddressOf());
 
     terrain.Initialize(deviceContext);
 
@@ -88,7 +86,7 @@ bool PlayScene::Load(ID3D11DeviceContext1* deviceContext)
     m_deviceContext = deviceContext;
 
     player.Initialize(deviceContext);
-    player.SetPosition(30.0f, 3.0f, 19.0f);
+    player.SetPosition(130.0f, 3.0f, 119.0f);
 
     effect = std::make_unique<DirectX::BasicEffect>(device);
     effect->SetAmbientLightColor(XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f));
@@ -96,7 +94,7 @@ bool PlayScene::Load(ID3D11DeviceContext1* deviceContext)
     effect->SetPerPixelLighting(true);
     effect->SetLightingEnabled(true);
     effect->SetLightEnabled(0, true);
-    effect->SetLightDiffuseColor(0, Colors::White);
+    effect->SetLightDiffuseColor(0, XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f));
     effect->SetLightDirection(0, SimpleMath::Vector3::UnitY);
     effect->SetTexture(skyTexture.Get());
 
@@ -104,7 +102,6 @@ bool PlayScene::Load(ID3D11DeviceContext1* deviceContext)
 
     model.Initialize("Data/10446_Palm_Tree_v1_max2010_iteration-2.obj", device, deviceContext);
     mdl.Initialize("Data/WoodenCabinObj.obj", device, deviceContext);
-
     return true;
 }
 
@@ -189,7 +186,6 @@ void PlayScene::Render()
 {
     m_world = XMMatrixIdentity();
 
-    //sky->Draw(m_world * XMMatrixTranslation(camera.GetPositionFloat3().x, camera.GetPositionFloat3().y, camera.GetPositionFloat3().z), camera.GetViewMatrix(), camera.GetProjectionMatrix(), Colors::White, skyTexture.Get());
     effect->SetWorld(m_world * XMMatrixTranslation(camera.GetPositionFloat3().x, camera.GetPositionFloat3().y, camera.GetPositionFloat3().z));
     effect->SetView(camera.GetViewMatrix());
     effect->SetProjection(camera.GetProjectionMatrix());
@@ -199,23 +195,19 @@ void PlayScene::Render()
     frustum.ConstructFrustum(1000.0f, camera.GetProjectionMatrix(), camera.GetViewMatrix(), m_world);
     quadTree.Draw(m_deviceContext, &frustum, m_world, camera.GetViewMatrix(), camera.GetProjectionMatrix());
 
-    //model.Draw(m_deviceContext, m_world * DirectX::XMMatrixScaling(0.04f, 0.04f, 0.04f) * DirectX::XMMatrixTranslation(5.0f, 0.0f, 5.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix());
-    //model.Draw(m_world * DirectX::XMMatrixScaling(0.08f, 0.08f, 0.08f) * DirectX::XMMatrixRotationX(3.1415f / 2.0f) * DirectX::XMMatrixTranslation(100.0f, 0.0f, 100.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix());
-    
-    for (int x = 0; x < 5; ++x)
+    for (int x = 0; x < 3; ++x)
     {
-        for (int z = 0; z < 5; ++z)
+        for (int z = 0; z < 3; ++z)
         {
             model.Draw(m_world * DirectX::XMMatrixScaling(0.08f, 0.08f, 0.08f) * DirectX::XMMatrixRotationX(3.1415f / 2.0f) * DirectX::XMMatrixTranslation(100.0f * x, 0.0f, 100.0f * z), camera.GetViewMatrix(), camera.GetProjectionMatrix());
         }
     }
     
     player.Draw(m_deviceContext, camera.GetViewMatrix(), camera.GetProjectionMatrix());
-    //water->Draw(m_world * XMMatrixTranslation(256.0f, -15.0f, 256.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix(), XMVectorSet(0.0f, 0.0f, 1.0f, 0.9f), waterTexture.Get());
-
-
-    mdl.Draw(m_world * DirectX::XMMatrixTranslation(50.0f, 0.0f, 50.0f) * XMMatrixScaling(0.5f, 0.5f, 0.5f), camera.GetViewMatrix(), camera.GetProjectionMatrix());
-
+    
+    mdl.Draw(m_world * DirectX::XMMatrixTranslation(150.0f, 0.0f, 150.0f) * XMMatrixScaling(0.5f, 0.5f, 0.5f), camera.GetViewMatrix(), camera.GetProjectionMatrix());
+    
+    // ImGui Window.
     ImGui_ImplDX11_NewFrame();
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
