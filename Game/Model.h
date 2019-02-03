@@ -15,10 +15,11 @@ class Model
 
     private:
         bool LoadModel(std::string const& filePath);
-        void ProcessNode(aiNode* node, aiScene const* scene);
-        Mesh ProcessMesh(aiMesh* mesh, aiScene const* scene);
+        void ProcessNode(aiNode* node, aiScene const* scene, DirectX::XMMATRIX const& parentTransformMatrix);
+        Mesh ProcessMesh(aiMesh* mesh, aiScene const* scene, DirectX::XMMATRIX const& transformMatrix);
         TextureStorageType DetermineTextureStorageType(aiScene const* pScene, aiMaterial* pMat, unsigned int index, aiTextureType textureType);
         std::vector<Texture> LoadMaterialTextures(aiMaterial* pMaterial, aiTextureType textureType, aiScene const* pScene);
+        int GetTextureIndex(aiString* pStr);
 
     private:
         MD5ModelShader shader;

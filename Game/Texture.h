@@ -24,6 +24,7 @@ class Texture
         Texture(ID3D11Device* device, Color const& color, aiTextureType type);
         Texture(ID3D11Device* device, uint16 width, uint16 height, Color const* color, aiTextureType type);
         Texture(ID3D11Device* device, std::string const& filePath, aiTextureType type);
+        Texture(ID3D11Device* device, uint8 const* pData, size_t size, aiTextureType type);
 
         aiTextureType const& GetType() const { return type; }
 

@@ -6,13 +6,11 @@
 #include "pch.h"
 #include "Application.h"
 #include "MouseData.h"
-#include "Window.h"
-
 
 constexpr static uint16 HID_USAGE_PAGE_GENERIC = static_cast<uint16>(0x01);
 constexpr static uint16 HID_USAGE_GENERIC_MOUSE = static_cast<uint16>(0x02);
 
-using namespace DirectX;
+//using namespace DirectX;
 
 namespace
 {
@@ -34,7 +32,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
 
-    if (!XMVerifyCPUSupport())
+    if (!DirectX::XMVerifyCPUSupport())
         return 1;
 
     HRESULT hr = CoInitializeEx(nullptr, COINITBASE_MULTITHREADED);
@@ -42,9 +40,6 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
         return 1;
 
     g_app = std::make_unique<Application>();
-
-
-    Window window(L"Shitty", 800, 600);
 
     // Register class and create window
     {
@@ -226,8 +221,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             else
                 application->OnDeactivated();
         }
-        Keyboard::ProcessMessage(message, wParam, lParam);
-        Mouse::ProcessMessage(message, wParam, lParam);
+        DirectX::Keyboard::ProcessMessage(message, wParam, lParam);
+        DirectX::Mouse::ProcessMessage(message, wParam, lParam);
         break;
 
     case WM_INPUT:
@@ -260,7 +255,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_XBUTTONDOWN:
     case WM_XBUTTONUP:
     case WM_MOUSEHOVER:
-        Mouse::ProcessMessage(message, wParam, lParam);
+        DirectX::Mouse::ProcessMessage(message, wParam, lParam);
         break;
 
     case WM_POWERBROADCAST:
@@ -320,7 +315,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
             s_fullscreen = !s_fullscreen;
         }
-        Keyboard::ProcessMessage(message, wParam, lParam);
+        DirectX::Keyboard::ProcessMessage(message, wParam, lParam);
         break;
 
     case WM_MENUCHAR:

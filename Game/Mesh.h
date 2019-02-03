@@ -13,10 +13,12 @@
 class Mesh
 {
     public:
-        Mesh(ID3D11Device* device, ID3D11DeviceContext* deviceContext, std::vector<MD5Vertex>& vertices, std::vector<DWORD>& indices, std::vector<Texture>& textures);
-        Mesh(Mesh const& mesh);
+        Mesh(ID3D11Device* device, ID3D11DeviceContext* deviceContext, std::vector<MD5Vertex>& vertices, std::vector<DWORD>& indices, std::vector<Texture>& textures, DirectX::XMMATRIX const& transformMatrix);
+        Mesh(Mesh const&) = default;
 
         void Draw();
+
+        DirectX::XMMATRIX const& GetTransformMatrix() { return transformMatrix; }
 
         uint32 GetIndexCount() const { return indexBuffer.IndexCount(); }
 
@@ -25,4 +27,5 @@ class Mesh
         IndexBuffer<DWORD> indexBuffer;
         std::vector<Texture> textures;
         ID3D11DeviceContext* deviceContext;
+        DirectX::XMMATRIX transformMatrix;
 };

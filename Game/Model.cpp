@@ -25,10 +25,9 @@ bool Model::Initialize(std::string const& filePath, ID3D11Device* device, ID3D11
 
 void Model::Draw(DirectX::XMMATRIX world, DirectX::XMMATRIX view, DirectX::XMMATRIX proj)
 {
-    shader.SetShaderParameters(deviceContext, world, view, proj);
-
     for (uint32 i = 0; i < meshes.size(); ++i)
     {
+        shader.SetShaderParameters(deviceContext, meshes[i].GetTransformMatrix() * world, view, proj);
         meshes[i].Draw();
         shader.RenderShader(deviceContext, meshes[i].GetIndexCount());
     }
@@ -45,25 +44,27 @@ bool Model::LoadModel(std::string const &filePath)
     if (pScene == nullptr)
         return false;
 
-    this->ProcessNode(pScene->mRootNode, pScene);
+    this->ProcessNode(pScene->mRootNode, pScene, DirectX::XMMatrixIdentity());
     return true;
 }
 
-void Model::ProcessNode(aiNode* node, aiScene const* scene)
+void Model::ProcessNode(aiNode* node, aiScene const* scene, DirectX::XMMATRIX const& parentTransformMatrix)
 {
+    DirectX::XMMATRIX nodeTransformMatrix = DirectX::XMMatrixTranspose(DirectX::XMMATRIX(&node->mTransformation.a1)) * parentTransformMatrix;
+
     for (uint32 i = 0; i < node->mNumMeshes; ++i)
     {
         aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-        meshes.push_back(ProcessMesh(mesh, scene));
+        meshes.push_back(ProcessMesh(mesh, scene, nodeTransformMatrix));
     }
 
     for (uint32 i = 0; i < node->mNumChildren; ++i)
     {
-        ProcessNode(node->mChildren[i], scene);
+        ProcessNode(node->mChildren[i], scene, nodeTransformMatrix);
     }
 }
 
-Mesh Model::ProcessMesh(aiMesh * mesh, aiScene const * scene)
+Mesh Model::ProcessMesh(aiMesh * mesh, aiScene const * scene, DirectX::XMMATRIX const& transformMatrix)
 {
     std::vector<MD5Vertex> vertices;
     std::vector<DWORD> indices;
@@ -103,7 +104,7 @@ Mesh Model::ProcessMesh(aiMesh * mesh, aiScene const * scene)
     std::vector<Texture> diffuseTextures = LoadMaterialTextures(material, aiTextureType::aiTextureType_DIFFUSE, scene);
     textures.insert(textures.end(), diffuseTextures.begin(), diffuseTextures.end());
 
-    return Mesh(device, deviceContext, vertices, indices, textures);
+    return Mesh(device, deviceContext, vertices, indices, textures, transformMatrix);
 }
 
 TextureStorageType Model::DetermineTextureStorageType(aiScene const* pScene, aiMaterial* pMat, unsigned int index, aiTextureType textureType)
@@ -186,11 +187,29 @@ std::vector<Texture> Model::LoadMaterialTextures(aiMaterial* pMaterial, aiTextur
 
             switch (storeType)
             {
+                case TextureStorageType::EmbeddedIndexCompressed:
+                {
+                    int index = GetTextureIndex(&path);
+                    Texture embeddedIndexedTexture(device, reinterpret_cast<uint8*>(pScene->mTextures[index]->pcData),
+                        pScene->mTextures[index]->mWidth, textureType);
+                    materialTextures.push_back(embeddedIndexedTexture);
+                    break;
+                }
+                case TextureStorageType::EmbeddedCompressed:
+                {
+                    aiTexture const* pTexture = pScene->GetEmbeddedTexture(path.C_Str());
+                    Texture embeddedTexture(device, reinterpret_cast<uint8*>(pTexture->pcData),
+                        pTexture->mWidth, textureType);
+                    materialTextures.push_back(embeddedTexture);
+                    break;
+                }
                 case TextureStorageType::Disk:
+                {
                     std::string fileName = directory + '\\' + path.C_Str();
                     Texture diskTexture(device, fileName, textureType);
                     materialTextures.push_back(diskTexture);
                     break;
+                }
             }
         }
     }
@@ -200,4 +219,10 @@ std::vector<Texture> Model::LoadMaterialTextures(aiMaterial* pMaterial, aiTextur
         materialTextures.push_back(Texture(device, Colors::UnhandledTextureColor, textureType));
     }
     return materialTextures;
+}
+
+int Model::GetTextureIndex(aiString* pStr)
+{
+    assert(pStr->length >= 2);
+    return atoi(&pStr->C_Str()[1]);
 }

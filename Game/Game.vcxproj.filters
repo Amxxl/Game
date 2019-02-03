@@ -56,6 +56,12 @@
     <Filter Include="Engine\Graphics\Buffers\Types">
       <UniqueIdentifier>{9c922392-46d0-4ea6-93f6-4d05396a07ec}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Audio">
+      <UniqueIdentifier>{e77ca1a7-a601-4890-a4da-2a26f5303559}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Network">
+      <UniqueIdentifier>{fc3fda61-64a4-4962-aa8d-1224d2d941e5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene.h">
@@ -145,9 +151,6 @@
     <ClInclude Include="Application.h">
       <Filter>Engine\System</Filter>
     </ClInclude>
-    <ClInclude Include="FrustumCuller.h">
-      <Filter>Engine\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Model.h">
       <Filter>Game</Filter>
     </ClInclude>
@@ -156,6 +159,12 @@
     </ClInclude>
     <ClInclude Include="StringHelper.h">
       <Filter>Engine\System</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainCell.h">
+      <Filter>Game\Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="Frustum.h">
+      <Filter>Engine\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -232,9 +241,6 @@
       <Filter>Engine\System</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="FrustumCuller.cpp">
-      <Filter>Engine\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="Model.cpp">
       <Filter>Game</Filter>
     </ClCompile>
@@ -243,6 +249,12 @@
     </ClCompile>
     <ClCompile Include="StringHelper.cpp">
       <Filter>Engine\System</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainCell.cpp">
+      <Filter>Game\Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="Frustum.cpp">
+      <Filter>Engine\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

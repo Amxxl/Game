@@ -101,7 +101,11 @@ bool PlayScene::Load(ID3D11DeviceContext1* deviceContext)
     sky->CreateInputLayout(effect.get(), inputLayout.ReleaseAndGetAddressOf());
 
     model.Initialize("Data/10446_Palm_Tree_v1_max2010_iteration-2.obj", device, deviceContext);
-    mdl.Initialize("Data/WoodenCabinObj.obj", device, deviceContext);
+    //mdl.Initialize("Data/WoodenCabinObj.obj", device, deviceContext);
+    mdl.Initialize("Data/WoodCabin.dae", device, deviceContext);
+    bridge.Initialize("Data/person_embeddedindexed.blend", device, deviceContext);
+    bx = by = bz = 0.0f;
+    //sbx = sby = sbz = 1.0f;
     return true;
 }
 
@@ -147,7 +151,8 @@ void PlayScene::Update(DX::StepTimer const& timer)
 
     auto mouse = Mouse::Get().GetState();
 
-    camera.AdjustRotation(MouseData::GetRelativeY() * 0.01f, MouseData::GetRelativeX() * 0.01f, 0.0f);
+    if (mouse.rightButton)
+        camera.AdjustRotation(MouseData::GetRelativeY() * 0.01f, MouseData::GetRelativeX() * 0.01f, 0.0f);
 
     if (keyboard.LeftShift)
         cameraSpeed = 40.0f;
@@ -192,7 +197,7 @@ void PlayScene::Render()
 
     sky->Draw(effect.get(), inputLayout.Get());
 
-    frustum.ConstructFrustum(1000.0f, camera.GetProjectionMatrix(), camera.GetViewMatrix(), m_world);
+    frustum.Construct(1000.0f, camera.GetViewMatrix(), camera.GetProjectionMatrix());
     quadTree.Draw(m_deviceContext, &frustum, m_world, camera.GetViewMatrix(), camera.GetProjectionMatrix());
 
     for (int x = 0; x < 3; ++x)
@@ -205,8 +210,9 @@ void PlayScene::Render()
     
     player.Draw(m_deviceContext, camera.GetViewMatrix(), camera.GetProjectionMatrix());
     
-    mdl.Draw(m_world * DirectX::XMMatrixTranslation(150.0f, 0.0f, 150.0f) * XMMatrixScaling(0.5f, 0.5f, 0.5f), camera.GetViewMatrix(), camera.GetProjectionMatrix());
-    
+    mdl.Draw(m_world * DirectX::XMMatrixTranslation(125.0f, 45.0f, 150.0f) * XMMatrixScaling(0.5f, 0.5f, 0.5f), camera.GetViewMatrix(), camera.GetProjectionMatrix());
+    bridge.Draw(m_world * DirectX::XMMatrixTranslation(bx, by, bz), camera.GetViewMatrix(), camera.GetProjectionMatrix());
+
     // ImGui Window.
     ImGui_ImplDX11_NewFrame();
     ImGui_ImplWin32_NewFrame();
@@ -217,6 +223,15 @@ void PlayScene::Render()
     std::ostringstream ss("");
     ss << "Frames per second: " << m_fps;
     ImGui::Text(ss.str().c_str());
+
+    ImGui::DragFloat("Position X: ", &bx);
+    ImGui::DragFloat("Position Y: ", &by);
+    ImGui::DragFloat("Position Z: ", &bz);
+
+    ImGui::DragFloat("Scale X: ", &sbx);
+    ImGui::DragFloat("Scale Y: ", &sby);
+    ImGui::DragFloat("Scale Z: ", &sbz);
+
 
     ss.str("");
     ss << "Draw count: " << quadTree.GetDrawCount();

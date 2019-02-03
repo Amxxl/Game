@@ -17,7 +17,7 @@
 #include "Camera.h"
 #include "Terrain.h"
 #include "QuadTree.h"
-#include "FrustumCuller.h"
+#include "Frustum.h"
 #include "Model.h"
 #include "RenderableGameObject.h"
 
@@ -75,6 +75,10 @@ class PlayScene : public Scene
         RenderableGameObject player;
         Model model;
         Model mdl;
+        Model bridge;
+        float bx, by, bz;
+        float sbx, sby, sbz;
+
         Camera camera;
         DirectX::XMMATRIX m_world;
 

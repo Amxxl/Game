@@ -44,6 +44,15 @@ Texture::Texture(ID3D11Device* device, std::string const& filePath, aiTextureTyp
     }
 }
 
+Texture::Texture(ID3D11Device* device, uint8 const* pData, size_t size, aiTextureType type)
+{
+    this->type = type;
+
+    DX::ThrowIfFailed(
+        DirectX::CreateWICTextureFromMemory(device, pData, size, texture.GetAddressOf(), textureView.GetAddressOf())
+    );
+}
+
 void Texture::Create1x1ColorTexture(ID3D11Device* device, Color const& color, aiTextureType type)
 {
     CreateColorTexture(device, 1, 1, &color, type);
