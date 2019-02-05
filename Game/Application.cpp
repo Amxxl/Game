@@ -128,19 +128,16 @@ void Application::Clear()
 void Application::OnActivated()
 {
     // TODO: Game is becoming active window.
-    m_sceneManager->OnActivated();
 }
 
 void Application::OnDeactivated()
 {
     // TODO: Game is becoming background window.
-    m_sceneManager->OnDeactivated();
 }
 
 void Application::OnSuspending()
 {
     // TODO: Game is being power-suspended (or minimized).
-    m_sceneManager->OnSuspending();
 }
 
 void Application::OnResuming()
@@ -148,14 +145,12 @@ void Application::OnResuming()
     m_timer.ResetElapsedTime();
 
     // TODO: Game is being power-resumed (or returning from minimize).
-    m_sceneManager->OnResuming();
 }
 
 void Application::OnWindowMoved()
 {
     auto r = m_deviceResources->GetOutputSize();
     m_deviceResources->WindowSizeChanged(r.right, r.bottom);
-    m_sceneManager->OnWindowMoved();
 }
 
 void Application::OnWindowSizeChanged(int width, int height)
@@ -166,7 +161,6 @@ void Application::OnWindowSizeChanged(int width, int height)
     CreateWindowSizeDependentResources();
 
     // TODO: Game window is being resized.
-    m_sceneManager->OnWindowSizeChanged(width, height);
 
 }
 
@@ -189,27 +183,22 @@ void Application::CreateDeviceDependentResources()
     // TODO: Initialize device dependent objects here (independent of window size).
     device;
     context;
-
-    m_sceneManager->CreateDeviceDependentResources();
 }
 
 // Allocate all memory resources that change on a window SizeChanged event.
 void Application::CreateWindowSizeDependentResources()
 {
     // TODO: Initialize windows-size dependent objects here.
-    m_sceneManager->CreateWindowSizeDependentResources();
 }
 
 void Application::OnDeviceLost()
 {
     // TODO: Add Direct3D resource cleanup here.
-    m_sceneManager->OnDeviceLost();
 }
 
 void Application::OnDeviceRestored()
 {
     CreateDeviceDependentResources();
     CreateWindowSizeDependentResources();
-    m_sceneManager->OnDeviceRestored();
 }
 #pragma endregion

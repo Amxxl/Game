@@ -27,21 +27,6 @@ class PlayScene : public Scene
         PlayScene();
         ~PlayScene();
 
-        void CreateDeviceDependentResources() override;
-        void CreateWindowSizeDependentResources() override;
-
-        // IDeviceNotify
-        void OnDeviceLost() override;
-        void OnDeviceRestored() override;
-
-        // Messages
-        void OnActivated() override;
-        void OnDeactivated() override;
-        void OnSuspending() override;
-        void OnResuming() override;
-        void OnWindowMoved() override;
-        void OnWindowSizeChanged(int width, int height) override;
-
         bool Load(ID3D11DeviceContext1* ) override;
         void Unload() override;
         

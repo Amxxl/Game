@@ -12,21 +12,6 @@ class SceneManager // @todo: Rename it to SceneController.
         SceneManager(ID3D11DeviceContext1* deviceContext);
         ~SceneManager();
 
-        void CreateDeviceDependentResources();
-        void CreateWindowSizeDependentResources();
-
-        // IDeviceNotify
-        void OnDeviceLost();
-        void OnDeviceRestored();
-
-        // Messages
-        void OnActivated();
-        void OnDeactivated();
-        void OnSuspending();
-        void OnResuming();
-        void OnWindowMoved();
-        void OnWindowSizeChanged(int width, int height);
-
         // Scene management
         void SwapScene(Scene* scene);
         void PushScene(Scene* scene);

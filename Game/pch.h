@@ -59,6 +59,7 @@
 #pragma warning(disable: 4100) // Disable warning: unreferenced parameter.
 #pragma warning(disable: 4458) // Disable same named class members warning.
 #pragma warning(disable: 4324) // Disable warning: structure was padded due to alignment specifier.
+#pragma warning(disable: 4238) // Disable warning: nonstandard extension used: class rvalue used as lvalue.
 
 // DirectXTK headers
 //#include "Audio.h"
@@ -70,7 +71,7 @@
 #include "GeometricPrimitive.h"
 #include "GraphicsMemory.h"
 #include "Keyboard.h"
-#include "Model.h"
+//#include "Model.h"
 #include "Mouse.h"
 #include "PostProcess.h"
 #include "PrimitiveBatch.h"

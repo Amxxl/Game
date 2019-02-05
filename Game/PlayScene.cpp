@@ -24,46 +24,6 @@ PlayScene::~PlayScene()
     }
 }
 
-void PlayScene::CreateDeviceDependentResources()
-{
-}
-
-void PlayScene::CreateWindowSizeDependentResources()
-{
-}
-
-void PlayScene::OnDeviceLost()
-{
-}
-
-void PlayScene::OnDeviceRestored()
-{
-}
-
-void PlayScene::OnActivated()
-{
-}
-
-void PlayScene::OnDeactivated()
-{
-}
-
-void PlayScene::OnSuspending()
-{
-}
-
-void PlayScene::OnResuming()
-{
-}
-
-void PlayScene::OnWindowMoved()
-{
-}
-
-void PlayScene::OnWindowSizeChanged(int width, int height)
-{
-}
-
 bool PlayScene::Load(ID3D11DeviceContext1* deviceContext)
 {
     sceneGraph = new SceneNode();

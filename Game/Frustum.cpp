@@ -106,7 +106,6 @@ bool Frustum::CheckCube(DirectX::XMFLOAT3 const& center, float radius) const
     // Check if any one point of the cube is in the view frustum.
     for (unsigned int i = 0; i < 6; ++i)
     {
-        
         if (XMVectorGetX(XMPlaneDotCoord(XMLoadFloat4(&m_planesNorm[i]), XMLoadFloat3(&XMFLOAT3(center.x - radius, center.y - radius, center.z - radius)))) > 0.0f)
             continue;
 
