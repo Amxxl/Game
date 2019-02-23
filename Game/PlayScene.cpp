@@ -4,7 +4,7 @@
 
 #include "pch.h"
 #include "PlayScene.h"
-#include "MouseData.h"
+#include "Mouse.h"
 
 PlayScene PlayScene::s_instance;
 
@@ -109,10 +109,23 @@ void PlayScene::Update(DX::StepTimer const& timer)
     else if (keyboard.Z)
         camera.AdjustPosition(0.0f, -deltaTime * cameraSpeed, 0.0f);
 
-    auto mouse = Mouse::Get().GetState();
+    //auto mouse = Mouse::Get().GetState();
 
-    if (mouse.rightButton)
-        camera.AdjustRotation(MouseData::GetRelativeY() * 0.01f, MouseData::GetRelativeX() * 0.01f, 0.0f);
+    //if (mouse.rightButton)
+       // camera.AdjustRotation(Mouse::GetRelativeY() * 0.01f, Mouse::GetRelativeX() * 0.01f, 0.0f);
+
+    Mouse* mouse = &Mouse::Get();
+
+    while (!mouse->EventBufferIsEmpty())
+    {
+        Mouse::Event mouseEvent = mouse->ReadEvent();
+
+        if (mouseEvent.GetType() == Mouse::Event::MoveRaw && mouse->IsRightDown())
+        {
+            camera.AdjustRotation(mouseEvent.GetPositionY() * deltaTime * 0.5f, mouseEvent.GetPositionX() * deltaTime * 0.5f, 0.0f);
+        }
+
+    }
 
     if (keyboard.LeftShift)
         cameraSpeed = 40.0f;
@@ -142,7 +155,7 @@ void PlayScene::Update(DX::StepTimer const& timer)
 
     player.Update(m_deviceContext, deltaTime, anim_index);
 
-    MouseData::SetRelativePos(0, 0);
+    //Mouse::SetRelativePos(0, 0);
     sceneGraph->Update(timer);
     m_fps = static_cast<float>(timer.GetFramesPerSecond());
 }

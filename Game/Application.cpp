@@ -15,21 +15,24 @@ Application::Application() noexcept(false)
 }
 
 // Initialize the Direct3D resources required to run.
-void Application::Initialize(HWND window, int width, int height)
+void Application::Initialize(int width, int height)
 {
-    m_deviceResources->SetWindow(window, width, height);
+    m_window = std::make_unique<Window>(L"Game", width, height);
+    m_window->RegisterUserData(reinterpret_cast<LONG_PTR>(this));
+
+    m_deviceResources->SetWindow(m_window->GetHandle(), width, height);
+
     m_deviceResources->CreateDeviceResources();
-
-    // Scenes manager.
-    m_sceneManager = std::make_unique<SceneManager>(m_deviceResources->GetD3DDeviceContext());
-    m_sceneManager->PushScene(PlayScene::Instance());
-
     CreateDeviceDependentResources();
 
     m_deviceResources->CreateWindowSizeDependentResources();
     CreateWindowSizeDependentResources();
 
-    // TODO: Change the timer settings if you want something other than the default variable timestep mode.
+    // Scenes manager.
+    m_sceneManager = std::make_unique<SceneManager>(m_deviceResources->GetD3DDeviceContext());
+    m_sceneManager->PushScene(PlayScene::Instance());
+
+    // TIP: Change the timer settings if you want something other than the default variable timestep mode.
     // e.g. for 60 FPS fixed timestep update logic, call:
     
     /*
@@ -37,17 +40,18 @@ void Application::Initialize(HWND window, int width, int height)
     m_timer.SetTargetElapsedSeconds(1.0 / 60);
     */
 
+    m_keyboard = std::make_unique<DirectX::Keyboard>();
+    m_mouse = std::make_unique<Mouse>();
+    //m_mouse->SetWindow(window);
+
     // Setup ImGui
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     //ImGuiIO& io = ImGui::GetIO();
-    ImGui_ImplWin32_Init(window);
+    ImGui_ImplWin32_Init(m_window->GetHandle());
     ImGui_ImplDX11_Init(m_deviceResources->GetD3DDevice(), m_deviceResources->GetD3DDeviceContext());
     ImGui::StyleColorsDark();
 
-    m_keyboard = std::make_unique<DirectX::Keyboard>();
-    m_mouse = std::make_unique<DirectX::Mouse>();
-    m_mouse->SetWindow(window);
 }
 
 #pragma region Frame Update
@@ -70,7 +74,21 @@ void Application::Update(DX::StepTimer const& timer)
     if (kb.Escape)
         PostQuitMessage(0);
 
-    auto mouse = m_mouse->GetState();
+    //auto mouse = m_mouse->GetState();
+
+    /*
+    while (!m_mouse->EventBufferIsEmpty())
+    {
+        Mouse::Event mouseEvent = m_mouse->ReadEvent();
+
+        if (mouseEvent.GetType() == Mouse::Event::MoveRaw)
+        {
+            std::wostringstream ss(L"");
+            ss << "X: " << mouseEvent.GetPositionX() << " Y: "
+                << mouseEvent.GetPositionY();
+            m_window->SetTitle(ss.str().c_str());
+        }
+    }*/
 
     m_sceneManager->Update(timer);
 }

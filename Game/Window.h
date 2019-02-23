@@ -6,39 +6,43 @@
 
 class Window
 {
-    class WindowClass
-    {
-        private:
-            WindowClass() noexcept;
-            ~WindowClass();
+    private:
+        class WindowClass
+        {
+            public:
+                static wchar_t const* GetName() noexcept;
+                static HINSTANCE GetInstance() noexcept;
 
-            WindowClass(WindowClass const&) = delete;
-            WindowClass& operator=(WindowClass const&) = delete;
+            private:
+                WindowClass() noexcept;
+                ~WindowClass();
+                WindowClass(WindowClass const&) = delete;
+                WindowClass& operator=(WindowClass const&) = delete;
 
-        public:
-            static wchar_t const* GetName() noexcept;
-            static HINSTANCE GetInstance() noexcept;
+            private:
+                static constexpr wchar_t const* wndClassName = L"WindowClass";
+                static WindowClass wndClass;
 
-        private:
-            static constexpr wchar_t const* wndClassName = L"WindowClass";
-            static WindowClass s_instance;
-            HINSTANCE hInstance;
-    };
+            private:
+                HINSTANCE hInstance;
+        };
+
     public:
-        Window() noexcept;
-        Window(wchar_t const* name, int32 width, int32 height) noexcept;
+        Window() = default;
+        Window(std::wstring const& name, int width, int height) noexcept;
         ~Window();
-
         Window(Window const&) = delete;
         Window& operator=(Window const&) = delete;
 
-    private:
-        static LRESULT CALLBACK HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;
-        static LRESULT CALLBACK HandleMsgThunk(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;
-        LRESULT HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+        void SetTitle(std::wstring const& title);
+        void RegisterUserData(LONG_PTR userData);
+        HWND GetHandle() const { return hWnd; }
 
     private:
-        int32 width;
-        int32 height;
+        static LRESULT CALLBACK HandleMessage(HWND HWnd, UINT message, WPARAM wParam, LPARAM lParam);
+
+    private:
+        int width;
+        int height;
         HWND hWnd;
 };

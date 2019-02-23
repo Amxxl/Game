@@ -70,9 +70,6 @@
     <ClInclude Include="SceneManager.h">
       <Filter>Game\Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="MouseData.h">
-      <Filter>Engine\Input</Filter>
-    </ClInclude>
     <ClInclude Include="pch.h">
       <Filter>Common</Filter>
     </ClInclude>
@@ -145,9 +142,6 @@
     <ClInclude Include="Texture.h">
       <Filter>Engine\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Window.h">
-      <Filter>Engine\System</Filter>
-    </ClInclude>
     <ClInclude Include="Application.h">
       <Filter>Engine\System</Filter>
     </ClInclude>
@@ -166,6 +160,12 @@
     <ClInclude Include="Frustum.h">
       <Filter>Engine\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Mouse.h">
+      <Filter>Engine\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Window.h">
+      <Filter>Engine\System</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scene.cpp">
@@ -173,9 +173,6 @@
     </ClCompile>
     <ClCompile Include="SceneManager.cpp">
       <Filter>Game\Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="MouseData.cpp">
-      <Filter>Engine\Input</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp">
       <Filter>Common</Filter>
@@ -234,9 +231,6 @@
     <ClCompile Include="Texture.cpp">
       <Filter>Engine\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Window.cpp">
-      <Filter>Engine\System</Filter>
-    </ClCompile>
     <ClCompile Include="Application.cpp">
       <Filter>Engine\System</Filter>
     </ClCompile>
@@ -255,6 +249,12 @@
     </ClCompile>
     <ClCompile Include="Frustum.cpp">
       <Filter>Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Mouse.cpp">
+      <Filter>Engine\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Window.cpp">
+      <Filter>Engine\System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

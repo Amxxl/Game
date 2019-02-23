@@ -4,8 +4,11 @@
 
 #pragma once
 
+#include "Window.h"
 #include "DeviceResources.h"
 #include "StepTimer.h"
+
+#include "Mouse.h"
 
 #include "SceneManager.h"
 #include "PlayScene.h"
@@ -21,9 +24,9 @@ class Application : public DX::IDeviceNotify
         Application() noexcept(false);
 
         // Initialization and management
-        void Initialize(HWND window, int width, int height);
+        void Initialize(int width, int height);
 
-        // Basic game loop
+        // Basic application loop
         void Tick();
 
         // IDeviceNotify
@@ -41,6 +44,8 @@ class Application : public DX::IDeviceNotify
         // Properties
         void GetDefaultSize(int& width, int& height) const;
 
+        Mouse* GetMouse() const { return m_mouse.get(); }
+
     private:
         void Update(DX::StepTimer const& timer);
         void Render();
@@ -50,15 +55,18 @@ class Application : public DX::IDeviceNotify
         void CreateDeviceDependentResources();
         void CreateWindowSizeDependentResources();
 
-        // Device resources.
+        // Basic Win32 Window.
+        std::unique_ptr<Window>                 m_window;
+
+        // Direct3D Device Resources.
         std::unique_ptr<DX::DeviceResources>    m_deviceResources;
 
         // Rendering loop timer.
         DX::StepTimer                           m_timer;
 
-        // Keyboard and mouse input.
-        std::unique_ptr<DirectX::Keyboard> m_keyboard;
-        std::unique_ptr<DirectX::Mouse> m_mouse;
+        // Keyboard and Mouse input.
+        std::unique_ptr<DirectX::Keyboard>      m_keyboard;
+        std::unique_ptr<Mouse>                  m_mouse;
 
-        std::unique_ptr<SceneManager> m_sceneManager;
+        std::unique_ptr<SceneManager>           m_sceneManager;
 };
