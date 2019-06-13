@@ -49,24 +49,23 @@ bool PlayScene::Load(SceneManager* sceneManager, Window& window)
     player.Initialize(m_deviceContext);
     player.SetPosition(205.0f, 16.5f, 215.0f);
     player.LoadMesh(m_deviceContext, L"Data/wraith.md5mesh");
-    player.LoadAnim(L"Data/af_pose.md5anim"); // 0
-    player.LoadAnim(L"Data/attack1.md5anim"); // 1
-    player.LoadAnim(L"Data/attack2.md5anim"); // 2
-    player.LoadAnim(L"Data/attack3.md5anim"); // 3
+    player.LoadAnim(L"Data/idle.md5anim"); // 0
+    player.LoadAnim(L"Data/walk.md5anim"); // 1
+    player.LoadAnim(L"Data/attack1.md5anim"); // 2
+    player.LoadAnim(L"Data/attack2.md5anim"); // 3
+    player.LoadAnim(L"Data/attack3.md5anim"); // 4
 
-    player.LoadAnim(L"Data/ceiling_attack_128.md5anim"); // 4
-    player.LoadAnim(L"Data/ceiling_attack_192.md5anim"); // 5
-    player.LoadAnim(L"Data/ceiling_attack_256.md5anim"); // 6 // error
-    player.LoadAnim(L"Data/ceiling_idle_128.md5anim"); // 7
-    player.LoadAnim(L"Data/ceiling_idle_192.md5anim"); // 8
-    player.LoadAnim(L"Data/ceiling_idle_256.md5anim"); // 9
-    player.LoadAnim(L"Data/evade_left.md5anim"); // 10
-    player.LoadAnim(L"Data/evade_right.md5anim"); // 11
-    player.LoadAnim(L"Data/idle.md5anim"); // 12
-    player.LoadAnim(L"Data/sight.md5anim"); // 13
-    player.LoadAnim(L"Data/teleport.md5anim"); // 14
-
-    player.LoadAnim(L"Data/walk.md5anim"); // 15
+    player.LoadAnim(L"Data/ceiling_attack_128.md5anim"); // 5
+    player.LoadAnim(L"Data/ceiling_attack_192.md5anim"); // 6
+    player.LoadAnim(L"Data/ceiling_attack_256.md5anim"); // 7 // error
+    player.LoadAnim(L"Data/ceiling_idle_128.md5anim"); // 8
+    player.LoadAnim(L"Data/ceiling_idle_192.md5anim"); // 9
+    player.LoadAnim(L"Data/ceiling_idle_256.md5anim"); // 10
+    player.LoadAnim(L"Data/evade_left.md5anim"); // 11
+    player.LoadAnim(L"Data/evade_right.md5anim"); // 12
+    player.LoadAnim(L"Data/af_pose.md5anim"); // 13
+    player.LoadAnim(L"Data/sight.md5anim"); // 14
+    player.LoadAnim(L"Data/teleport.md5anim"); // 15
     player.LoadAnim(L"Data/run.md5anim"); // 16
 
     npc.Initialize(m_deviceContext);
