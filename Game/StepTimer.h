@@ -4,7 +4,6 @@
 #pragma once
 
 #include <cmath>
-#include <exception>
 #include <stdint.h>
 
 namespace DX

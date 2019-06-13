@@ -47,8 +47,17 @@
 #include <memory>
 #include <stdexcept>
 #include <fstream>
+#include <unordered_map>
+#include <typeindex>
+#include <string>
+#include <string_view>
+#include <sstream>
+#include <vector>
 
 #include "IntegerTypes.h"
+#include "Vector2.h"
+#include "Vector3.h"
+#include "Logger.h"
 
 #include <stdio.h>
 
@@ -61,7 +70,7 @@
 #pragma warning(disable: 4324) // Disable warning: structure was padded due to alignment specifier.
 #pragma warning(disable: 4238) // Disable warning: nonstandard extension used: class rvalue used as lvalue.
 
-// DirectXTK headers
+// DirectX Tool Kit headers
 //#include "Audio.h"
 #include "CommonStates.h"
 #include "DDSTextureLoader.h"
@@ -70,9 +79,8 @@
 //#include "GamePad.h"
 #include "GeometricPrimitive.h"
 #include "GraphicsMemory.h"
-#include "Keyboard.h"
+//#include "Keyboard.h"
 //#include "Model.h"
-// We are going to implement our own class for mouse.
 //#include "Mouse.h"
 #include "PostProcess.h"
 #include "PrimitiveBatch.h"
@@ -138,10 +146,11 @@ namespace DX
 
                 float ms = duration.count() * 1000.0f;
 
-                std::wstringstream ss(L"");
-                ss  << L"Execution Time: " << ms << " ms. ";
+                std::ostringstream ss("");
+                ss  << "Execution Time: " << ms << " ms. ";
 
-                OutputDebugString(ss.str().c_str());
+                //OutputDebugString(ss.str().c_str());
+                Logger::Get()->info(ss.str().c_str());
             }
         private:
             std::chrono::time_point<std::chrono::steady_clock> begin, end;

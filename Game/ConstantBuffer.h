@@ -14,8 +14,8 @@ class ConstantBuffer
             Create(device);
         }
 
-        ConstantBuffer(ConstantBuffer const&) = delete;
-        ConstantBuffer& operator=(ConstantBuffer const&) = delete;
+        ConstantBuffer(ConstantBuffer const&) = default;
+        ConstantBuffer& operator=(ConstantBuffer const&) = default;
 
         void Create(_In_ ID3D11Device* device)
         {

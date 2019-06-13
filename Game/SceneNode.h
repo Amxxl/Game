@@ -4,7 +4,6 @@
 
 #pragma once
 
-#include <vector>
 #include "StepTimer.h"
 
 class SceneNode

@@ -92,8 +92,9 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <FloatingPointModel>Fast</FloatingPointModel>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
-      <AdditionalIncludeDirectories>$(SolutionDir)\DirectXTK\Inc;$(SolutionDir)\ImGui\include;D:\sources\Game\External\Assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\DirectXTK\Inc;$(SolutionDir)\ImGui\include;$(SolutionDir)\External\Assimp\include;$(SolutionDir)\External\ReactPhysics3D\include;$(SolutionDir)\External\FMOD\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -110,8 +111,9 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <FloatingPointModel>Fast</FloatingPointModel>
-      <AdditionalIncludeDirectories>$(SolutionDir)\DirectXTK\Inc;$(SolutionDir)\ImGui\include;D:\sources\Game\External\Assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\DirectXTK\Inc;$(SolutionDir)\ImGui\include;$(SolutionDir)\External\Assimp\include;$(SolutionDir)\External\ReactPhysics3D\include;$(SolutionDir)\External\FMOD\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -131,8 +133,9 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <FloatingPointModel>Fast</FloatingPointModel>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
-      <AdditionalIncludeDirectories>$(SolutionDir)\DirectXTK\Inc;$(SolutionDir)\ImGui\include;D:\sources\Game\External\Assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\DirectXTK\Inc;$(SolutionDir)\ImGui\include;$(SolutionDir)\External\Assimp\include;$(SolutionDir)\External\ReactPhysics3D\include;$(SolutionDir)\External\FMOD\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -153,62 +156,223 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <FloatingPointModel>Fast</FloatingPointModel>
-      <AdditionalIncludeDirectories>$(SolutionDir)\DirectXTK\Inc;$(SolutionDir)\ImGui\include;D:\sources\Game\External\Assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\DirectXTK\Inc;$(SolutionDir)\ImGui\include;$(SolutionDir)\External\Assimp\include;$(SolutionDir)\External\ReactPhysics3D\include;$(SolutionDir)\External\FMOD\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>d3d11.lib;dxgi.lib;dxguid.lib;d3dcompiler.lib;uuid.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;odbc32.lib;odbccp32.lib;assimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;dxgi.lib;dxguid.lib;d3dcompiler.lib;uuid.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;odbc32.lib;odbccp32.lib;assimp.lib;fmod64_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>D:\sources\Game\External\Assimp\lib;D:\sources\Game\External\FMOD\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\External\FMOD\include\fmod.h" />
+    <ClInclude Include="..\External\FMOD\include\fmod.hpp" />
+    <ClInclude Include="..\External\FMOD\include\fmod_codec.h" />
+    <ClInclude Include="..\External\FMOD\include\fmod_common.h" />
+    <ClInclude Include="..\External\FMOD\include\fmod_dsp.h" />
+    <ClInclude Include="..\External\FMOD\include\fmod_dsp_effects.h" />
+    <ClInclude Include="..\External\FMOD\include\fmod_errors.h" />
+    <ClInclude Include="..\External\FMOD\include\fmod_output.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\body\Body.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\body\CollisionBody.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\body\RigidBody.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\broadphase\BroadPhaseAlgorithm.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\broadphase\DynamicAABBTree.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\CollisionCallback.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\CollisionDetection.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\ContactManifold.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\ContactManifoldInfo.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\ContactManifoldSet.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\ContactPointInfo.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\HalfEdgeStructure.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\MiddlePhaseTriangleCallback.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\NarrowPhaseInfo.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\narrowphase\CapsuleVsCapsuleAlgorithm.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\narrowphase\CapsuleVsConvexPolyhedronAlgorithm.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\narrowphase\CollisionDispatch.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\narrowphase\ConvexPolyhedronVsConvexPolyhedronAlgorithm.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\narrowphase\DefaultCollisionDispatch.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\narrowphase\GJK\GJKAlgorithm.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\narrowphase\GJK\VoronoiSimplex.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\narrowphase\NarrowPhaseAlgorithm.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\narrowphase\SAT\SATAlgorithm.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\narrowphase\SphereVsCapsuleAlgorithm.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\narrowphase\SphereVsConvexPolyhedronAlgorithm.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\narrowphase\SphereVsSphereAlgorithm.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\OverlapCallback.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\PolygonVertexArray.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\PolyhedronMesh.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\ProxyShape.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\RaycastInfo.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\shapes\AABB.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\shapes\BoxShape.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\shapes\CapsuleShape.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\shapes\CollisionShape.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\shapes\ConcaveMeshShape.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\shapes\ConcaveShape.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\shapes\ConvexMeshShape.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\shapes\ConvexPolyhedronShape.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\shapes\ConvexShape.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\shapes\HeightFieldShape.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\shapes\SphereShape.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\shapes\TriangleShape.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\TriangleMesh.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\TriangleVertexArray.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\configuration.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\constraint\BallAndSocketJoint.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\constraint\ContactPoint.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\constraint\FixedJoint.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\constraint\HingeJoint.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\constraint\Joint.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\constraint\SliderJoint.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\containers\containers_common.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\containers\LinkedList.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\containers\List.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\containers\Map.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\containers\Pair.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\containers\Set.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\containers\Stack.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\decimal.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\engine\CollisionWorld.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\engine\ConstraintSolver.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\engine\ContactSolver.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\engine\DynamicsWorld.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\engine\EventListener.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\engine\Island.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\engine\Material.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\engine\OverlappingPair.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\engine\Timer.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\mathematics\mathematics.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\mathematics\mathematics_functions.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\mathematics\Matrix2x2.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\mathematics\Matrix3x3.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\mathematics\Quaternion.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\mathematics\Ray.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\mathematics\Transform.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\mathematics\Vector2.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\mathematics\Vector3.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\memory\DefaultAllocator.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\memory\MemoryAllocator.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\memory\MemoryManager.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\memory\PoolAllocator.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\memory\SingleFrameAllocator.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\reactphysics3d.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\utils\Logger.h" />
+    <ClInclude Include="..\External\ReactPhysics3D\include\utils\Profiler.h" />
+    <ClInclude Include="Audio.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="ConstantBuffer.h" />
     <ClInclude Include="ConstantBufferTypes.h" />
     <ClInclude Include="DeviceResources.h" />
     <ClInclude Include="DynamicVertexBuffer.h" />
+    <ClInclude Include="Event.h" />
     <ClInclude Include="Frustum.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="IndexBuffer.h" />
+    <ClInclude Include="Input.h" />
     <ClInclude Include="IntegerTypes.h" />
+    <ClInclude Include="KeyEvents.h" />
+    <ClInclude Include="Logger.h" />
     <ClInclude Include="MD5Loader.h" />
     <ClInclude Include="MD5Model.h" />
     <ClInclude Include="MD5ModelShader.h" />
     <ClInclude Include="MD5Vertex.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
-    <ClInclude Include="Mouse.h" />
+    <ClInclude Include="MouseEvents.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="QuadTree.h" />
     <ClInclude Include="RenderableGameObject.h" />
+    <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SceneNode.h" />
+    <ClInclude Include="spdlog\async.h" />
+    <ClInclude Include="spdlog\async_logger.h" />
+    <ClInclude Include="spdlog\common.h" />
+    <ClInclude Include="spdlog\details\async_logger_impl.h" />
+    <ClInclude Include="spdlog\details\circular_q.h" />
+    <ClInclude Include="spdlog\details\console_globals.h" />
+    <ClInclude Include="spdlog\details\file_helper.h" />
+    <ClInclude Include="spdlog\details\fmt_helper.h" />
+    <ClInclude Include="spdlog\details\logger_impl.h" />
+    <ClInclude Include="spdlog\details\log_msg.h" />
+    <ClInclude Include="spdlog\details\mpmc_blocking_q.h" />
+    <ClInclude Include="spdlog\details\null_mutex.h" />
+    <ClInclude Include="spdlog\details\os.h" />
+    <ClInclude Include="spdlog\details\pattern_formatter.h" />
+    <ClInclude Include="spdlog\details\periodic_worker.h" />
+    <ClInclude Include="spdlog\details\registry.h" />
+    <ClInclude Include="spdlog\details\thread_pool.h" />
+    <ClInclude Include="spdlog\fmt\bin_to_hex.h" />
+    <ClInclude Include="spdlog\fmt\bundled\chrono.h" />
+    <ClInclude Include="spdlog\fmt\bundled\color.h" />
+    <ClInclude Include="spdlog\fmt\bundled\core.h" />
+    <ClInclude Include="spdlog\fmt\bundled\format-inl.h" />
+    <ClInclude Include="spdlog\fmt\bundled\format.h" />
+    <ClInclude Include="spdlog\fmt\bundled\locale.h" />
+    <ClInclude Include="spdlog\fmt\bundled\ostream.h" />
+    <ClInclude Include="spdlog\fmt\bundled\posix.h" />
+    <ClInclude Include="spdlog\fmt\bundled\printf.h" />
+    <ClInclude Include="spdlog\fmt\bundled\ranges.h" />
+    <ClInclude Include="spdlog\fmt\bundled\time.h" />
+    <ClInclude Include="spdlog\fmt\fmt.h" />
+    <ClInclude Include="spdlog\fmt\ostr.h" />
+    <ClInclude Include="spdlog\formatter.h" />
+    <ClInclude Include="spdlog\logger.h" />
+    <ClInclude Include="spdlog\sinks\android_sink.h" />
+    <ClInclude Include="spdlog\sinks\ansicolor_sink.h" />
+    <ClInclude Include="spdlog\sinks\base_sink.h" />
+    <ClInclude Include="spdlog\sinks\basic_file_sink.h" />
+    <ClInclude Include="spdlog\sinks\daily_file_sink.h" />
+    <ClInclude Include="spdlog\sinks\dist_sink.h" />
+    <ClInclude Include="spdlog\sinks\msvc_sink.h" />
+    <ClInclude Include="spdlog\sinks\null_sink.h" />
+    <ClInclude Include="spdlog\sinks\ostream_sink.h" />
+    <ClInclude Include="spdlog\sinks\rotating_file_sink.h" />
+    <ClInclude Include="spdlog\sinks\sink.h" />
+    <ClInclude Include="spdlog\sinks\stdout_color_sinks.h" />
+    <ClInclude Include="spdlog\sinks\stdout_sinks.h" />
+    <ClInclude Include="spdlog\sinks\syslog_sink.h" />
+    <ClInclude Include="spdlog\sinks\systemd_sink.h" />
+    <ClInclude Include="spdlog\sinks\wincolor_sink.h" />
+    <ClInclude Include="spdlog\spdlog.h" />
+    <ClInclude Include="spdlog\tweakme.h" />
+    <ClInclude Include="spdlog\version.h" />
     <ClInclude Include="StepTimer.h" />
     <ClInclude Include="StringHelper.h" />
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="TerrainCell.h" />
     <ClInclude Include="TerrainShader.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="ThirdPersonCamera.h" />
+    <ClInclude Include="Vector2.h" />
+    <ClInclude Include="Vector3.h" />
     <ClInclude Include="VertexBuffer.h" />
     <ClInclude Include="VertexBufferTypes.h" />
     <ClInclude Include="Window.h" />
+    <ClInclude Include="WindowEvents.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Audio.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="ConstantBufferTypes.cpp" />
     <ClCompile Include="DeviceResources.cpp" />
+    <ClCompile Include="Event.cpp" />
     <ClCompile Include="Frustum.cpp" />
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="Input.cpp" />
+    <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MD5Loader.cpp" />
     <ClCompile Include="MD5Model.cpp" />
@@ -216,7 +380,6 @@
     <ClCompile Include="MD5Vertex.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Model.cpp" />
-    <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -226,6 +389,7 @@
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="QuadTree.cpp" />
     <ClCompile Include="RenderableGameObject.cpp" />
+    <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SceneNode.cpp" />
@@ -235,6 +399,8 @@
     <ClCompile Include="TerrainCell.cpp" />
     <ClCompile Include="TerrainShader.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="ThirdPersonCamera.cpp" />
+    <ClCompile Include="Vector3.cpp" />
     <ClCompile Include="VertexBufferTypes.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
@@ -385,8 +551,13 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\External\FMOD\include\fmod.cs" />
+    <None Include="..\External\FMOD\include\fmod_dsp.cs" />
+    <None Include="..\External\FMOD\include\fmod_errors.cs" />
+    <None Include="Data\Fonts\Consolas14BI.spritefont" />
     <None Include="guard.md5anim" />
     <None Include="guard.md5mesh" />
+    <None Include="spdlog\fmt\bundled\LICENSE.rst" />
     <None Include="terrain.raw" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

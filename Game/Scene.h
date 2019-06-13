@@ -4,9 +4,10 @@
 
 #pragma once
 
-#include "SceneNode.h"
 #include "StepTimer.h"
+#include "Window.h"
 
+class SceneManager;
 
 class Scene
 {
@@ -14,9 +15,10 @@ class Scene
         Scene() = default;
         Scene(Scene const&) = delete;
         Scene& operator=(Scene const&) = delete;
+        virtual ~Scene() = default;
 
     public:
-        virtual bool Load(ID3D11DeviceContext1* deviceContext) = 0;
+        virtual bool Load(SceneManager* sceneManager, Window& window) = 0;
         virtual void Unload() = 0;
 
         virtual void Update(DX::StepTimer const& timer) = 0;
@@ -25,11 +27,15 @@ class Scene
         virtual void Pause() = 0;
         virtual void Resume() = 0;
 
-    protected:
-        // All scenes must have Scene Graph.
-        // Scene Graph is just a root node of every scene.
-        SceneNode* sceneGraph;
+    public:
+        virtual void OnKeyPressed(size_t key) {}
+        virtual void OnKeyReleased(size_t key) {}
 
-        // @todo: make it possible to switch scenes from any scene.
-        // TIP: SceneManager* sceneManager; // something like that.
+    public:
+        virtual void OnMouseMoved(Vector2i const& position) {}
+        virtual void OnMouseMovedRaw(Vector2i const& position) {}
+        virtual void OnMouseWheelScrolled(Vector2i const& position, float const delta) {}
+        virtual void OnMouseButtonPressed(Vector2i const& position, Input::MouseButton const button) {}
+        virtual void OnMouseButtonReleased(Vector2i const& position, Input::MouseButton const button) {}
+        virtual void OnMouseButtonDoubleClicked(Vector2i const& position, Input::MouseButton const button) {}
 };

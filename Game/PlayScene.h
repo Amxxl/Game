@@ -4,9 +4,6 @@
 
 #pragma once
 
-#include <string>
-#include <sstream>
-
 #include "Scene.h"
 
 #include "imgui.h"
@@ -15,11 +12,15 @@
 
 #include "GeometricPrimitive.h"
 #include "Camera.h"
+#include "ThirdPersonCamera.h"
 #include "Terrain.h"
 #include "QuadTree.h"
 #include "Frustum.h"
 #include "Model.h"
 #include "RenderableGameObject.h"
+
+#include "MouseEvents.h"
+#include "KeyEvents.h"
 
 class PlayScene : public Scene
 {
@@ -27,24 +28,35 @@ class PlayScene : public Scene
         PlayScene();
         ~PlayScene();
 
-        bool Load(ID3D11DeviceContext1* ) override;
-        void Unload() override;
+        virtual bool Load(SceneManager* sceneManager, Window& window) final override;
+        virtual void Unload() final override;
         
-        void Update(DX::StepTimer const& timer) override;
-        void Render() override;
+        virtual void Update(DX::StepTimer const& timer) final override;
+        virtual void Render() final override;
 
-        void Pause() override { paused = true; }
-        void Resume() override { paused = false; }
+        virtual void Pause() final override { paused = true; }
+        virtual void Resume() final override { paused = false; }
 
         bool const IsPaused() const { return paused; }
 
-        static PlayScene* Instance() { return &s_instance; }
+        virtual void OnKeyPressed(size_t key) final override;
+        virtual void OnKeyReleased(size_t key) final override;
+
+        virtual void OnMouseMoved(Vector2i const& position) final override;
+        virtual void OnMouseMovedRaw(Vector2i const& position) final override;
+        virtual void OnMouseWheelScrolled(Vector2i const& position, float const delta) final override;
+        virtual void OnMouseButtonPressed(Vector2i const& position, Input::MouseButton const button) final override;
+        virtual void OnMouseButtonReleased(Vector2i const& position, Input::MouseButton const button) final override;
+        virtual void OnMouseButtonDoubleClicked(Vector2i const& position, Input::MouseButton const button) final override;
+
+        static PlayScene& Get() { return s_instance; }
 
     private:
         // Instance of our play scene.
         static PlayScene s_instance;
 
     private:
+        std::unique_ptr<DirectX::GeometricPrimitive> water;
         std::unique_ptr<DirectX::GeometricPrimitive> sky;
         Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> skyTexture;
         std::unique_ptr<DirectX::BasicEffect> effect;
@@ -52,26 +64,29 @@ class PlayScene : public Scene
 
         std::unique_ptr<DirectX::CommonStates> state;
 
+        std::unique_ptr<DirectX::SpriteBatch> spriteBatch;
+        std::unique_ptr<DirectX::SpriteFont> font;
+
         ID3D11DeviceContext* m_deviceContext = nullptr;
 
         Terrain terrain;
         QuadTree quadTree;
         Frustum frustum;
         RenderableGameObject player;
+        RenderableGameObject npc;
         Model model;
         Model mdl;
         Model bridge;
-        float bx, by, bz;
-        float sbx, sby, sbz;
 
-        Camera camera;
+        //Camera camera;
+        ThirdPersonCamera camera;
         DirectX::XMMATRIX m_world;
 
-        int mouse_x;
-        int mouse_y;
-
         float m_fps;
+        bool in_jump;
 
+        DirectX::XMFLOAT3 playerPos;
+        //float rota;
     private:
         bool paused;
 };

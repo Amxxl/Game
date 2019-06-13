@@ -5,10 +5,6 @@
 #include "pch.h"
 #include "Application.h"
 
-
-constexpr static uint16 HID_USAGE_PAGE_GENERIC = static_cast<uint16>(0x01);
-constexpr static uint16 HID_USAGE_GENERIC_MOUSE = static_cast<uint16>(0x02);
-
 // Indicates to hybrid graphics systems to prefer the discrete part by default
 extern "C"
 {
@@ -22,8 +18,14 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
 
+    Logger::Init();
+    Logger::Get()->info("Logging system initialized.");
+
     if (!DirectX::XMVerifyCPUSupport())
+    {
+        Logger::Get()->error("Your CPU doesn't support DirectX Math!");
         return 1;
+    }
 
     if (FAILED(CoInitializeEx(nullptr, COINITBASE_MULTITHREADED)))
         return 1;
@@ -31,20 +33,10 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     std::unique_ptr<Application> app = std::make_unique<Application>();
     app->Initialize(800, 600);
 
-    RAWINPUTDEVICE rid;
-    rid.usUsagePage = HID_USAGE_PAGE_GENERIC;
-    rid.usUsage = HID_USAGE_GENERIC_MOUSE;
-    rid.dwFlags = 0;
-    rid.hwndTarget = nullptr;
+    Logger::Get()->info("Application successfully initialized.");
     
-    if (RegisterRawInputDevices(&rid, 1, sizeof(rid)) == FALSE)
-    {
-        MessageBox(nullptr, L"Failed to register RAWINPUTDEVICE.", L"Error", MB_OK);
-        return 1;
-    }
-
     // Main message loop
-    MSG msg = {};
+    MSG msg = { };
 
     while (msg.message != WM_QUIT)
     {

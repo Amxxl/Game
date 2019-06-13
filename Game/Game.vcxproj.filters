@@ -47,9 +47,6 @@
     <Filter Include="Engine\Graphics\Buffers">
       <UniqueIdentifier>{afc3f87d-f1e4-4c43-bc6e-9581c2f726f1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Input">
-      <UniqueIdentifier>{290517e8-aeb4-4ae3-8917-e15e2f08b3b1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\System">
       <UniqueIdentifier>{b4a5e20e-73f0-42ff-a636-ff58c1c498dc}</UniqueIdentifier>
     </Filter>
@@ -62,6 +59,90 @@
     <Filter Include="Engine\Network">
       <UniqueIdentifier>{fc3fda61-64a4-4962-aa8d-1224d2d941e5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\System\Events">
+      <UniqueIdentifier>{4555aa68-3cb8-4767-b90a-c736a13dc183}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Math">
+      <UniqueIdentifier>{c05a10ca-8fae-48a1-8ca7-54ea991e4261}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\System\Logging">
+      <UniqueIdentifier>{47594ba8-bf77-4230-a1ca-5c535d3ca0ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\System\Logging\spdlog">
+      <UniqueIdentifier>{e9bf5f83-3754-42fc-887e-674bb53a717d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\System\Logging\spdlog\sinks">
+      <UniqueIdentifier>{b6b546c1-26dd-47cc-a0f4-d22074395400}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\System\Logging\spdlog\fmt">
+      <UniqueIdentifier>{efd4dc62-67c1-43ef-af3a-9f8ab6fa589d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\System\Logging\spdlog\details">
+      <UniqueIdentifier>{cc26d094-d3a8-4fab-a508-0c1d22ee5191}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\System\Logging\spdlog\fmt\bundled">
+      <UniqueIdentifier>{757444a8-cfb9-47e2-be6c-1ee28bbb9f1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Audio\FMOD">
+      <UniqueIdentifier>{8a84066d-6425-41ec-87e4-fa1ac6538621}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\Fonts">
+      <UniqueIdentifier>{9dcb5e53-d856-476c-9727-7bc2e15df3c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\System\Timer">
+      <UniqueIdentifier>{0f25843c-ff35-4a29-8fa0-ad09473afcac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameObjects">
+      <UniqueIdentifier>{7d3d595d-085d-4682-9b82-2e3fbf2256ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Physics">
+      <UniqueIdentifier>{decb0a46-68dd-4cad-8d05-3e28c1ad05da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Physics\ReactPhysics3D">
+      <UniqueIdentifier>{a4368580-7afe-4e7b-b39d-8f75c7411dd6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Physics\ReactPhysics3D\body">
+      <UniqueIdentifier>{185ea669-4734-488a-9e73-e861166beec3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Physics\ReactPhysics3D\collision">
+      <UniqueIdentifier>{90c7a7ce-6128-4b17-b17e-fe1f559e7265}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Physics\ReactPhysics3D\constraint">
+      <UniqueIdentifier>{0599bc5c-b113-47df-b346-6c2bdf7d4ca2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Physics\ReactPhysics3D\containers">
+      <UniqueIdentifier>{3104df72-7510-445b-8a8d-7257a69a5f85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Physics\ReactPhysics3D\engine">
+      <UniqueIdentifier>{467da2bd-e225-478e-8242-c3d5bd013509}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Physics\ReactPhysics3D\mathematics">
+      <UniqueIdentifier>{0154930b-1906-4752-bd89-f55d4790651b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Physics\ReactPhysics3D\memory">
+      <UniqueIdentifier>{96a20955-996f-44e6-924a-010b11b33406}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Physics\ReactPhysics3D\utils">
+      <UniqueIdentifier>{3f948a14-36cb-44da-8d04-879ae4d3b1da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Physics\ReactPhysics3D\collision\broadphase">
+      <UniqueIdentifier>{e77606df-faf6-4891-a8e0-6e63a39c1bcc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Physics\ReactPhysics3D\collision\narrowphase">
+      <UniqueIdentifier>{c4751750-00df-4311-a27b-e41adcdf35aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Physics\ReactPhysics3D\collision\shapes">
+      <UniqueIdentifier>{1e64fb62-ed65-493a-b114-a53e47b7c0c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Physics\ReactPhysics3D\collision\narrowphase\GJK">
+      <UniqueIdentifier>{c1efe79c-f1a5-4157-907f-9ebb5f8ec3f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Physics\ReactPhysics3D\collision\narrowphase\SAT">
+      <UniqueIdentifier>{d3f580b6-b07b-4dae-9b9a-a315a3a65a40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\System\Input">
+      <UniqueIdentifier>{290517e8-aeb4-4ae3-8917-e15e2f08b3b1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene.h">
@@ -72,9 +153,6 @@
     </ClInclude>
     <ClInclude Include="pch.h">
       <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="SceneNode.h">
       <Filter>Game\Scenes</Filter>
@@ -91,9 +169,6 @@
     <ClInclude Include="DeviceResources.h">
       <Filter>Engine\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="StepTimer.h">
-      <Filter>Engine\System</Filter>
-    </ClInclude>
     <ClInclude Include="MD5Vertex.h">
       <Filter>Game\MD5Model</Filter>
     </ClInclude>
@@ -109,14 +184,8 @@
     <ClInclude Include="Color.h">
       <Filter>Engine\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>Game</Filter>
-    </ClInclude>
     <ClInclude Include="QuadTree.h">
       <Filter>Game\Terrain</Filter>
-    </ClInclude>
-    <ClInclude Include="RenderableGameObject.h">
-      <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="IntegerTypes.h">
       <Filter>Common</Filter>
@@ -160,11 +229,491 @@
     <ClInclude Include="Frustum.h">
       <Filter>Engine\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Mouse.h">
-      <Filter>Engine\Input</Filter>
-    </ClInclude>
     <ClInclude Include="Window.h">
       <Filter>Engine\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Event.h">
+      <Filter>Engine\System\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="MouseEvents.h">
+      <Filter>Engine\System\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector2.h">
+      <Filter>Engine\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>Engine\System\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\async.h">
+      <Filter>Engine\System\Logging\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\async_logger.h">
+      <Filter>Engine\System\Logging\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\common.h">
+      <Filter>Engine\System\Logging\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\formatter.h">
+      <Filter>Engine\System\Logging\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\logger.h">
+      <Filter>Engine\System\Logging\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\spdlog.h">
+      <Filter>Engine\System\Logging\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\tweakme.h">
+      <Filter>Engine\System\Logging\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\version.h">
+      <Filter>Engine\System\Logging\spdlog</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\sinks\android_sink.h">
+      <Filter>Engine\System\Logging\spdlog\sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\sinks\ansicolor_sink.h">
+      <Filter>Engine\System\Logging\spdlog\sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\sinks\base_sink.h">
+      <Filter>Engine\System\Logging\spdlog\sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\sinks\basic_file_sink.h">
+      <Filter>Engine\System\Logging\spdlog\sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\sinks\daily_file_sink.h">
+      <Filter>Engine\System\Logging\spdlog\sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\sinks\dist_sink.h">
+      <Filter>Engine\System\Logging\spdlog\sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\sinks\msvc_sink.h">
+      <Filter>Engine\System\Logging\spdlog\sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\sinks\null_sink.h">
+      <Filter>Engine\System\Logging\spdlog\sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\sinks\ostream_sink.h">
+      <Filter>Engine\System\Logging\spdlog\sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\sinks\rotating_file_sink.h">
+      <Filter>Engine\System\Logging\spdlog\sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\sinks\sink.h">
+      <Filter>Engine\System\Logging\spdlog\sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\sinks\stdout_color_sinks.h">
+      <Filter>Engine\System\Logging\spdlog\sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\sinks\stdout_sinks.h">
+      <Filter>Engine\System\Logging\spdlog\sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\sinks\syslog_sink.h">
+      <Filter>Engine\System\Logging\spdlog\sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\sinks\systemd_sink.h">
+      <Filter>Engine\System\Logging\spdlog\sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\sinks\wincolor_sink.h">
+      <Filter>Engine\System\Logging\spdlog\sinks</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\details\async_logger_impl.h">
+      <Filter>Engine\System\Logging\spdlog\details</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\details\circular_q.h">
+      <Filter>Engine\System\Logging\spdlog\details</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\details\console_globals.h">
+      <Filter>Engine\System\Logging\spdlog\details</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\details\file_helper.h">
+      <Filter>Engine\System\Logging\spdlog\details</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\details\fmt_helper.h">
+      <Filter>Engine\System\Logging\spdlog\details</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\details\log_msg.h">
+      <Filter>Engine\System\Logging\spdlog\details</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\details\logger_impl.h">
+      <Filter>Engine\System\Logging\spdlog\details</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\details\mpmc_blocking_q.h">
+      <Filter>Engine\System\Logging\spdlog\details</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\details\null_mutex.h">
+      <Filter>Engine\System\Logging\spdlog\details</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\details\os.h">
+      <Filter>Engine\System\Logging\spdlog\details</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\details\pattern_formatter.h">
+      <Filter>Engine\System\Logging\spdlog\details</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\details\periodic_worker.h">
+      <Filter>Engine\System\Logging\spdlog\details</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\details\registry.h">
+      <Filter>Engine\System\Logging\spdlog\details</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\details\thread_pool.h">
+      <Filter>Engine\System\Logging\spdlog\details</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\fmt\bin_to_hex.h">
+      <Filter>Engine\System\Logging\spdlog\fmt</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\fmt\fmt.h">
+      <Filter>Engine\System\Logging\spdlog\fmt</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\fmt\ostr.h">
+      <Filter>Engine\System\Logging\spdlog\fmt</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\fmt\bundled\chrono.h">
+      <Filter>Engine\System\Logging\spdlog\fmt\bundled</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\fmt\bundled\color.h">
+      <Filter>Engine\System\Logging\spdlog\fmt\bundled</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\fmt\bundled\core.h">
+      <Filter>Engine\System\Logging\spdlog\fmt\bundled</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\fmt\bundled\format.h">
+      <Filter>Engine\System\Logging\spdlog\fmt\bundled</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\fmt\bundled\format-inl.h">
+      <Filter>Engine\System\Logging\spdlog\fmt\bundled</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\fmt\bundled\locale.h">
+      <Filter>Engine\System\Logging\spdlog\fmt\bundled</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\fmt\bundled\ostream.h">
+      <Filter>Engine\System\Logging\spdlog\fmt\bundled</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\fmt\bundled\posix.h">
+      <Filter>Engine\System\Logging\spdlog\fmt\bundled</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\fmt\bundled\printf.h">
+      <Filter>Engine\System\Logging\spdlog\fmt\bundled</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\fmt\bundled\ranges.h">
+      <Filter>Engine\System\Logging\spdlog\fmt\bundled</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog\fmt\bundled\time.h">
+      <Filter>Engine\System\Logging\spdlog\fmt\bundled</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\FMOD\include\fmod.h">
+      <Filter>Engine\Audio\FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\FMOD\include\fmod.hpp">
+      <Filter>Engine\Audio\FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\FMOD\include\fmod_codec.h">
+      <Filter>Engine\Audio\FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\FMOD\include\fmod_common.h">
+      <Filter>Engine\Audio\FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\FMOD\include\fmod_dsp.h">
+      <Filter>Engine\Audio\FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\FMOD\include\fmod_dsp_effects.h">
+      <Filter>Engine\Audio\FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\FMOD\include\fmod_errors.h">
+      <Filter>Engine\Audio\FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\FMOD\include\fmod_output.h">
+      <Filter>Engine\Audio\FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="Logger.h">
+      <Filter>Engine\System\Logging</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyEvents.h">
+      <Filter>Engine\System\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowEvents.h">
+      <Filter>Engine\System\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="StepTimer.h">
+      <Filter>Engine\System\Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Game\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderableGameObject.h">
+      <Filter>Game\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdPersonCamera.h">
+      <Filter>Game\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Game\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector3.h">
+      <Filter>Engine\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\configuration.h">
+      <Filter>Engine\Physics\ReactPhysics3D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\decimal.h">
+      <Filter>Engine\Physics\ReactPhysics3D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\reactphysics3d.h">
+      <Filter>Engine\Physics\ReactPhysics3D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\body\Body.h">
+      <Filter>Engine\Physics\ReactPhysics3D\body</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\body\CollisionBody.h">
+      <Filter>Engine\Physics\ReactPhysics3D\body</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\body\RigidBody.h">
+      <Filter>Engine\Physics\ReactPhysics3D\body</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\CollisionCallback.h">
+      <Filter>Engine\Physics\ReactPhysics3D\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\CollisionDetection.h">
+      <Filter>Engine\Physics\ReactPhysics3D\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\ContactManifold.h">
+      <Filter>Engine\Physics\ReactPhysics3D\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\ContactManifoldInfo.h">
+      <Filter>Engine\Physics\ReactPhysics3D\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\ContactManifoldSet.h">
+      <Filter>Engine\Physics\ReactPhysics3D\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\ContactPointInfo.h">
+      <Filter>Engine\Physics\ReactPhysics3D\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\HalfEdgeStructure.h">
+      <Filter>Engine\Physics\ReactPhysics3D\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\MiddlePhaseTriangleCallback.h">
+      <Filter>Engine\Physics\ReactPhysics3D\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\NarrowPhaseInfo.h">
+      <Filter>Engine\Physics\ReactPhysics3D\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\OverlapCallback.h">
+      <Filter>Engine\Physics\ReactPhysics3D\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\PolygonVertexArray.h">
+      <Filter>Engine\Physics\ReactPhysics3D\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\PolyhedronMesh.h">
+      <Filter>Engine\Physics\ReactPhysics3D\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\ProxyShape.h">
+      <Filter>Engine\Physics\ReactPhysics3D\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\RaycastInfo.h">
+      <Filter>Engine\Physics\ReactPhysics3D\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\TriangleMesh.h">
+      <Filter>Engine\Physics\ReactPhysics3D\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\TriangleVertexArray.h">
+      <Filter>Engine\Physics\ReactPhysics3D\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\broadphase\BroadPhaseAlgorithm.h">
+      <Filter>Engine\Physics\ReactPhysics3D\collision\broadphase</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\broadphase\DynamicAABBTree.h">
+      <Filter>Engine\Physics\ReactPhysics3D\collision\broadphase</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\narrowphase\CapsuleVsCapsuleAlgorithm.h">
+      <Filter>Engine\Physics\ReactPhysics3D\collision\narrowphase</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\narrowphase\CapsuleVsConvexPolyhedronAlgorithm.h">
+      <Filter>Engine\Physics\ReactPhysics3D\collision\narrowphase</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\narrowphase\CollisionDispatch.h">
+      <Filter>Engine\Physics\ReactPhysics3D\collision\narrowphase</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\narrowphase\ConvexPolyhedronVsConvexPolyhedronAlgorithm.h">
+      <Filter>Engine\Physics\ReactPhysics3D\collision\narrowphase</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\narrowphase\DefaultCollisionDispatch.h">
+      <Filter>Engine\Physics\ReactPhysics3D\collision\narrowphase</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\narrowphase\NarrowPhaseAlgorithm.h">
+      <Filter>Engine\Physics\ReactPhysics3D\collision\narrowphase</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\narrowphase\SphereVsCapsuleAlgorithm.h">
+      <Filter>Engine\Physics\ReactPhysics3D\collision\narrowphase</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\narrowphase\SphereVsConvexPolyhedronAlgorithm.h">
+      <Filter>Engine\Physics\ReactPhysics3D\collision\narrowphase</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\narrowphase\SphereVsSphereAlgorithm.h">
+      <Filter>Engine\Physics\ReactPhysics3D\collision\narrowphase</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\narrowphase\GJK\GJKAlgorithm.h">
+      <Filter>Engine\Physics\ReactPhysics3D\collision\narrowphase\GJK</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\narrowphase\GJK\VoronoiSimplex.h">
+      <Filter>Engine\Physics\ReactPhysics3D\collision\narrowphase\GJK</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\narrowphase\SAT\SATAlgorithm.h">
+      <Filter>Engine\Physics\ReactPhysics3D\collision\narrowphase\SAT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\shapes\AABB.h">
+      <Filter>Engine\Physics\ReactPhysics3D\collision\shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\shapes\BoxShape.h">
+      <Filter>Engine\Physics\ReactPhysics3D\collision\shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\shapes\CapsuleShape.h">
+      <Filter>Engine\Physics\ReactPhysics3D\collision\shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\shapes\CollisionShape.h">
+      <Filter>Engine\Physics\ReactPhysics3D\collision\shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\shapes\ConcaveMeshShape.h">
+      <Filter>Engine\Physics\ReactPhysics3D\collision\shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\shapes\ConcaveShape.h">
+      <Filter>Engine\Physics\ReactPhysics3D\collision\shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\shapes\ConvexMeshShape.h">
+      <Filter>Engine\Physics\ReactPhysics3D\collision\shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\shapes\ConvexPolyhedronShape.h">
+      <Filter>Engine\Physics\ReactPhysics3D\collision\shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\shapes\ConvexShape.h">
+      <Filter>Engine\Physics\ReactPhysics3D\collision\shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\shapes\HeightFieldShape.h">
+      <Filter>Engine\Physics\ReactPhysics3D\collision\shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\shapes\SphereShape.h">
+      <Filter>Engine\Physics\ReactPhysics3D\collision\shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\collision\shapes\TriangleShape.h">
+      <Filter>Engine\Physics\ReactPhysics3D\collision\shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\constraint\BallAndSocketJoint.h">
+      <Filter>Engine\Physics\ReactPhysics3D\constraint</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\constraint\ContactPoint.h">
+      <Filter>Engine\Physics\ReactPhysics3D\constraint</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\constraint\FixedJoint.h">
+      <Filter>Engine\Physics\ReactPhysics3D\constraint</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\constraint\HingeJoint.h">
+      <Filter>Engine\Physics\ReactPhysics3D\constraint</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\constraint\Joint.h">
+      <Filter>Engine\Physics\ReactPhysics3D\constraint</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\constraint\SliderJoint.h">
+      <Filter>Engine\Physics\ReactPhysics3D\constraint</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\containers\containers_common.h">
+      <Filter>Engine\Physics\ReactPhysics3D\containers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\containers\LinkedList.h">
+      <Filter>Engine\Physics\ReactPhysics3D\containers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\containers\List.h">
+      <Filter>Engine\Physics\ReactPhysics3D\containers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\containers\Map.h">
+      <Filter>Engine\Physics\ReactPhysics3D\containers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\containers\Pair.h">
+      <Filter>Engine\Physics\ReactPhysics3D\containers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\containers\Set.h">
+      <Filter>Engine\Physics\ReactPhysics3D\containers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\containers\Stack.h">
+      <Filter>Engine\Physics\ReactPhysics3D\containers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\engine\CollisionWorld.h">
+      <Filter>Engine\Physics\ReactPhysics3D\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\engine\ConstraintSolver.h">
+      <Filter>Engine\Physics\ReactPhysics3D\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\engine\ContactSolver.h">
+      <Filter>Engine\Physics\ReactPhysics3D\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\engine\DynamicsWorld.h">
+      <Filter>Engine\Physics\ReactPhysics3D\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\engine\EventListener.h">
+      <Filter>Engine\Physics\ReactPhysics3D\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\engine\Island.h">
+      <Filter>Engine\Physics\ReactPhysics3D\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\engine\Material.h">
+      <Filter>Engine\Physics\ReactPhysics3D\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\engine\OverlappingPair.h">
+      <Filter>Engine\Physics\ReactPhysics3D\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\engine\Timer.h">
+      <Filter>Engine\Physics\ReactPhysics3D\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\mathematics\mathematics.h">
+      <Filter>Engine\Physics\ReactPhysics3D\mathematics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\mathematics\mathematics_functions.h">
+      <Filter>Engine\Physics\ReactPhysics3D\mathematics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\mathematics\Matrix2x2.h">
+      <Filter>Engine\Physics\ReactPhysics3D\mathematics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\mathematics\Matrix3x3.h">
+      <Filter>Engine\Physics\ReactPhysics3D\mathematics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\mathematics\Quaternion.h">
+      <Filter>Engine\Physics\ReactPhysics3D\mathematics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\mathematics\Ray.h">
+      <Filter>Engine\Physics\ReactPhysics3D\mathematics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\mathematics\Transform.h">
+      <Filter>Engine\Physics\ReactPhysics3D\mathematics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\mathematics\Vector2.h">
+      <Filter>Engine\Physics\ReactPhysics3D\mathematics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\mathematics\Vector3.h">
+      <Filter>Engine\Physics\ReactPhysics3D\mathematics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\memory\DefaultAllocator.h">
+      <Filter>Engine\Physics\ReactPhysics3D\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\memory\MemoryAllocator.h">
+      <Filter>Engine\Physics\ReactPhysics3D\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\memory\MemoryManager.h">
+      <Filter>Engine\Physics\ReactPhysics3D\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\memory\PoolAllocator.h">
+      <Filter>Engine\Physics\ReactPhysics3D\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\memory\SingleFrameAllocator.h">
+      <Filter>Engine\Physics\ReactPhysics3D\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\utils\Logger.h">
+      <Filter>Engine\Physics\ReactPhysics3D\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ReactPhysics3D\include\utils\Profiler.h">
+      <Filter>Engine\Physics\ReactPhysics3D\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio.h">
+      <Filter>Engine\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>Engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -192,9 +741,6 @@
     <ClCompile Include="DeviceResources.cpp">
       <Filter>Engine\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
     <ClCompile Include="MD5Vertex.cpp">
       <Filter>Game\MD5Model</Filter>
     </ClCompile>
@@ -210,17 +756,8 @@
     <ClCompile Include="Color.cpp">
       <Filter>Engine\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
     <ClCompile Include="QuadTree.cpp">
       <Filter>Game\Terrain</Filter>
-    </ClCompile>
-    <ClCompile Include="RenderableGameObject.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
-    <ClCompile Include="StepTimer.cpp">
-      <Filter>Engine\System</Filter>
     </ClCompile>
     <ClCompile Include="ConstantBufferTypes.cpp">
       <Filter>Engine\Graphics\Buffers\Types</Filter>
@@ -250,11 +787,41 @@
     <ClCompile Include="Frustum.cpp">
       <Filter>Engine\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Mouse.cpp">
-      <Filter>Engine\Input</Filter>
-    </ClCompile>
     <ClCompile Include="Window.cpp">
       <Filter>Engine\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Event.cpp">
+      <Filter>Engine\System\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>Engine\System\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Logger.cpp">
+      <Filter>Engine\System\Logging</Filter>
+    </ClCompile>
+    <ClCompile Include="StepTimer.cpp">
+      <Filter>Engine\System\Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Game\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderableGameObject.cpp">
+      <Filter>Game\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdPersonCamera.cpp">
+      <Filter>Game\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Game\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector3.cpp">
+      <Filter>Engine\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Audio.cpp">
+      <Filter>Engine\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>Engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -340,6 +907,21 @@
     </None>
     <None Include="terrain.raw">
       <Filter>Assets\Terrain</Filter>
+    </None>
+    <None Include="spdlog\fmt\bundled\LICENSE.rst">
+      <Filter>Engine\System\Logging\spdlog\fmt\bundled</Filter>
+    </None>
+    <None Include="..\External\FMOD\include\fmod.cs">
+      <Filter>Engine\Audio\FMOD</Filter>
+    </None>
+    <None Include="..\External\FMOD\include\fmod_dsp.cs">
+      <Filter>Engine\Audio\FMOD</Filter>
+    </None>
+    <None Include="..\External\FMOD\include\fmod_errors.cs">
+      <Filter>Engine\Audio\FMOD</Filter>
+    </None>
+    <None Include="Data\Fonts\Consolas14BI.spritefont">
+      <Filter>Assets\Fonts</Filter>
     </None>
   </ItemGroup>
 </Project>

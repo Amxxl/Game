@@ -11,16 +11,6 @@ Mesh::Mesh(ID3D11Device* device, ID3D11DeviceContext* deviceContext, std::vector
     indexBuffer.Create(device, indices.data(), static_cast<uint32>(indices.size()));
 }
 
-/*
-Mesh::Mesh(Mesh const& mesh)
-{
-    this->deviceContext = mesh.deviceContext;
-    this->indexBuffer = mesh.indexBuffer;
-    this->vertexBuffer = mesh.vertexBuffer;
-    this->textures = mesh.textures;
-    this->transformMatrix = mesh.transformMatrix;
-}*/
-
 void Mesh::Draw()
 {
     uint32 offset = 0;
@@ -36,5 +26,4 @@ void Mesh::Draw()
 
     deviceContext->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), vertexBuffer.StridePtr(), &offset);
     deviceContext->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
-    //deviceContext->DrawIndexed(indexBuffer.IndexCount(), 0, 0);
 }

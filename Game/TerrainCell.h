@@ -1,8 +1,9 @@
 #pragma once
+
 class TerrainCell
 {
-public:
-    TerrainCell();
-    ~TerrainCell();
+    public:
+        TerrainCell();
+        ~TerrainCell();
 };
 

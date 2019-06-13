@@ -6,31 +6,54 @@
 #include "Application.h"
 #include "Color.h"
 
-//using Microsoft::WRL::ComPtr;
+
+Application* Application::s_instance;
 
 Application::Application() noexcept(false)
 {
-    m_deviceResources = std::make_unique<DX::DeviceResources>();
-    m_deviceResources->RegisterDeviceNotify(this);
+    s_instance = this;
+}
+
+Application::~Application()
+{
+    if (ImGui::GetCurrentContext() != nullptr)
+    {
+        ImGui_ImplDX11_Shutdown();
+        ImGui_ImplWin32_Shutdown();
+        ImGui::DestroyContext();
+    }
 }
 
 // Initialize the Direct3D resources required to run.
 void Application::Initialize(int width, int height)
 {
     m_window = std::make_unique<Window>(L"Game", width, height);
-    m_window->RegisterUserData(reinterpret_cast<LONG_PTR>(this));
 
-    m_deviceResources->SetWindow(m_window->GetHandle(), width, height);
+    if (!m_window)
+        Logger::Get()->error("Window creation process failed!");
 
-    m_deviceResources->CreateDeviceResources();
+
+    m_audio = std::make_unique<Audio>();
+
+    auto deviceResources = m_window->GetDeviceResources();
+
+    deviceResources->CreateDeviceResources();
     CreateDeviceDependentResources();
 
-    m_deviceResources->CreateWindowSizeDependentResources();
+    deviceResources->CreateWindowSizeDependentResources();
     CreateWindowSizeDependentResources();
 
+    // Setup ImGui
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+
+    ImGui_ImplWin32_Init(m_window->GetHandle());
+    ImGui_ImplDX11_Init(deviceResources->GetD3DDevice(), deviceResources->GetD3DDeviceContext());
+    ImGui::StyleColorsDark();
+
     // Scenes manager.
-    m_sceneManager = std::make_unique<SceneManager>(m_deviceResources->GetD3DDeviceContext());
-    m_sceneManager->PushScene(PlayScene::Instance());
+    m_sceneManager = std::make_unique<SceneManager>(*m_window.get());
+    m_sceneManager->PushScene(&PlayScene::Get());
 
     // TIP: Change the timer settings if you want something other than the default variable timestep mode.
     // e.g. for 60 FPS fixed timestep update logic, call:
@@ -40,22 +63,40 @@ void Application::Initialize(int width, int height)
     m_timer.SetTargetElapsedSeconds(1.0 / 60);
     */
 
-    m_keyboard = std::make_unique<DirectX::Keyboard>();
-    m_mouse = std::make_unique<Mouse>();
-    //m_mouse->SetWindow(window);
+    // Event handlers @todo: move it somewhere else.
+    ON_EVENT_DISPATCHED([&](EventKeyPressed const* e) {
+        m_sceneManager->OnKeyPressed(e->GetKey());
+    });
+    
+    ON_EVENT_DISPATCHED([&](EventKeyReleased const* e) {
+        m_sceneManager->OnKeyReleased(e->GetKey());
+    });
 
-    // Setup ImGui
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    //ImGuiIO& io = ImGui::GetIO();
-    ImGui_ImplWin32_Init(m_window->GetHandle());
-    ImGui_ImplDX11_Init(m_deviceResources->GetD3DDevice(), m_deviceResources->GetD3DDeviceContext());
-    ImGui::StyleColorsDark();
+    ON_EVENT_DISPATCHED([&](EventMouseMoved const* e) {
+        m_sceneManager->OnMouseMoved(e->GetPosition());
+    });
 
+    ON_EVENT_DISPATCHED([&](EventMouseMovedRaw const* e) {
+        m_sceneManager->OnMouseMovedRaw(e->GetPosition());
+    });
+
+    ON_EVENT_DISPATCHED([&](EventMouseWheelScrolled const* e) {
+        m_sceneManager->OnMouseWheelScrolled(e->GetPosition(), e->GetDelta());
+    });
+
+    ON_EVENT_DISPATCHED([&](EventMouseButtonPressed const* e) {
+        m_sceneManager->OnMouseButtonPressed(e->GetPosition(), e->GetButton());
+    });
+
+    ON_EVENT_DISPATCHED([&](EventMouseButtonReleased const* e) {
+        m_sceneManager->OnMouseButtonReleased(e->GetPosition(), e->GetButton());
+    });
+
+    ON_EVENT_DISPATCHED([&](EventMouseButtonDoubleClicked const* e) {
+        m_sceneManager->OnMouseButtonDoubleClicked(e->GetPosition(), e->GetButton());
+    });
 }
 
-#pragma region Frame Update
-// Executes the basic game loop.
 void Application::Tick()
 {
     m_timer.Tick([&]()
@@ -66,36 +107,14 @@ void Application::Tick()
     Render();
 }
 
-// Updates the world.
 void Application::Update(DX::StepTimer const& timer)
 {
-    // TODO: Add your game logic here.
-    auto kb = m_keyboard->GetState();
-    if (kb.Escape)
+    if (m_window->GetInput().IsKeyDown(Input::Key::Escape))
         PostQuitMessage(0);
-
-    //auto mouse = m_mouse->GetState();
-
-    /*
-    while (!m_mouse->EventBufferIsEmpty())
-    {
-        Mouse::Event mouseEvent = m_mouse->ReadEvent();
-
-        if (mouseEvent.GetType() == Mouse::Event::MoveRaw)
-        {
-            std::wostringstream ss(L"");
-            ss << "X: " << mouseEvent.GetPositionX() << " Y: "
-                << mouseEvent.GetPositionY();
-            m_window->SetTitle(ss.str().c_str());
-        }
-    }*/
 
     m_sceneManager->Update(timer);
 }
-#pragma endregion
 
-#pragma region Frame Render
-// Draws the scene.
 void Application::Render()
 {
     // Don't try to render anything before the first Update.
@@ -104,29 +123,33 @@ void Application::Render()
 
     Clear();
 
-    m_deviceResources->PIXBeginEvent(L"Render");
-    auto context = m_deviceResources->GetD3DDeviceContext();
+    auto deviceResources = m_window->GetDeviceResources();
+
+    deviceResources->PIXBeginEvent(L"Render");
+    auto context = deviceResources->GetD3DDeviceContext();
 
     // TODO: Add your rendering code here.
     context;
 
     m_sceneManager->Render();
 
-    m_deviceResources->PIXEndEvent();
+    deviceResources->PIXEndEvent();
 
     // Show the new frame.
-    m_deviceResources->Present();
+    deviceResources->Present();
 }
 
 // Helper method to clear the back buffers.
 void Application::Clear()
 {
-    m_deviceResources->PIXBeginEvent(L"Clear");
+    auto deviceResources = m_window->GetDeviceResources();
+
+    deviceResources->PIXBeginEvent(L"Clear");
 
     // Clear the views.
-    auto context = m_deviceResources->GetD3DDeviceContext();
-    auto renderTarget = m_deviceResources->GetRenderTargetView();
-    auto depthStencil = m_deviceResources->GetDepthStencilView();
+    auto context = deviceResources->GetD3DDeviceContext();
+    auto renderTarget = deviceResources->GetRenderTargetView();
+    auto depthStencil = deviceResources->GetDepthStencilView();
 
     float color[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
     context->ClearRenderTargetView(renderTarget, color);
@@ -134,14 +157,12 @@ void Application::Clear()
     context->OMSetRenderTargets(1, &renderTarget, depthStencil);
 
     // Set the viewport.
-    auto viewport = m_deviceResources->GetScreenViewport();
+    auto viewport = deviceResources->GetScreenViewport();
     context->RSSetViewports(1, &viewport);
 
-    m_deviceResources->PIXEndEvent();
+    deviceResources->PIXEndEvent();
 }
-#pragma endregion
 
-#pragma region Message Handlers
 // Message handlers
 void Application::OnActivated()
 {
@@ -167,13 +188,23 @@ void Application::OnResuming()
 
 void Application::OnWindowMoved()
 {
-    auto r = m_deviceResources->GetOutputSize();
-    m_deviceResources->WindowSizeChanged(r.right, r.bottom);
+    if (!m_window)
+        return;
+
+    auto deviceResources = m_window->GetDeviceResources();
+
+    auto r = deviceResources->GetOutputSize();
+    deviceResources->WindowSizeChanged(r.right, r.bottom);
 }
 
 void Application::OnWindowSizeChanged(int width, int height)
 {
-    if (!m_deviceResources->WindowSizeChanged(width, height))
+    if (!m_window)
+        return;
+
+    auto deviceResources = m_window->GetDeviceResources();
+
+    if (deviceResources && !deviceResources->WindowSizeChanged(width, height))
         return;
 
     CreateWindowSizeDependentResources();
@@ -189,14 +220,14 @@ void Application::GetDefaultSize(int& width, int& height) const
     width = 800;
     height = 600;
 }
-#pragma endregion
 
-#pragma region Direct3D Resources
 // These are the resources that depend on the device.
 void Application::CreateDeviceDependentResources()
 {
-    auto device = m_deviceResources->GetD3DDevice();
-    auto context = m_deviceResources->GetD3DDeviceContext();
+    auto deviceResources = m_window->GetDeviceResources();
+
+    auto device = deviceResources->GetD3DDevice();
+    auto context = deviceResources->GetD3DDeviceContext();
 
     // TODO: Initialize device dependent objects here (independent of window size).
     device;
@@ -208,15 +239,3 @@ void Application::CreateWindowSizeDependentResources()
 {
     // TODO: Initialize windows-size dependent objects here.
 }
-
-void Application::OnDeviceLost()
-{
-    // TODO: Add Direct3D resource cleanup here.
-}
-
-void Application::OnDeviceRestored()
-{
-    CreateDeviceDependentResources();
-    CreateWindowSizeDependentResources();
-}
-#pragma endregion

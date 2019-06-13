@@ -11,6 +11,10 @@ class RenderableGameObject : public GameObject
         ~RenderableGameObject();
 
         void Initialize(ID3D11DeviceContext* deviceContext);
+
+        void LoadMesh(ID3D11DeviceContext* deviceContext, std::wstring const& fileName);
+        void LoadAnim(std::wstring const& fileName); 
+
         void Update(ID3D11DeviceContext* deviceContext, float deltaTime, int index);
         void Draw(ID3D11DeviceContext* deviceContext, DirectX::XMMATRIX const& viewMatrix, DirectX::XMMATRIX const& projMatrix);
 
@@ -18,6 +22,6 @@ class RenderableGameObject : public GameObject
         void UpdateMatrix() override;
     
     private:
-        DirectX::XMMATRIX worldMatrix = DirectX::XMMatrixIdentity();
+        DirectX::XMMATRIX m_worldMatrix = DirectX::XMMatrixIdentity();
         MD5Model model;
 };
