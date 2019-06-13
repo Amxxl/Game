@@ -15,6 +15,11 @@ Open Asset Import Library (short name: Assimp) is a portable Open Source library
 well-known 3D model formats. There is no reason to waste time on writing something that is already here.
 More informaction about Assimp you can find on: http://www.assimp.org
 
+# Why ReactPhysics3D?
+ReactPhysics3D is a C++ physics engine library that can be used in 3D simulations and games.
+The library is developed by Daniel Chappuis and is released under the open-source ZLib license.
+Developing our own physics engine would take a lot of time, so i prefer to use this instead.
+
 # Supported Platforms
 Targeting platforms: Windows 7, Windows 8, Windows 8.1, Windows 10.
 Any other platforms are not supported.
