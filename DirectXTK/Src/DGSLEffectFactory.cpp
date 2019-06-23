@@ -155,7 +155,7 @@ std::shared_ptr<IEffect> DGSLEffectFactory::Impl::CreateEffect(DGSLEffectFactory
         }
     }
 
-    return effect;
+    return std::move(effect);
 }
 
 
@@ -310,6 +310,16 @@ std::shared_ptr<IEffect> DGSLEffectFactory::Impl::CreateDGSLEffect(DGSLEffectFac
         effect->SetTextureEnabled(true);
     }
 
+    if (info.emissiveTexture && *info.emissiveTexture)
+    {
+        ComPtr<ID3D11ShaderResourceView> srv;
+
+        factory->CreateTexture(info.emissiveTexture, deviceContext, srv.GetAddressOf());
+
+        effect->SetTexture(3, srv.Get());
+        effect->SetTextureEnabled(true);
+    }
+
     for (size_t j = 0; j < _countof(info.textures); ++j)
     {
         if (info.textures[j] && *info.textures[j])
@@ -337,7 +347,7 @@ std::shared_ptr<IEffect> DGSLEffectFactory::Impl::CreateDGSLEffect(DGSLEffectFac
         }
     }
 
-    return effect;
+    return std::move(effect);
 }
 
 
@@ -474,7 +484,8 @@ void DGSLEffectFactory::Impl::CreatePixelShader(const wchar_t* name, ID3D11Pixel
         ThrowIfFailed(
             mDevice->CreatePixelShader(data.get(), dataSize, nullptr, pixelShader));
 
-        _Analysis_assume_(*pixelShader != 0);
+        assert(pixelShader != nullptr && *pixelShader != nullptr);
+        _Analysis_assume_(pixelShader != nullptr && *pixelShader != nullptr);
 
         if (mSharing && *name && it == mShaderCache.end())
         {

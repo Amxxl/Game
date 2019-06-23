@@ -74,6 +74,12 @@ bool PlayScene::Load(SceneManager* sceneManager, Window& window)
     npc.LoadMesh(m_deviceContext, L"Data/guard.md5mesh");
     npc.LoadAnim(L"Data/guard.md5anim");
 
+    monster.Initialize(m_deviceContext);
+    monster.SetPosition(150.0f, 25.0f, 220.0f);
+    monster.SetRotation(-90.0f, -90.0f, -90.0f);
+    monster.LoadMesh(m_deviceContext, L"Data/monster.md5mesh");
+    monster.LoadAnim(L"Data/monster.md5anim");
+
     effect = std::make_unique<DirectX::BasicEffect>(device);
     effect->SetAmbientLightColor(XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f));
     effect->SetTextureEnabled(true);
@@ -213,6 +219,7 @@ void PlayScene::Update(DX::StepTimer const& timer)
 
     player.Update(m_deviceContext, deltaTime, anim_index);
     npc.Update(m_deviceContext, deltaTime, 0);
+    monster.Update(m_deviceContext, deltaTime, 0);
 
     camera.SetOrigin(player.GetPositionFloat3());
     camera.UpdateMatrix();
@@ -236,7 +243,8 @@ void PlayScene::Render()
 
     player.Draw(m_deviceContext, camera.GetViewMatrix(), camera.GetProjectionMatrix());
     npc.Draw(m_deviceContext, camera.GetViewMatrix(), camera.GetProjectionMatrix());
-    
+    monster.Draw(m_deviceContext, camera.GetViewMatrix(), camera.GetProjectionMatrix());
+
     mdl.Draw(m_world * DirectX::XMMatrixTranslation(465.0f, 32.5f, 485.0f) * XMMatrixScaling(0.5f, 0.5f, 0.5f), camera.GetViewMatrix(), camera.GetProjectionMatrix());
     mdl.Draw(m_world * DirectX::XMMatrixScaling(0.7f, 0.7f, 0.7f) * DirectX::XMMatrixTranslation(365.0f, 32.5f, 485.0f) * XMMatrixScaling(0.5f, 0.5f, 0.5f), camera.GetViewMatrix(), camera.GetProjectionMatrix());
 

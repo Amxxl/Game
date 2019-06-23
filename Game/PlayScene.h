@@ -74,6 +74,7 @@ class PlayScene : public Scene
         Frustum frustum;
         RenderableGameObject player;
         RenderableGameObject npc;
+        RenderableGameObject monster;
         Model model;
         Model mdl;
         Model bridge;

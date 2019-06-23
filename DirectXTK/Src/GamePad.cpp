@@ -19,6 +19,8 @@ using Microsoft::WRL::ComPtr;
 
 namespace
 {
+    const float c_XboxOneThumbDeadZone = .24f;  // Recommended Xbox One controller deadzone
+
     float ApplyLinearDeadZone(float value, float maxValue, float deadZoneSize)
     {
         if (value < -deadZoneSize)
@@ -81,7 +83,7 @@ namespace
 
 #pragma warning(push)
 #pragma warning(disable : 4471)
-#include <Windows.Gaming.Input.h>
+#include <windows.gaming.input.h>
 #pragma warning(pop)
 
 class GamePad::Impl
@@ -205,11 +207,11 @@ public:
                     state.dpad.left = (reading.Buttons & GamepadButtons::GamepadButtons_DPadLeft) != 0;
 
                     ApplyStickDeadZone(static_cast<float>(reading.LeftThumbstickX), static_cast<float>(reading.LeftThumbstickY),
-                                       deadZoneMode, 1.f, .24f /* Recommended Xbox One deadzone */,
+                                       deadZoneMode, 1.f, c_XboxOneThumbDeadZone,
                                        state.thumbSticks.leftX, state.thumbSticks.leftY);
 
                     ApplyStickDeadZone(static_cast<float>(reading.RightThumbstickX), static_cast<float>(reading.RightThumbstickY),
-                                       deadZoneMode, 1.f, .24f /* Recommended Xbox One deadzone */,
+                                       deadZoneMode, 1.f, c_XboxOneThumbDeadZone,
                                        state.thumbSticks.rightX, state.thumbSticks.rightY);
 
                     state.triggers.left = static_cast<float>(reading.LeftTrigger);
@@ -281,10 +283,10 @@ public:
             if (mGamePad[player])
             {
                 GamepadVibration vib;
-                vib.LeftMotor = leftMotor;
-                vib.RightMotor = rightMotor;
-                vib.LeftTrigger = leftTrigger;
-                vib.RightTrigger = rightTrigger;
+                vib.LeftMotor = double(leftMotor);
+                vib.RightMotor = double(rightMotor);
+                vib.LeftTrigger = double(leftTrigger);
+                vib.RightTrigger = double(rightTrigger);
                 HRESULT hr = mGamePad[player]->put_Vibration(vib);
 
                 if (SUCCEEDED(hr))
@@ -652,11 +654,11 @@ public:
                     state.dpad.left = (reading.Buttons & GamepadButtons::GamepadButtons_DPadLeft) != 0;
 
                     ApplyStickDeadZone(reading.LeftThumbstickX, reading.LeftThumbstickY,
-                                       deadZoneMode, 1.f, .24f /* Recommended Xbox One deadzone */,
+                                       deadZoneMode, 1.f, c_XboxOneThumbDeadZone,
                                        state.thumbSticks.leftX, state.thumbSticks.leftY);
 
                     ApplyStickDeadZone(reading.RightThumbstickX, reading.RightThumbstickY,
-                                       deadZoneMode, 1.f, .24f /* Recommended Xbox One deadzone */,
+                                       deadZoneMode, 1.f, c_XboxOneThumbDeadZone,
                                        state.thumbSticks.rightX, state.thumbSticks.rightY);
 
                     state.triggers.left = reading.LeftTrigger;
@@ -878,7 +880,7 @@ GamePad::Impl* GamePad::Impl::s_gamePad = nullptr;
 // XInput
 //======================================================================================
 
-#include <xinput.h>
+#include <Xinput.h>
 
 static_assert(GamePad::MAX_PLAYER_COUNT == XUSER_MAX_COUNT, "xinput.h mismatch");
 
@@ -1167,7 +1169,7 @@ private:
         {
             if (!mConnected[j])
             {
-                LONGLONG delta = time - mLastReadTime[j];
+                LONGLONG delta = LONGLONG(time) - LONGLONG(mLastReadTime[j]);
 
                 LONGLONG interval = 1000;
                 if (j != player)
@@ -1305,25 +1307,25 @@ GamePad& GamePad::Get()
 
 void GamePad::ButtonStateTracker::Update(const GamePad::State& state)
 {
-    UPDATE_BUTTON_STATE(a);
+    UPDATE_BUTTON_STATE(a)
 
     assert((!state.buttons.a && !lastState.buttons.a) == (a == UP));
     assert((state.buttons.a && lastState.buttons.a) == (a == HELD));
     assert((!state.buttons.a && lastState.buttons.a) == (a == RELEASED));
     assert((state.buttons.a && !lastState.buttons.a) == (a == PRESSED));
 
-    UPDATE_BUTTON_STATE(b);
-    UPDATE_BUTTON_STATE(x);
-    UPDATE_BUTTON_STATE(y);
+    UPDATE_BUTTON_STATE(b)
+    UPDATE_BUTTON_STATE(x)
+    UPDATE_BUTTON_STATE(y)
 
-    UPDATE_BUTTON_STATE(leftStick);
-    UPDATE_BUTTON_STATE(rightStick);
+    UPDATE_BUTTON_STATE(leftStick)
+    UPDATE_BUTTON_STATE(rightStick)
 
-    UPDATE_BUTTON_STATE(leftShoulder);
-    UPDATE_BUTTON_STATE(rightShoulder);
+    UPDATE_BUTTON_STATE(leftShoulder)
+    UPDATE_BUTTON_STATE(rightShoulder)
 
-    UPDATE_BUTTON_STATE(back);
-    UPDATE_BUTTON_STATE(start);
+    UPDATE_BUTTON_STATE(back)
+    UPDATE_BUTTON_STATE(start)
 
     dpadUp = static_cast<ButtonState>((!!state.dpad.up) | ((!!state.dpad.up ^ !!lastState.dpad.up) << 1));
     dpadDown = static_cast<ButtonState>((!!state.dpad.down) | ((!!state.dpad.down ^ !!lastState.dpad.down) << 1));

@@ -131,7 +131,7 @@ std::shared_ptr<IEffect> EffectFactory::Impl::CreateEffect(IEffectFactory* facto
             mEffectCacheSkinning.insert(v);
         }
 
-        return effect;
+        return std::move(effect);
     }
     else if (info.enableDualTexture)
     {
@@ -168,8 +168,17 @@ std::shared_ptr<IEffect> EffectFactory::Impl::CreateEffect(IEffectFactory* facto
             effect->SetTexture(srv.Get());
         }
 
-        if (info.specularTexture && *info.specularTexture)
+        if (info.emissiveTexture && *info.emissiveTexture)
         {
+            ComPtr<ID3D11ShaderResourceView> srv;
+
+            factory->CreateTexture(info.emissiveTexture, deviceContext, srv.GetAddressOf());
+
+            effect->SetTexture2(srv.Get());
+        }
+        else if (info.specularTexture && *info.specularTexture)
+        {
+            // If there's no emissive texture specified, use the specular texture as the second texture
             ComPtr<ID3D11ShaderResourceView> srv;
 
             factory->CreateTexture(info.specularTexture, deviceContext, srv.GetAddressOf());
@@ -184,7 +193,7 @@ std::shared_ptr<IEffect> EffectFactory::Impl::CreateEffect(IEffectFactory* facto
             mEffectCacheDualTexture.insert(v);
         }
 
-        return effect;
+        return std::move(effect);
     }
     else if (info.enableNormalMaps && mUseNormalMapEffect)
     {
@@ -270,7 +279,7 @@ std::shared_ptr<IEffect> EffectFactory::Impl::CreateEffect(IEffectFactory* facto
             mEffectNormalMap.insert(v);
         }
 
-        return effect;
+        return std::move(effect);
     }
     else
     {
@@ -340,7 +349,7 @@ std::shared_ptr<IEffect> EffectFactory::Impl::CreateEffect(IEffectFactory* facto
             mEffectCache.insert(v);
         }
 
-        return effect;
+        return std::move(effect);
     }
 }
 

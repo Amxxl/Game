@@ -193,6 +193,8 @@ namespace DirectX
 
             #endif // _XBOX_ONE && _TITLE
 
+                case DXGI_FORMAT_UNKNOWN:
+                case DXGI_FORMAT_FORCE_UINT:
                 default:
                     return 0;
             }
@@ -292,6 +294,70 @@ namespace DirectX
         }
 
         //--------------------------------------------------------------------------------------
+        inline HRESULT LoadTextureDataFromMemory(
+            _In_reads_(ddsDataSize) const uint8_t* ddsData,
+            size_t ddsDataSize,
+            const DDS_HEADER** header,
+            const uint8_t** bitData,
+            size_t* bitSize)
+        {
+            if (!header || !bitData || !bitSize)
+            {
+                return E_POINTER;
+            }
+
+            if (ddsDataSize > UINT32_MAX)
+            {
+                return E_FAIL;
+            }
+
+            if (ddsDataSize < (sizeof(uint32_t) + sizeof(DDS_HEADER)))
+            {
+                return E_FAIL;
+            }
+
+            // DDS files always start with the same magic number ("DDS ")
+            auto dwMagicNumber = *reinterpret_cast<const uint32_t*>(ddsData);
+            if (dwMagicNumber != DDS_MAGIC)
+            {
+                return E_FAIL;
+            }
+
+            auto hdr = reinterpret_cast<const DDS_HEADER*>(ddsData + sizeof(uint32_t));
+
+            // Verify header to validate DDS file
+            if (hdr->size != sizeof(DDS_HEADER) ||
+                hdr->ddspf.size != sizeof(DDS_PIXELFORMAT))
+            {
+                return E_FAIL;
+            }
+
+            // Check for DX10 extension
+            bool bDXT10Header = false;
+            if ((hdr->ddspf.flags & DDS_FOURCC) &&
+                (MAKEFOURCC('D', 'X', '1', '0') == hdr->ddspf.fourCC))
+            {
+                // Must be long enough for both headers and magic value
+                if (ddsDataSize < (sizeof(DDS_HEADER) + sizeof(uint32_t) + sizeof(DDS_HEADER_DXT10)))
+                {
+                    return E_FAIL;
+                }
+
+                bDXT10Header = true;
+            }
+
+            // setup the pointers in the process request
+            *header = hdr;
+            auto offset = sizeof(uint32_t)
+                + sizeof(DDS_HEADER)
+                + (bDXT10Header ? sizeof(DDS_HEADER_DXT10) : 0u);
+            *bitData = ddsData + offset;
+            *bitSize = ddsDataSize - offset;
+
+            return S_OK;
+        }
+
+        //--------------------------------------------------------------------------------------
         inline HRESULT LoadTextureDataFromFile(
             _In_z_ const wchar_t* fileName,
             std::unique_ptr<uint8_t[]>& ddsData,
@@ -340,7 +406,7 @@ namespace DirectX
             }
 
             // Need at least enough data to fill the header and magic number to be a valid DDS
-            if (fileInfo.EndOfFile.LowPart < (sizeof(DDS_HEADER) + sizeof(uint32_t)))
+            if (fileInfo.EndOfFile.LowPart < (sizeof(uint32_t) + sizeof(DDS_HEADER)))
             {
                 return E_FAIL;
             }
@@ -370,7 +436,7 @@ namespace DirectX
             }
 
             // DDS files always start with the same magic number ("DDS ")
-            uint32_t dwMagicNumber = *reinterpret_cast<const uint32_t*>(ddsData.get());
+            auto dwMagicNumber = *reinterpret_cast<const uint32_t*>(ddsData.get());
             if (dwMagicNumber != DDS_MAGIC)
             {
                 return E_FAIL;
@@ -401,8 +467,8 @@ namespace DirectX
 
             // setup the pointers in the process request
             *header = hdr;
-            ptrdiff_t offset = sizeof(uint32_t) + sizeof(DDS_HEADER)
-                + (bDXT10Header ? sizeof(DDS_HEADER_DXT10) : 0);
+            auto offset = sizeof(uint32_t) + sizeof(DDS_HEADER)
+                + (bDXT10Header ? sizeof(DDS_HEADER_DXT10) : 0u);
             *bitData = ddsData.get() + offset;
             *bitSize = fileInfo.EndOfFile.LowPart - offset;
 
@@ -832,6 +898,7 @@ namespace DirectX
                         case DDS_ALPHA_MODE_CUSTOM:
                             return mode;
 
+                        case DDS_ALPHA_MODE_UNKNOWN:
                         default:
                             break;
                     }
