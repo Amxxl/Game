@@ -33,8 +33,8 @@ struct MD5Vertex
     DirectX::XMFLOAT2 textureCoordinate;
 
     // Won't be send to the shader.
-    int StartWeight;
-    int WeightCount;
+    int StartWeight = 0;
+    int WeightCount = 0;
 
     static const int InputElementCount = 3;
     static const D3D11_INPUT_ELEMENT_DESC InputElements[InputElementCount];

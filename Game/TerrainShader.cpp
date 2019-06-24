@@ -55,7 +55,7 @@ void TerrainShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, Dire
     LightBufferType light;
     light.ambientColor = DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
     light.diffuseColor = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-    light.lightDirection = DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f);
+    light.lightDirection = DirectX::XMFLOAT3(1.0f, 0.0f, 1.0f);
     light.padding = 0.0f;
     lightBuffer.SetData(deviceContext, light);
 

@@ -30,7 +30,7 @@ bool PlayScene::Load(SceneManager* sceneManager, Window& window)
 {
     m_deviceContext = window.GetDeviceResources()->GetD3DDeviceContext();
 
-    camera.SetProjectionValues(90.0f, 800.0f / 600.0f, 0.1f, 1000.0f);
+    camera.SetProjectionValues(90.0f, 800.0f / 600.0f, 0.1f, 1500.0f);
     camera.SetPosition(0.0f, 20.0f, 0.0f);
     camera.SetLookAtPos(Vector3f(5.0f, 0.0f, 5.0f));
     camera.SetRotation(0.0f, 0.0f, 0.0f);
@@ -81,12 +81,12 @@ bool PlayScene::Load(SceneManager* sceneManager, Window& window)
     monster.LoadAnim(L"Data/monster.md5anim");
 
     effect = std::make_unique<DirectX::BasicEffect>(device);
-    effect->SetAmbientLightColor(XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f));
+    effect->SetAmbientLightColor(XMVectorSet(1.0f, 1.0f, 1.0f, 0.5f));
     effect->SetTextureEnabled(true);
     effect->SetPerPixelLighting(true);
     effect->SetLightingEnabled(true);
     effect->SetLightEnabled(0, true);
-    effect->SetLightDiffuseColor(0, XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f));
+    effect->SetLightDiffuseColor(0, XMVectorSet(1.0f, 1.0f, 1.0f, 0.5f));
     effect->SetLightDirection(0, SimpleMath::Vector3::UnitZ);
     effect->SetTexture(skyTexture.Get());
 
