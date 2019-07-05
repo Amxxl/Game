@@ -7,11 +7,11 @@
 #include "DeviceResources.h"
 #include "Input.h"
 
-class Window : public DX::IDeviceNotify
+class Window : public DX::IDeviceNotify, public EventDispatcher
 {
     public:
         Window() = default;
-        Window(std::wstring const& name, int width, int height) noexcept;
+        explicit Window(std::wstring const& name, int width, int height, bool fullScreen = false) noexcept;
         ~Window();
         Window(Window const&) = default;
         Window& operator=(Window const&) = default;
@@ -25,6 +25,7 @@ class Window : public DX::IDeviceNotify
         DX::DeviceResources* GetDeviceResources() const { return m_deviceResources.get(); }
 
         Vector2i const GetSize() const { return { m_iWidth, m_iHeight }; }
+        Input& GetInput() { return input; }
         Input const& GetInput() const { return input; }
 
     private:
@@ -42,7 +43,8 @@ class Window : public DX::IDeviceNotify
         std::unique_ptr<DX::DeviceResources> m_deviceResources;
 
         HINSTANCE m_hInstance;
-        HWND m_hWindow;
         std::wstring m_wsTitle;
         int m_iWidth, m_iHeight;
+        bool m_bFullScreen;
+        HWND m_hWindow;
 };

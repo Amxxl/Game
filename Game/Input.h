@@ -6,7 +6,7 @@
 
 #include "Event.h"
 
-class Input
+class Input : public EventDispatcher
 {
     friend class Window;
 

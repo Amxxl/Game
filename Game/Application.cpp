@@ -27,7 +27,7 @@ Application::~Application()
 // Initialize the Direct3D resources required to run.
 void Application::Initialize(int width, int height)
 {
-    m_window = std::make_unique<Window>(L"Game", width, height);
+    m_window = std::make_unique<Window>(L"Game", width, height, true);
 
     if (!m_window)
         Logger::Get()->error("Window creation process failed!");
@@ -63,38 +63,14 @@ void Application::Initialize(int width, int height)
     m_timer.SetTargetElapsedSeconds(1.0 / 60);
     */
 
-    // Event handlers @todo: move it somewhere else.
-    ON_EVENT_DISPATCHED([&](EventKeyPressed const* e) {
-        m_sceneManager->OnKeyPressed(e->GetKey());
-    });
-    
-    ON_EVENT_DISPATCHED([&](EventKeyReleased const* e) {
-        m_sceneManager->OnKeyReleased(e->GetKey());
-    });
-
-    ON_EVENT_DISPATCHED([&](EventMouseMoved const* e) {
-        m_sceneManager->OnMouseMoved(e->GetPosition());
-    });
-
-    ON_EVENT_DISPATCHED([&](EventMouseMovedRaw const* e) {
-        m_sceneManager->OnMouseMovedRaw(e->GetPosition());
-    });
-
-    ON_EVENT_DISPATCHED([&](EventMouseWheelScrolled const* e) {
-        m_sceneManager->OnMouseWheelScrolled(e->GetPosition(), e->GetDelta());
-    });
-
-    ON_EVENT_DISPATCHED([&](EventMouseButtonPressed const* e) {
-        m_sceneManager->OnMouseButtonPressed(e->GetPosition(), e->GetButton());
-    });
-
-    ON_EVENT_DISPATCHED([&](EventMouseButtonReleased const* e) {
-        m_sceneManager->OnMouseButtonReleased(e->GetPosition(), e->GetButton());
-    });
-
-    ON_EVENT_DISPATCHED([&](EventMouseButtonDoubleClicked const* e) {
-        m_sceneManager->OnMouseButtonDoubleClicked(e->GetPosition(), e->GetButton());
-    });
+    m_window->GetInput().AddEventListener<EventKeyPressed>(*this);
+    m_window->GetInput().AddEventListener<EventKeyReleased>(*this);
+    m_window->GetInput().AddEventListener<EventMouseMoved>(*this);
+    m_window->GetInput().AddEventListener<EventMouseMovedRaw>(*this);
+    m_window->GetInput().AddEventListener<EventMouseWheelScrolled>(*this);
+    m_window->GetInput().AddEventListener<EventMouseButtonPressed>(*this);
+    m_window->GetInput().AddEventListener<EventMouseButtonReleased>(*this);
+    m_window->GetInput().AddEventListener<EventMouseButtonDoubleClicked>(*this);
 }
 
 void Application::Tick()
@@ -211,6 +187,46 @@ void Application::OnWindowSizeChanged(int width, int height)
 
     // TODO: Game window is being resized.
 
+}
+
+void Application::OnEvent(EventKeyPressed const& event)
+{
+    m_sceneManager->OnKeyPressed(event.key);
+}
+
+void Application::OnEvent(EventKeyReleased const& event)
+{
+    m_sceneManager->OnKeyReleased(event.key);
+}
+
+void Application::OnEvent(EventMouseMoved const& event)
+{
+    m_sceneManager->OnMouseMoved(event.position);
+}
+
+void Application::OnEvent(EventMouseMovedRaw const& event)
+{
+    m_sceneManager->OnMouseMovedRaw(event.position);
+}
+
+void Application::OnEvent(EventMouseWheelScrolled const& event)
+{
+    m_sceneManager->OnMouseWheelScrolled(event.position, event.delta);
+}
+
+void Application::OnEvent(EventMouseButtonPressed const& event)
+{
+    m_sceneManager->OnMouseButtonPressed(event.position, event.button);
+}
+
+void Application::OnEvent(EventMouseButtonReleased const& event)
+{
+    m_sceneManager->OnMouseButtonReleased(event.position, event.button);
+}
+
+void Application::OnEvent(EventMouseButtonDoubleClicked const& event)
+{
+    m_sceneManager->OnMouseButtonDoubleClicked(event.position, event.button);
 }
 
 // Properties

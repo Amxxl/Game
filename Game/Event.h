@@ -4,43 +4,101 @@
 
 #pragma once
 
-#define ON_EVENT_DISPATCHED(callback) EventManager::AddListener(std::function(callback))
-#define DISPATCH_EVENT(e) EventManager::Dispatch(e);
-
-class Event
+template<typename Event>
+struct EventCallback
 {
-    public:
-        virtual ~Event() = default;
+    explicit EventCallback(std::function<void(Event const&)> callback)
+        : callback(callback)
+    {
+    }
+
+    void operator()(void const* event)
+    {
+        callback(*(static_cast<Event const*>(event)));
+    }
+
+    std::function<void(Event const&)> callback;
 };
 
-class EventManager
+class EventDispatcher
 {
     public:
-        template<typename T>
-        static void AddListener(std::function<void(T const*)> callback)
+        template<typename Event, typename Listener>
+        void AddEventListener(Listener& listener)
         {
-            auto callbackFunc = [=](Event const* args) {
-                callback(dynamic_cast<T const*>(args));
-            };
+            assert(!IsListeningForEvent<Event>(listener)); // Attempted to listen to the same event more than once.
+            void(Listener::*listen_func)(Event const&) = &Listener::OnEvent;
 
-            auto index = std::type_index(typeid(T));
-            s_mapCallbacks[index].emplace_back(callbackFunc);
+            auto callback = EventCallback<Event>(std::bind(listen_func, &listener, std::placeholders::_1));
+            m_callbacks[std::type_index(typeid(Event))].emplace_back(&listener, callback);
         }
 
-        template<typename T>
-        static void Dispatch(T const& e)
+        template<typename Event, typename Listener>
+        bool RemoveEventListener(Listener& listener)
         {
-            auto iter = s_mapCallbacks.find(std::type_index(typeid(T)));
+            auto& listeners = m_callbacks[std::type_index(typeid(Event))];
 
-            if (iter != s_mapCallbacks.end())
+            for (size_t i = 0; i < listeners.size(); ++i)
             {
-                auto const& callbacks = iter->second;
-
-                for (auto const& callback : callbacks)
-                    callback(&e);
+                if (listeners[i].address == &listener)
+                {
+                    listeners.erase(listeners.begin() + i);
+                    return true;
+                }
             }
+
+            return false;
+        }
+
+        template<typename Event, typename Listener>
+        inline bool IsListeningForEvent(Listener& listener)
+        {
+            auto& listeners = m_callbacks[std::type_index(typeid(Event))];
+
+            for (size_t i = 0; i < listeners.size(); ++i)
+            {
+                if (listeners[i].address == &listener)
+                    return true;
+            }
+
+            return false;
+        }
+
+        template<typename Event, typename Listener>
+        void OnEventDispatched(Listener& listener)
+        {
+            EventCallback<Event> callback(listener);
+            m_callbacks[std::type_index(typeid(Event))].emplace_back(nullptr, callback);
+        }
+
+    protected:
+        template<typename Event, typename... Args>
+        void DispatchEvent(Args&&... args)
+        {
+            auto const& listeners = m_callbacks[std::type_index(typeid(Event))];
+
+            if (listeners.empty())
+                return;
+
+            Event event = Event{ std::forward<Args>(args)... };
+
+            for (auto listener : listeners)
+                listener.callback(&event);
         }
 
     private:
-        static std::unordered_map<std::type_index, std::vector<std::function<void(Event const*)>>> s_mapCallbacks;
+        struct EventListener
+        {
+            explicit EventListener(void* address, std::function<void(void const*)> callback)
+                : address(address)
+                , callback(callback)
+            {
+            }
+
+            void* address;
+            std::function<void(void const*)> callback;
+        };
+
+    private:
+        std::unordered_map<std::type_index, std::vector<EventListener>> m_callbacks{ 20 };
 };

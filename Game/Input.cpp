@@ -53,40 +53,40 @@ bool Input::IsKeyboardConnected()
 
 void Input::OnMouseMoved(Vector2i const& position)
 {
-    DISPATCH_EVENT(EventMouseMoved(position, m_vecMousePosition));
+    DispatchEvent<EventMouseMoved>(position, m_vecMousePosition);
     m_vecMousePosition = position;
 }
 
 void Input::OnMouseMovedRaw(Vector2i const& position)
 {
-    DISPATCH_EVENT(EventMouseMovedRaw(position));
+    DispatchEvent<EventMouseMovedRaw>(position);
 }
 
 void Input::OnMouseWheelScrolled(Vector2i const& position, float const delta)
 {
     m_vecMousePosition = position;
-    DISPATCH_EVENT(EventMouseWheelScrolled(position, delta));
+    DispatchEvent<EventMouseWheelScrolled>(position, delta);
 }
 
 void Input::OnMouseButtonPressed(Vector2i const& position, MouseButton const button)
 {
     m_vecMousePosition = position;
     m_bMouseButtonStates[static_cast<int>(button)] = true;
-    DISPATCH_EVENT(EventMouseButtonPressed(position, button));
+    DispatchEvent<EventMouseButtonPressed>(position, button);
 }
 
 void Input::OnMouseButtonReleased(Vector2i const& position, MouseButton const button)
 {
     m_vecMousePosition = position;
     m_bMouseButtonStates[static_cast<int>(button)] = false;
-    DISPATCH_EVENT(EventMouseButtonReleased(position, button));
+    DispatchEvent<EventMouseButtonReleased>(position, button);
 }
 
 void Input::OnMouseButtonDoubleClicked(Vector2i const& position, MouseButton const button)
 {
     m_vecMousePosition = position;
     m_bMouseButtonStates[static_cast<int>(button)] = true;
-    DISPATCH_EVENT(EventMouseButtonDoubleClicked(position, button));
+    DispatchEvent<EventMouseButtonDoubleClicked>(position, button);
 }
 
 void Input::OnKeyPressed(size_t const key)
@@ -94,7 +94,7 @@ void Input::OnKeyPressed(size_t const key)
     if (key >= Key::None && key <= Key::OemClear)
     {
         m_bKeyStates[key] = true;
-        DISPATCH_EVENT(EventKeyPressed(key));
+        DispatchEvent<EventKeyPressed>(key);
     }
 }
 
@@ -103,7 +103,7 @@ void Input::OnKeyReleased(size_t const key)
     if (key >= Key::None && key <= Key::OemClear)
     {
         m_bKeyStates[key] = false;
-        DISPATCH_EVENT(EventKeyReleased(key));
+        DispatchEvent<EventKeyReleased>(key);
     }
 }
 

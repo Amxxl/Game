@@ -1,31 +1,11 @@
 #pragma once
 
-#include "Event.h"
-
-class EventKeyPressed : public Event
+struct EventKeyPressed
 {
-    public:
-        EventKeyPressed(size_t const key)
-            : m_iKey(key)
-        {
-        }
-
-        size_t GetKey() const { return m_iKey; }
-
-    private:
-        size_t m_iKey;
+    size_t key;
 };
 
-class EventKeyReleased : public Event
+struct EventKeyReleased
 {
-    public:
-        EventKeyReleased(size_t const key)
-            : m_iKey(key)
-        {
-        }
-
-        size_t GetKey() const { return m_iKey; }
-
-    private:
-        size_t m_iKey;
+    size_t key;
 };

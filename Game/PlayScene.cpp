@@ -94,6 +94,7 @@ bool PlayScene::Load(SceneManager* sceneManager, Window& window)
 
     model.Initialize("Data/10446_Palm_Tree_v1_max2010_iteration-2.obj", device, m_deviceContext);
     mdl.Initialize("Data/WoodCabin.dae", device, m_deviceContext);
+    grass.Initialize("Data/grass.obj", device, m_deviceContext);
 
     bridge.Initialize("Data/bridge.dae", device, m_deviceContext);
 
@@ -134,7 +135,7 @@ void PlayScene::Update(DX::StepTimer const& timer)
         DirectX::XMStoreFloat3(&forward, camera.GetForwardVector());
 
         player.AdjustPosition(forward.x * speed, 0.0f, forward.z * speed);
-        //player.SetRotation(0.0f, atan2(forward.x, forward.z), 0.0f);
+        player.SetRotation(0.0f, atan2(forward.x, forward.z), 0.0f);
         anim_index = 1;
     }
     else if (Input::IsKeyDown(Input::Key::S))
@@ -248,6 +249,8 @@ void PlayScene::Render()
     mdl.Draw(m_world * DirectX::XMMatrixTranslation(465.0f, 32.5f, 485.0f) * XMMatrixScaling(0.5f, 0.5f, 0.5f), camera.GetViewMatrix(), camera.GetProjectionMatrix());
     mdl.Draw(m_world * DirectX::XMMatrixScaling(0.7f, 0.7f, 0.7f) * DirectX::XMMatrixTranslation(365.0f, 32.5f, 485.0f) * XMMatrixScaling(0.5f, 0.5f, 0.5f), camera.GetViewMatrix(), camera.GetProjectionMatrix());
 
+    grass.Draw(m_world * DirectX::XMMatrixTranslation(0.0f, 0.0f, 0.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix());
+
     bridge.Draw(m_world * DirectX::XMMatrixRotationY(-77.0f * (3.1415f / 180.0f)) * DirectX::XMMatrixTranslation(257.0f, 58.0f, 381.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix());
 
     water->Draw(m_world * XMMatrixTranslation(256.0f, 0.0f, 256.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix(), XMVectorSet(0.0f, 0.0f, 1.0f, 0.7f));
@@ -298,9 +301,9 @@ void PlayScene::OnKeyPressed(size_t key)
         if (player.GetPositionFloat3().y >= 16.5f + 40.0f)
             in_jump = false;
     }
-    //std::ostringstream ss("");
-    //ss << "Key was pressed: " << key;
-    //Logger::Get()->info(ss.str().c_str());
+    std::ostringstream ss("");
+    ss << "Key was pressed: " << key;
+    Logger::Get()->info(ss.str().c_str());
 }
 
 void PlayScene::OnKeyReleased(size_t key)

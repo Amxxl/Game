@@ -4,102 +4,39 @@
 #include "Vector2.h"
 #include "Input.h"
 
-class EventMouseMoved : public Event
+struct EventMouseMoved
 {
-    public:
-        EventMouseMoved(Vector2i const& position, Vector2i const& old_position)
-            : m_vecPosition(position)
-            , m_vecOldPosition(old_position)
-        {
-        }
+    Vector2i GetDeltaPosition() const { return position - old_position; }
 
-        Vector2i GetPosition() const { return m_vecPosition; }
-        Vector2i GetOldPosition() const { return m_vecOldPosition; }
-        Vector2i GetPositionDelta() const { return m_vecPosition - m_vecOldPosition; }
-
-    private:
-        Vector2i m_vecPosition;
-        Vector2i m_vecOldPosition;
+    Vector2i position;
+    Vector2i old_position;
 };
 
-class EventMouseMovedRaw : public Event
+struct EventMouseMovedRaw
 {
-    public:
-        EventMouseMovedRaw(Vector2i const& position)
-            : m_vecPosition(position)
-        {
-        }
-
-        Vector2i GetPosition() const { return m_vecPosition; }
-
-    private:
-        Vector2i m_vecPosition;
+    Vector2i position;
 };
 
-class EventMouseWheelScrolled : public Event
+struct EventMouseWheelScrolled
 {
-    public:
-        EventMouseWheelScrolled(Vector2i const& position, float const delta)
-            : m_vecPosition(position)
-            , m_fDelta(delta)
-        {
-        }
-
-        Vector2i GetPosition() const { return m_vecPosition; }
-        float GetDelta() const { return m_fDelta; }
-
-    private:
-        Vector2i m_vecPosition;
-        float m_fDelta;
+    Vector2i position;
+    float delta;
 };
 
-class EventMouseButtonPressed : public Event
+struct EventMouseButtonPressed
 {
-    public:
-        EventMouseButtonPressed(Vector2i const& position, Input::MouseButton const button)
-            : m_vecPosition(position)
-            , m_button(button)
-        {
-        }
-
-        Input::MouseButton GetButton() const { return m_button; }
-        Vector2i GetPosition() const { return m_vecPosition; }
-
-    private:
-        Input::MouseButton m_button;
-        Vector2i m_vecPosition;
+    Vector2i position;
+    Input::MouseButton button;
 };
 
-class EventMouseButtonReleased : public Event
+struct EventMouseButtonReleased
 {
-    public:
-        EventMouseButtonReleased(Vector2i const& position, Input::MouseButton const button)
-            : m_vecPosition(position)
-            , m_button(button)
-        {
-        }
-
-        Input::MouseButton GetButton() const { return m_button; }
-        Vector2i GetPosition() const { return m_vecPosition; }
-
-    private:
-        Input::MouseButton m_button;
-        Vector2i m_vecPosition;
+    Vector2i position;
+    Input::MouseButton button;
 };
 
-class EventMouseButtonDoubleClicked : public Event
+struct EventMouseButtonDoubleClicked
 {
-    public:
-        EventMouseButtonDoubleClicked(Vector2i const& position, Input::MouseButton const button)
-            : m_vecPosition(position)
-            , m_button(button)
-        {
-        }
-
-        Input::MouseButton GetButton() const { return m_button; }
-        Vector2i GetPosition() const { return m_vecPosition; }
-
-    private:
-        Input::MouseButton m_button;
-        Vector2i m_vecPosition;
+    Vector2i position;
+    Input::MouseButton button;
 };

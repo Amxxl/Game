@@ -10,11 +10,13 @@ o//
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-Window::Window(std::wstring const& name, int width, int height) noexcept
-    : m_hInstance(GetModuleHandle(nullptr))
+Window::Window(std::wstring const& name, int width, int height, bool fullScreen) noexcept
+    : m_deviceResources(std::make_unique<DX::DeviceResources>())
+    , m_hInstance(GetModuleHandle(nullptr))
     , m_wsTitle(name)
     , m_iWidth(width)
     , m_iHeight(height)
+    , m_bFullScreen(fullScreen)
 {
     WNDCLASSEXW wcex = { };
     wcex.cbSize = sizeof(WNDCLASSEXW);
@@ -44,14 +46,16 @@ Window::Window(std::wstring const& name, int width, int height) noexcept
     int x = GetSystemMetrics(SM_CXSCREEN) / 2 - width / 2;
     int y = GetSystemMetrics(SM_CYSCREEN) / 2 - height / 2;
 
-
-    /* TIP: If default to fullscreen change to this:
-    m_hWindow = CreateWindowEx(WS_EX_TOPMOST, wcex.lpszClassName, m_wsTitle.c_str(),
-        WS_POPUP, x, y, width, height, nullptr, nullptr, m_hInstance, this);
-    */
-
-    m_hWindow = CreateWindowEx(WS_EX_APPWINDOW, wcex.lpszClassName, m_wsTitle.c_str(),
-        WS_OVERLAPPEDWINDOW, x, y, width, height, nullptr, nullptr, m_hInstance, this);
+    if (fullScreen)
+    {
+        m_hWindow = CreateWindowEx(WS_EX_TOPMOST, wcex.lpszClassName, m_wsTitle.c_str(),
+            WS_POPUP, x, y, width, height, nullptr, nullptr, m_hInstance, this);
+    }
+    else
+    {
+        m_hWindow = CreateWindowEx(WS_EX_APPWINDOW, wcex.lpszClassName, m_wsTitle.c_str(),
+            WS_OVERLAPPEDWINDOW, x, y, width, height, nullptr, nullptr, m_hInstance, this);
+    }
 
     if (!m_hWindow)
     {
@@ -59,12 +63,11 @@ Window::Window(std::wstring const& name, int width, int height) noexcept
         PostQuitMessage(2);
     }
 
-    m_deviceResources = std::make_unique<DX::DeviceResources>();
+    //m_deviceResources = std::make_unique<DX::DeviceResources>();
     m_deviceResources->RegisterDeviceNotify(this);
     m_deviceResources->SetWindow(m_hWindow, width, height);
 
-    // TIP: Change SW_SHOWDEFAULT to SW_SHOWMAXIMIZED to default to fullscreen.
-    ShowWindow(m_hWindow, SW_SHOWDEFAULT);
+    ShowWindow(m_hWindow, (fullScreen ? SW_SHOWMAXIMIZED : SW_SHOWDEFAULT));
 }
 
 Window::~Window()
@@ -122,7 +125,7 @@ LRESULT Window::HandleMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPa
     static bool s_in_suspend = false;
     static bool s_minimized = false;
     // TIP: Set s_fullscreen to true if defaulting to fullscreen.
-    static bool s_fullscreen = false;
+    static bool s_fullscreen = m_bFullScreen;//false;
 
     // @todo: Find a better way to handle this.
     Application* app = &Application::Get();
@@ -156,7 +159,7 @@ LRESULT Window::HandleMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPa
             m_iWidth = LOWORD(lParam);
             m_iHeight = HIWORD(lParam);
 
-            DISPATCH_EVENT(EventWindowResized(m_iWidth, m_iHeight));
+            DispatchEvent<EventWindowResized>(m_iWidth, m_iHeight);
 
             if (wParam == SIZE_MINIMIZED)
             {
@@ -346,7 +349,7 @@ LRESULT Window::HandleMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPa
                 input.OnMouseButtonDoubleClicked(position, Input::MouseButton::X2);
             break;
         }
-        case WM_MOUSEHOVER: // @todo: Do we need this?
+        case WM_MOUSEHOVER: // @todo: Do we need this? yes we need.
             break;
 
         case WM_POWERBROADCAST:
@@ -395,12 +398,21 @@ LRESULT Window::HandleMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPa
 
                     int width = 800;
                     int height = 600;
+
                     if (app)
                         app->GetDefaultSize(width, height);
 
+                    RECT rc = { 0, 0, static_cast<LONG>(width), static_cast<LONG>(height) };
+                    AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
+
+                    width = rc.right - rc.left;
+                    height = rc.bottom - rc.top;
+                    int x = GetSystemMetrics(SM_CXSCREEN) / 2 - width / 2;
+                    int y = GetSystemMetrics(SM_CYSCREEN) / 2 - height / 2;
+
                     ShowWindow(hWnd, SW_SHOWNORMAL);
 
-                    SetWindowPos(hWnd, HWND_TOP, 0, 0, width, height, SWP_NOMOVE | SWP_NOZORDER | SWP_FRAMECHANGED);
+                    SetWindowPos(hWnd, HWND_TOP, x, y, width, height, /*SWP_NOMOVE | */SWP_NOZORDER | SWP_FRAMECHANGED);
                 }
                 else
                 {

@@ -31,7 +31,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
         return 1;
 
     std::unique_ptr<Application> app = std::make_unique<Application>();
-    app->Initialize(800, 600);
+    app->Initialize(1366, 768);
 
     Logger::Get()->info("Application successfully initialized.");
     

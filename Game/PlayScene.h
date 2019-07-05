@@ -78,6 +78,7 @@ class PlayScene : public Scene
         Model model;
         Model mdl;
         Model bridge;
+        Model grass;
 
         //Camera camera;
         ThirdPersonCamera camera;

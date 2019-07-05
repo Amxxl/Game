@@ -39,13 +39,22 @@ class Application
         void OnWindowMoved();
         void OnWindowSizeChanged(int width, int height);
 
+        void OnEvent(EventKeyPressed const& event);
+        void OnEvent(EventKeyReleased const& event);
+        void OnEvent(EventMouseMoved const& event);
+        void OnEvent(EventMouseMovedRaw const& event);
+        void OnEvent(EventMouseWheelScrolled const& event);
+        void OnEvent(EventMouseButtonPressed const& event);
+        void OnEvent(EventMouseButtonReleased const& event);
+        void OnEvent(EventMouseButtonDoubleClicked const& event);
+
         // Properties
         void GetDefaultSize(int& width, int& height) const;
 
-        static Application& Get() { return *s_instance; }
-
         void CreateDeviceDependentResources();
         void CreateWindowSizeDependentResources();
+
+        static Application& Get() { return *s_instance; }
 
     private:
         void Update(DX::StepTimer const& timer);
