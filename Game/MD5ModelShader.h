@@ -39,7 +39,7 @@ class MD5ModelShader
         Microsoft::WRL::ComPtr<ID3D11VertexShader> vertexShader;
         Microsoft::WRL::ComPtr<ID3D11PixelShader> pixelShader;
         Microsoft::WRL::ComPtr<ID3D11InputLayout> inputLayout;
-        ConstantBuffer<MatrixBufferType> constantBuffer;
-        ConstantBuffer<LightBufferType> lightBuffer;
+        DX::ConstantBuffer<MatrixBufferType> constantBuffer;
+        DX::ConstantBuffer<LightBufferType> lightBuffer;
 };
 

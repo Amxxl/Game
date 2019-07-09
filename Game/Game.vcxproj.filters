@@ -17,9 +17,6 @@
     <Filter Include="Assets\Shaders">
       <UniqueIdentifier>{31f9c28e-180b-4810-a8a9-4b797f1d7695}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\MD5Model">
-      <UniqueIdentifier>{1ad24ecb-6b22-4a55-ab97-de09f683ea53}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Assets\Models">
       <UniqueIdentifier>{95107d52-2e76-449d-b2d0-6eafb2b0e416}</UniqueIdentifier>
     </Filter>
@@ -34,9 +31,6 @@
     </Filter>
     <Filter Include="Assets\Images">
       <UniqueIdentifier>{2c843e4a-9af7-4b38-9bb2-f6a92087244f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Terrain">
-      <UniqueIdentifier>{d8b2dca3-4a68-4720-8c71-d05bd05bdf37}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine">
       <UniqueIdentifier>{b31bf13c-2680-4b6b-bad5-200b1118fa55}</UniqueIdentifier>
@@ -143,6 +137,27 @@
     <Filter Include="Engine\System\Input">
       <UniqueIdentifier>{290517e8-aeb4-4ae3-8917-e15e2f08b3b1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Core">
+      <UniqueIdentifier>{034ac408-a3a1-48ea-a112-9d93b4941b38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Terrain">
+      <UniqueIdentifier>{d8b2dca3-4a68-4720-8c71-d05bd05bdf37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\MD5Model">
+      <UniqueIdentifier>{1ad24ecb-6b22-4a55-ab97-de09f683ea53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Drawable">
+      <UniqueIdentifier>{8c6d0d66-e88e-4782-9c71-a812b2ab94f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Pipeline">
+      <UniqueIdentifier>{c3829a29-e6fe-42aa-903e-92ef5736ea12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Pipeline\Bindable">
+      <UniqueIdentifier>{410135f5-62ba-4a74-a968-459b367944e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Pipeline\Bindable\Bindables">
+      <UniqueIdentifier>{d8acbc91-3fa1-4f2a-9efa-261f1a6acfa6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene.h">
@@ -187,9 +202,6 @@
     <ClInclude Include="QuadTree.h">
       <Filter>Game\Terrain</Filter>
     </ClInclude>
-    <ClInclude Include="IntegerTypes.h">
-      <Filter>Common</Filter>
-    </ClInclude>
     <ClInclude Include="IndexBuffer.h">
       <Filter>Engine\Graphics\Buffers</Filter>
     </ClInclude>
@@ -213,12 +225,6 @@
     </ClInclude>
     <ClInclude Include="Application.h">
       <Filter>Engine\System</Filter>
-    </ClInclude>
-    <ClInclude Include="Model.h">
-      <Filter>Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Mesh.h">
-      <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="StringHelper.h">
       <Filter>Engine\System</Filter>
@@ -712,8 +718,47 @@
     <ClInclude Include="Audio.h">
       <Filter>Engine\Audio</Filter>
     </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics.h">
+      <Filter>Engine\Physics</Filter>
+    </ClInclude>
     <ClInclude Include="ResourceManager.h">
-      <Filter>Engine</Filter>
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="IntegerTypes.h">
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Bindable.h">
+      <Filter>Engine\Graphics\Pipeline\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Engine\Graphics\Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="Drawable.h">
+      <Filter>Engine\Graphics\Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="Vertex.h">
+      <Filter>Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="ConstantBuffers.h">
+      <Filter>Engine\Graphics\Pipeline\Bindable\Bindables</Filter>
+    </ClInclude>
+    <ClInclude Include="InputLayout.h">
+      <Filter>Engine\Graphics\Pipeline\Bindable\Bindables</Filter>
+    </ClInclude>
+    <ClInclude Include="PixelShader.h">
+      <Filter>Engine\Graphics\Pipeline\Bindable\Bindables</Filter>
+    </ClInclude>
+    <ClInclude Include="Topology.h">
+      <Filter>Engine\Graphics\Pipeline\Bindable\Bindables</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexShader.h">
+      <Filter>Engine\Graphics\Pipeline\Bindable\Bindables</Filter>
+    </ClInclude>
+    <ClInclude Include="BindableCommon.h">
+      <Filter>Engine\Graphics\Pipeline\Bindable</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -772,12 +817,6 @@
       <Filter>Engine\System</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Model.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Mesh.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
     <ClCompile Include="StringHelper.cpp">
       <Filter>Engine\System</Filter>
     </ClCompile>
@@ -820,8 +859,38 @@
     <ClCompile Include="Audio.cpp">
       <Filter>Engine\Audio</Filter>
     </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics.cpp">
+      <Filter>Engine\Physics</Filter>
+    </ClCompile>
     <ClCompile Include="ResourceManager.cpp">
-      <Filter>Engine</Filter>
+      <Filter>Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Bindable.cpp">
+      <Filter>Engine\Graphics\Pipeline\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Engine\Graphics\Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="Drawable.cpp">
+      <Filter>Engine\Graphics\Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="Vertex.cpp">
+      <Filter>Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="InputLayout.cpp">
+      <Filter>Engine\Graphics\Pipeline\Bindable\Bindables</Filter>
+    </ClCompile>
+    <ClCompile Include="PixelShader.cpp">
+      <Filter>Engine\Graphics\Pipeline\Bindable\Bindables</Filter>
+    </ClCompile>
+    <ClCompile Include="Topology.cpp">
+      <Filter>Engine\Graphics\Pipeline\Bindable\Bindables</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexShader.cpp">
+      <Filter>Engine\Graphics\Pipeline\Bindable\Bindables</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -895,6 +964,9 @@
       <Filter>Assets\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="MD5ModelPixelShader.hlsl">
+      <Filter>Assets\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="terrain.hlsl">
       <Filter>Assets\Shaders</Filter>
     </FxCompile>
   </ItemGroup>

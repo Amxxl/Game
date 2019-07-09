@@ -2,17 +2,17 @@
 #include "StringHelper.h"
 
 
-std::wstring StringHelper::StringToWide(std::string_view str)
+std::wstring StringHelper::StringToWide(std::string const& str)
 {
     return std::wstring(str.begin(), str.end());
 }
 
-std::string StringHelper::WideToString(std::wstring_view wstr)
+std::string StringHelper::WideToString(std::wstring const& wstr)
 {
     return std::string(wstr.begin(), wstr.end());
 }
 
-std::string StringHelper::GetDirectoryFromPath(std::string_view filePath)
+std::string StringHelper::GetDirectoryFromPath(std::string const& filePath)
 {
     size_t off1 = filePath.find_last_of('\\');
     size_t off2 = filePath.find_last_of('/');
@@ -31,7 +31,7 @@ std::string StringHelper::GetDirectoryFromPath(std::string_view filePath)
     return std::string(filePath.substr(0, std::max(off1, off2)));
 }
 
-std::wstring StringHelper::GetDirectoryFromPath(std::wstring_view filePath)
+std::wstring StringHelper::GetDirectoryFromPath(std::wstring const& filePath)
 {
     size_t off1 = filePath.find_last_of('\\');
     size_t off2 = filePath.find_last_of('/');
@@ -50,7 +50,7 @@ std::wstring StringHelper::GetDirectoryFromPath(std::wstring_view filePath)
     return std::wstring(filePath.substr(0, std::max(off1, off2)));
 }
 
-std::string StringHelper::GetFileExtension(std::string_view fileName)
+std::string StringHelper::GetFileExtension(std::string const& fileName)
 {
     size_t off = fileName.find_last_of('.');
 
@@ -60,7 +60,7 @@ std::string StringHelper::GetFileExtension(std::string_view fileName)
     return std::string(fileName.substr(off + 1));
 }
 
-std::wstring StringHelper::GetFileExtension(std::wstring_view fileName)
+std::wstring StringHelper::GetFileExtension(std::wstring const& fileName)
 {
     size_t off = fileName.find_last_of('.');
 

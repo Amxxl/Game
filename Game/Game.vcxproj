@@ -101,8 +101,8 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3d11.lib;dxgi.lib;dxguid.lib;d3dcompiler.lib;uuid.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;odbc32.lib;odbccp32.lib;assimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>D:\sources\Game\External\Assimp\lib;D:\sources\Game\External\FMOD\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>d3d11.lib;dxgi.lib;dxguid.lib;d3dcompiler.lib;uuid.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;odbc32.lib;odbccp32.lib;assimp.lib;%(AdditionalDependencies);reactphysics3d.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\sources\Game\External\Assimp\lib;D:\sources\Game\External\FMOD\lib;D:\sources\Game\External\ReactPhysics3D\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -122,8 +122,8 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3d11.lib;dxgi.lib;dxguid.lib;d3dcompiler.lib;uuid.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;odbc32.lib;odbccp32.lib;assimp.lib;fmod64_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>D:\sources\Game\External\Assimp\lib;D:\sources\Game\External\FMOD\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>d3d11.lib;dxgi.lib;dxguid.lib;d3dcompiler.lib;uuid.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;odbc32.lib;odbccp32.lib;assimp.lib;fmod64_vc.lib;%(AdditionalDependencies);reactphysics3d.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\sources\Game\External\Assimp\lib;D:\sources\Game\External\FMOD\lib;D:\sources\Game\External\ReactPhysics3D\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -148,8 +148,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>d3d11.lib;dxgi.lib;dxguid.lib;d3dcompiler.lib;uuid.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;odbc32.lib;odbccp32.lib;assimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>D:\sources\Game\External\Assimp\lib;D:\sources\Game\External\FMOD\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>d3d11.lib;dxgi.lib;dxguid.lib;d3dcompiler.lib;uuid.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;odbc32.lib;odbccp32.lib;assimp.lib;%(AdditionalDependencies);reactphysics3d.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\sources\Game\External\Assimp\lib;D:\sources\Game\External\FMOD\lib;D:\sources\Game\External\ReactPhysics3D\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -173,8 +173,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>d3d11.lib;dxgi.lib;dxguid.lib;d3dcompiler.lib;uuid.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;odbc32.lib;odbccp32.lib;assimp.lib;fmod64_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>D:\sources\Game\External\Assimp\lib;D:\sources\Game\External\FMOD\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>d3d11.lib;dxgi.lib;dxguid.lib;d3dcompiler.lib;uuid.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;odbc32.lib;odbccp32.lib;assimp.lib;fmod64_vc.lib;%(AdditionalDependencies);reactphysics3d.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\sources\Game\External\Assimp\lib;D:\sources\Game\External\FMOD\lib;D:\sources\Game\External\ReactPhysics3D\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -273,11 +273,15 @@
     <ClInclude Include="..\External\ReactPhysics3D\include\utils\Logger.h" />
     <ClInclude Include="..\External\ReactPhysics3D\include\utils\Profiler.h" />
     <ClInclude Include="Audio.h" />
+    <ClInclude Include="Bindable.h" />
+    <ClInclude Include="BindableCommon.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="ConstantBuffer.h" />
+    <ClInclude Include="ConstantBuffers.h" />
     <ClInclude Include="ConstantBufferTypes.h" />
     <ClInclude Include="DeviceResources.h" />
+    <ClInclude Include="Drawable.h" />
     <ClInclude Include="DynamicVertexBuffer.h" />
     <ClInclude Include="Event.h" />
     <ClInclude Include="Frustum.h" />
@@ -285,6 +289,7 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="InputLayout.h" />
     <ClInclude Include="IntegerTypes.h" />
     <ClInclude Include="KeyEvents.h" />
     <ClInclude Include="Logger.h" />
@@ -296,6 +301,8 @@
     <ClInclude Include="Model.h" />
     <ClInclude Include="MouseEvents.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="Physics.h" />
+    <ClInclude Include="PixelShader.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="QuadTree.h" />
     <ClInclude Include="RenderableGameObject.h" />
@@ -362,24 +369,30 @@
     <ClInclude Include="TerrainShader.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="ThirdPersonCamera.h" />
+    <ClInclude Include="Topology.h" />
     <ClInclude Include="Vector2.h" />
     <ClInclude Include="Vector3.h" />
+    <ClInclude Include="Vertex.h" />
     <ClInclude Include="VertexBuffer.h" />
     <ClInclude Include="VertexBufferTypes.h" />
+    <ClInclude Include="VertexShader.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="WindowEvents.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Audio.cpp" />
+    <ClCompile Include="Bindable.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="ConstantBufferTypes.cpp" />
     <ClCompile Include="DeviceResources.cpp" />
+    <ClCompile Include="Drawable.cpp" />
     <ClCompile Include="Event.cpp" />
     <ClCompile Include="Frustum.cpp" />
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Input.cpp" />
+    <ClCompile Include="InputLayout.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MD5Loader.cpp" />
@@ -394,6 +407,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Physics.cpp" />
+    <ClCompile Include="PixelShader.cpp" />
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="QuadTree.cpp" />
     <ClCompile Include="RenderableGameObject.cpp" />
@@ -408,8 +423,11 @@
     <ClCompile Include="TerrainShader.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="ThirdPersonCamera.cpp" />
+    <ClCompile Include="Topology.cpp" />
     <ClCompile Include="Vector3.cpp" />
+    <ClCompile Include="Vertex.cpp" />
     <ClCompile Include="VertexBufferTypes.cpp" />
+    <ClCompile Include="VertexShader.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -496,6 +514,17 @@
       <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)%(Filename).shh</HeaderFileOutput>
       <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)%(Filename).shh</HeaderFileOutput>
       <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)%(Filename).shh</HeaderFileOutput>
+    </FxCompile>
+    <FxCompile Include="terrain.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">TerrainVertexShader</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">TerrainVertexShader</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">TerrainVertexShader</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">TerrainVertexShader</EntryPointName>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)%(Filename).vs</ObjectFileOutput>
     </FxCompile>
     <FxCompile Include="TerrainPixelShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>

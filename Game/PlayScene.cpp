@@ -28,7 +28,7 @@ PlayScene::~PlayScene()
 
 bool PlayScene::Load(SceneManager* sceneManager, Window& window)
 {
-    m_deviceContext = window.GetDeviceResources()->GetD3DDeviceContext();
+    m_deviceContext = window.GetDeviceResources()->GetDeviceContext();
 
     camera.SetProjectionValues(90.0f, 800.0f / 600.0f, 0.1f, 1500.0f);
     camera.SetPosition(0.0f, 20.0f, 0.0f);
@@ -94,8 +94,6 @@ bool PlayScene::Load(SceneManager* sceneManager, Window& window)
 
     model.Initialize("Data/10446_Palm_Tree_v1_max2010_iteration-2.obj", device, m_deviceContext);
     mdl.Initialize("Data/WoodCabin.dae", device, m_deviceContext);
-    grass.Initialize("Data/grass.obj", device, m_deviceContext);
-
     bridge.Initialize("Data/bridge.dae", device, m_deviceContext);
 
     spriteBatch = std::make_unique<DirectX::SpriteBatch>(m_deviceContext);
@@ -129,6 +127,7 @@ void PlayScene::Update(DX::StepTimer const& timer)
     if (Input::IsMouseButtonDown(Input::MouseButton::Right))
         player.SetRotation(0.0f, atan2(add.x, add.z), 0.0f);
 
+
     if (Input::IsKeyDown(Input::Key::W) || Input::IsMouseButtonDown(Input::MouseButton::Left) && Input::IsMouseButtonDown(Input::MouseButton::Right))
     {
         Vector3f forward;
@@ -155,6 +154,7 @@ void PlayScene::Update(DX::StepTimer const& timer)
         player.AdjustPosition(forward.x, 0.0f, forward.z);
         player.SetRotation(0.0f, atan2(forward.x, forward.z), 0.0f);
         anim_index = 1;
+
     }
     else if (Input::IsKeyDown(Input::Key::D))
     {
@@ -165,18 +165,13 @@ void PlayScene::Update(DX::StepTimer const& timer)
         player.SetRotation(0.0f, atan2(forward.x, forward.z), 0.0f);
         anim_index = 1;
     }
+
     else anim_index = 0;
 
-    //if (Input::IsKeyDown(Input::Key::Space))
-    //    camera.AdjustPosition(0.0f, deltaTime * cameraSpeed, 0.0f);
-    //else if (Input::IsKeyDown(Input::Key::Z))
-    //    camera.AdjustPosition(0.0f, -deltaTime * cameraSpeed, 0.0f);
-
-
     if (Input::IsKeyDown(Input::Key::NumPad0))
-        anim_index = 0;
+        anim_index = 11;
     else if (Input::IsKeyDown(Input::Key::NumPad1))
-        anim_index = 1;
+        anim_index = 12;
     else if (Input::IsKeyDown(Input::Key::NumPad2))
         anim_index = 2;
     else if (Input::IsKeyDown(Input::Key::NumPad3))
@@ -203,24 +198,25 @@ void PlayScene::Update(DX::StepTimer const& timer)
     if (Input::IsKeyDown(Input::Key::D3))
         anim_index = 5;
 
-    static float velocity = 20.0f;
+    static float velocity = 15.0f;
 
     if (player.GetPositionFloat3().y > 16.5f)
     {
-        player.AdjustPosition(0.0f, -deltaTime * velocity, 0.0f);
-        velocity += 1.0f;
+        player.AdjustPosition(0.0f, -(deltaTime * velocity), 0.0f);
+        velocity += 15.0f * deltaTime;
     }
-    else
-        velocity = 20.0f;
-    
 
     if (player.GetPositionFloat3().y <= 16.5f)
+    {
+        velocity = 15.0f;
+        in_jump = false;
         player.SetPosition(player.GetPositionFloat3().x, 16.5f, player.GetPositionFloat3().z);
-
+    }
 
     player.Update(m_deviceContext, deltaTime, anim_index);
     npc.Update(m_deviceContext, deltaTime, 0);
     monster.Update(m_deviceContext, deltaTime, 0);
+
 
     camera.SetOrigin(player.GetPositionFloat3());
     camera.UpdateMatrix();
@@ -243,13 +239,13 @@ void PlayScene::Render()
     model.Draw(m_world * DirectX::XMMatrixScaling(0.08f, 0.08f, 0.08f) * DirectX::XMMatrixRotationX(3.1415f / 2.0f) * DirectX::XMMatrixTranslation(200.0f, 16.0f, 200.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix());
 
     player.Draw(m_deviceContext, camera.GetViewMatrix(), camera.GetProjectionMatrix());
+
     npc.Draw(m_deviceContext, camera.GetViewMatrix(), camera.GetProjectionMatrix());
+
     monster.Draw(m_deviceContext, camera.GetViewMatrix(), camera.GetProjectionMatrix());
 
     mdl.Draw(m_world * DirectX::XMMatrixTranslation(465.0f, 32.5f, 485.0f) * XMMatrixScaling(0.5f, 0.5f, 0.5f), camera.GetViewMatrix(), camera.GetProjectionMatrix());
     mdl.Draw(m_world * DirectX::XMMatrixScaling(0.7f, 0.7f, 0.7f) * DirectX::XMMatrixTranslation(365.0f, 32.5f, 485.0f) * XMMatrixScaling(0.5f, 0.5f, 0.5f), camera.GetViewMatrix(), camera.GetProjectionMatrix());
-
-    grass.Draw(m_world * DirectX::XMMatrixTranslation(0.0f, 0.0f, 0.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix());
 
     bridge.Draw(m_world * DirectX::XMMatrixRotationY(-77.0f * (3.1415f / 180.0f)) * DirectX::XMMatrixTranslation(257.0f, 58.0f, 381.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix());
 
@@ -293,13 +289,11 @@ void PlayScene::Render()
 
 void PlayScene::OnKeyPressed(size_t key)
 {
-    if (in_jump || Input::IsKeyDown(Input::Key::Space))
+    if (!in_jump && key == Input::Key::Space)
     {
         in_jump = true;
-        player.AdjustPosition(0.0f, 20.0f, 0.0f);
 
-        if (player.GetPositionFloat3().y >= 16.5f + 40.0f)
-            in_jump = false;
+        player.AdjustPosition(0.0f, 10.0f, 0.0f);
     }
     std::ostringstream ss("");
     ss << "Key was pressed: " << key;

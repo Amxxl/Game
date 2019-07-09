@@ -26,7 +26,7 @@ class EventDispatcher
         template<typename Event, typename Listener>
         void AddEventListener(Listener& listener)
         {
-            assert(!IsListeningForEvent<Event>(listener)); // Attempted to listen to the same event more than once.
+            assert(!IsListeningForEvent<Event>(listener) && "Attempted to add same event to the same listener.");
             void(Listener::*listen_func)(Event const&) = &Listener::OnEvent;
 
             auto callback = EventCallback<Event>(std::bind(listen_func, &listener, std::placeholders::_1));

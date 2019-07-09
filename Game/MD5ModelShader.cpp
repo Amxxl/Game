@@ -80,7 +80,7 @@ void MD5ModelShader::RenderShader(ID3D11DeviceContext* deviceContext, UINT numIn
     ID3D11RasterizerState* cullNone = states->CullNone();
     deviceContext->RSSetState(cullNone);
 
-    ID3D11SamplerState* sampler = states->LinearClamp();
+    ID3D11SamplerState* sampler = states->LinearWrap();
     deviceContext->PSSetSamplers(0, 1, &sampler);
 
     deviceContext->DrawIndexed(numIndices, 0, 0);

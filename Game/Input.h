@@ -210,6 +210,11 @@ class Input : public EventDispatcher
         static bool IsMouseConnected();
         static bool IsKeyboardConnected();
 
+        bool IsMouseInWindow() const { return m_bMouseInWindow; }
+
+        bool IsAutorepeatEnabled() const { return m_bEnableAutorepeat; }
+        bool SetAutorepeatEnabled(bool enabled) { m_bEnableAutorepeat = enabled; }
+
     private:
         void OnMouseMoved(Vector2i const& position);
         void OnMouseMovedRaw(Vector2i const& position);
@@ -217,9 +222,11 @@ class Input : public EventDispatcher
         void OnMouseButtonPressed(Vector2i const& position, MouseButton const button);
         void OnMouseButtonReleased(Vector2i const& position, MouseButton const button);
         void OnMouseButtonDoubleClicked(Vector2i const& position, MouseButton const button);
+        void OnMouseEnter();
+        void OnMouseLeave();
 
     private:
-        void OnKeyPressed(size_t const key);
+        void OnKeyPressed(size_t const key, bool repeated);
         void OnKeyReleased(size_t const key);
 
 
@@ -231,5 +238,9 @@ class Input : public EventDispatcher
         static bool m_bKeyStates[MaxKeys];
 
         static bool m_bMouseButtonStates[static_cast<int>(MouseButton::TOTAL_MOUSE_BUTTONS)];
+
+    private:
         Vector2i m_vecMousePosition;
+        bool m_bMouseInWindow = false;
+        bool m_bEnableAutorepeat = false;
 };

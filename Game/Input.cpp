@@ -89,12 +89,30 @@ void Input::OnMouseButtonDoubleClicked(Vector2i const& position, MouseButton con
     DispatchEvent<EventMouseButtonDoubleClicked>(position, button);
 }
 
-void Input::OnKeyPressed(size_t const key)
+void Input::OnMouseEnter()
+{
+    Logger::Get()->info("Mouse enter");
+    m_bMouseInWindow = true;
+    DispatchEvent<EventMouseEnter>();
+}
+
+void Input::OnMouseLeave()
+{
+    Logger::Get()->info("Mouse leave");
+    m_bMouseInWindow = false;
+    DispatchEvent<EventMouseLeave>();
+}
+
+void Input::OnKeyPressed(size_t const key, bool repeated)
 {
     if (key >= Key::None && key <= Key::OemClear)
     {
+        // Don't do autorepeat if it's disabled.
+        if (repeated && !IsAutorepeatEnabled())
+            return;
+
         m_bKeyStates[key] = true;
-        DispatchEvent<EventKeyPressed>(key);
+        DispatchEvent<EventKeyPressed>(key, repeated);
     }
 }
 

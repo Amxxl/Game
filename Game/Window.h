@@ -10,11 +10,12 @@
 class Window : public DX::IDeviceNotify, public EventDispatcher
 {
     public:
-        Window() = default;
+        Window() = delete;
         explicit Window(std::wstring const& name, int width, int height, bool fullScreen = false) noexcept;
         ~Window();
-        Window(Window const&) = default;
-        Window& operator=(Window const&) = default;
+        Window(Window const&) = delete;
+        Window& operator=(Window const&) = delete;
+        Window(Window&&) = delete;
 
         void SetTitle(std::wstring const& title);
         HWND GetHandle() const { return m_hWindow; }

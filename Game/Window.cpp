@@ -18,6 +18,8 @@ Window::Window(std::wstring const& name, int width, int height, bool fullScreen)
     , m_iHeight(height)
     , m_bFullScreen(fullScreen)
 {
+    m_deviceResources->RegisterDeviceNotify(this);
+
     WNDCLASSEXW wcex = { };
     wcex.cbSize = sizeof(WNDCLASSEXW);
     wcex.style = CS_VREDRAW | CS_HREDRAW | CS_OWNDC;
@@ -63,8 +65,6 @@ Window::Window(std::wstring const& name, int width, int height, bool fullScreen)
         PostQuitMessage(2);
     }
 
-    //m_deviceResources = std::make_unique<DX::DeviceResources>();
-    m_deviceResources->RegisterDeviceNotify(this);
     m_deviceResources->SetWindow(m_hWindow, width, height);
 
     ShowWindow(m_hWindow, (fullScreen ? SW_SHOWMAXIMIZED : SW_SHOWDEFAULT));
@@ -239,6 +239,13 @@ LRESULT Window::HandleMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPa
             }
             return DefWindowProc(hWnd, message, wParam, lParam);
         }
+        case WM_MOUSEHOVER:
+            input.OnMouseEnter();
+            break;
+        case WM_MOUSELEAVE:
+            input.OnMouseLeave();
+            break;
+
         case WM_MOUSEMOVE:
         {
             if (io.WantCaptureMouse)
@@ -349,9 +356,6 @@ LRESULT Window::HandleMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPa
                 input.OnMouseButtonDoubleClicked(position, Input::MouseButton::X2);
             break;
         }
-        case WM_MOUSEHOVER: // @todo: Do we need this? yes we need.
-            break;
-
         case WM_POWERBROADCAST:
         {
             switch (wParam)
@@ -427,7 +431,7 @@ LRESULT Window::HandleMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPa
                 s_fullscreen = !s_fullscreen;
             }
 
-            input.OnKeyPressed(static_cast<size_t>(wParam));
+            input.OnKeyPressed(static_cast<size_t>(wParam), lParam & 0x40000000);
             break;
         }
         case WM_KEYUP:

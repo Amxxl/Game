@@ -27,8 +27,8 @@ class QuadTree
         {
             float positionX, positionZ, width;
             int triangleCount;
-            VertexBuffer<DirectX::VertexPositionNormalColorDualTexture> vertexBuffer;
-            IndexBuffer<unsigned long> indexBuffer;
+            DX::VertexBuffer<DirectX::VertexPositionNormalColorDualTexture> vertexBuffer;
+            DX::IndexBuffer<unsigned long> indexBuffer;
             NodeType* nodes[4];
         };
 

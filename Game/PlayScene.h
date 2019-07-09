@@ -78,7 +78,6 @@ class PlayScene : public Scene
         Model model;
         Model mdl;
         Model bridge;
-        Model grass;
 
         //Camera camera;
         ThirdPersonCamera camera;
@@ -88,7 +87,7 @@ class PlayScene : public Scene
         bool in_jump;
 
         DirectX::XMFLOAT3 playerPos;
-        //float rota;
+
     private:
         bool paused;
 };

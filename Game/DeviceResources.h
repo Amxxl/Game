@@ -39,20 +39,20 @@ namespace DX
         RECT GetOutputSize() const { return m_outputSize; }
 
         // Direct3D Accessors.
-        ID3D11Device1*          GetD3DDevice() const                    { return m_d3dDevice.Get(); }
-        ID3D11DeviceContext1*   GetD3DDeviceContext() const             { return m_d3dContext.Get(); }
-        IDXGISwapChain1*        GetSwapChain() const                    { return m_swapChain.Get(); }
-        D3D_FEATURE_LEVEL       GetDeviceFeatureLevel() const           { return m_d3dFeatureLevel; }
-        ID3D11Texture2D*        GetRenderTarget() const                 { return m_renderTarget.Get(); }
-        ID3D11Texture2D*        GetDepthStencil() const                 { return m_depthStencil.Get(); }
-        ID3D11RenderTargetView*	GetRenderTargetView() const             { return m_d3dRenderTargetView.Get(); }
-        ID3D11DepthStencilView* GetDepthStencilView() const             { return m_d3dDepthStencilView.Get(); }
-        DXGI_FORMAT             GetBackBufferFormat() const             { return m_backBufferFormat; }
-        DXGI_FORMAT             GetDepthBufferFormat() const            { return m_depthBufferFormat; }
-        D3D11_VIEWPORT          GetScreenViewport() const               { return m_screenViewport; }
-        UINT                    GetBackBufferCount() const              { return m_backBufferCount; }
-        DXGI_COLOR_SPACE_TYPE   GetColorSpace() const                   { return m_colorSpace; }
-        unsigned int            GetDeviceOptions() const                { return m_options; }
+        ID3D11Device1*          GetDevice() const             { return m_d3dDevice.Get(); }
+        ID3D11DeviceContext1*   GetDeviceContext() const      { return m_d3dContext.Get(); }
+        IDXGISwapChain1*        GetSwapChain() const          { return m_swapChain.Get(); }
+        D3D_FEATURE_LEVEL       GetDeviceFeatureLevel() const { return m_d3dFeatureLevel; }
+        ID3D11Texture2D*        GetRenderTarget() const       { return m_renderTarget.Get(); }
+        ID3D11Texture2D*        GetDepthStencil() const       { return m_depthStencil.Get(); }
+        ID3D11RenderTargetView*	GetRenderTargetView() const   { return m_d3dRenderTargetView.Get(); }
+        ID3D11DepthStencilView* GetDepthStencilView() const   { return m_d3dDepthStencilView.Get(); }
+        DXGI_FORMAT             GetBackBufferFormat() const   { return m_backBufferFormat; }
+        DXGI_FORMAT             GetDepthBufferFormat() const  { return m_depthBufferFormat; }
+        D3D11_VIEWPORT          GetScreenViewport() const     { return m_screenViewport; }
+        UINT                    GetBackBufferCount() const    { return m_backBufferCount; }
+        DXGI_COLOR_SPACE_TYPE   GetColorSpace() const         { return m_colorSpace; }
+        unsigned int            GetDeviceOptions() const      { return m_options; }
 
         // Performance events
         void PIXBeginEvent(_In_z_ const wchar_t* name)
@@ -76,37 +76,37 @@ namespace DX
         void UpdateColorSpace();
 
         // Direct3D objects.
-        Microsoft::WRL::ComPtr<IDXGIFactory2>               m_dxgiFactory;
-        Microsoft::WRL::ComPtr<ID3D11Device1>               m_d3dDevice;
-        Microsoft::WRL::ComPtr<ID3D11DeviceContext1>        m_d3dContext;
-        Microsoft::WRL::ComPtr<IDXGISwapChain1>             m_swapChain;
-        Microsoft::WRL::ComPtr<ID3DUserDefinedAnnotation>   m_d3dAnnotation;
+        Microsoft::WRL::ComPtr<IDXGIFactory2>                 m_dxgiFactory;
+        Microsoft::WRL::ComPtr<ID3D11Device1>                 m_d3dDevice;
+        Microsoft::WRL::ComPtr<ID3D11DeviceContext1>          m_d3dContext;
+        Microsoft::WRL::ComPtr<IDXGISwapChain1>               m_swapChain;
+        Microsoft::WRL::ComPtr<ID3DUserDefinedAnnotation>     m_d3dAnnotation;
 
         // Direct3D rendering objects. Required for 3D.
-        Microsoft::WRL::ComPtr<ID3D11Texture2D>         m_renderTarget;
-        Microsoft::WRL::ComPtr<ID3D11Texture2D>         m_depthStencil;
-        Microsoft::WRL::ComPtr<ID3D11RenderTargetView>  m_d3dRenderTargetView;
-        Microsoft::WRL::ComPtr<ID3D11DepthStencilView>  m_d3dDepthStencilView;
-        D3D11_VIEWPORT                                  m_screenViewport;
+        Microsoft::WRL::ComPtr<ID3D11Texture2D>               m_renderTarget;
+        Microsoft::WRL::ComPtr<ID3D11Texture2D>               m_depthStencil;
+        Microsoft::WRL::ComPtr<ID3D11RenderTargetView>        m_d3dRenderTargetView;
+        Microsoft::WRL::ComPtr<ID3D11DepthStencilView>        m_d3dDepthStencilView;
+        D3D11_VIEWPORT                                        m_screenViewport;
 
         // Direct3D properties.
-        DXGI_FORMAT                                     m_backBufferFormat;
-        DXGI_FORMAT                                     m_depthBufferFormat;
-        UINT                                            m_backBufferCount;
-        D3D_FEATURE_LEVEL                               m_d3dMinFeatureLevel;
+        DXGI_FORMAT                                           m_backBufferFormat;
+        DXGI_FORMAT                                           m_depthBufferFormat;
+        UINT                                                  m_backBufferCount;
+        D3D_FEATURE_LEVEL                                     m_d3dMinFeatureLevel;
 
         // Cached device properties.
-        HWND                                            m_window;
-        D3D_FEATURE_LEVEL                               m_d3dFeatureLevel;
-        RECT                                            m_outputSize;
+        HWND                                                  m_window;
+        D3D_FEATURE_LEVEL                                     m_d3dFeatureLevel;
+        RECT                                                  m_outputSize;
 
         // HDR Support
-        DXGI_COLOR_SPACE_TYPE                           m_colorSpace;
+        DXGI_COLOR_SPACE_TYPE                                 m_colorSpace;
 
         // DeviceResources options (see flags above)
-        unsigned int                                    m_options;
+        unsigned int                                          m_options;
 
         // The IDeviceNotify can be held directly as it owns the DeviceResources.
-        IDeviceNotify*                                  m_deviceNotify;
+        IDeviceNotify*                                        m_deviceNotify;
     };
 }

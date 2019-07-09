@@ -40,3 +40,6 @@ struct EventMouseButtonDoubleClicked
     Vector2i position;
     Input::MouseButton button;
 };
+
+struct EventMouseEnter {};
+struct EventMouseLeave {};

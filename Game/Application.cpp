@@ -48,7 +48,7 @@ void Application::Initialize(int width, int height)
     ImGui::CreateContext();
 
     ImGui_ImplWin32_Init(m_window->GetHandle());
-    ImGui_ImplDX11_Init(deviceResources->GetD3DDevice(), deviceResources->GetD3DDeviceContext());
+    ImGui_ImplDX11_Init(deviceResources->GetDevice(), deviceResources->GetDeviceContext());
     ImGui::StyleColorsDark();
 
     // Scenes manager.
@@ -102,7 +102,7 @@ void Application::Render()
     auto deviceResources = m_window->GetDeviceResources();
 
     deviceResources->PIXBeginEvent(L"Render");
-    auto context = deviceResources->GetD3DDeviceContext();
+    auto context = deviceResources->GetDeviceContext();
 
     // TODO: Add your rendering code here.
     context;
@@ -123,7 +123,7 @@ void Application::Clear()
     deviceResources->PIXBeginEvent(L"Clear");
 
     // Clear the views.
-    auto context = deviceResources->GetD3DDeviceContext();
+    auto context = deviceResources->GetDeviceContext();
     auto renderTarget = deviceResources->GetRenderTargetView();
     auto depthStencil = deviceResources->GetDepthStencilView();
 
@@ -242,8 +242,8 @@ void Application::CreateDeviceDependentResources()
 {
     auto deviceResources = m_window->GetDeviceResources();
 
-    auto device = deviceResources->GetD3DDevice();
-    auto context = deviceResources->GetD3DDeviceContext();
+    auto device = deviceResources->GetDevice();
+    auto context = deviceResources->GetDeviceContext();
 
     // TODO: Initialize device dependent objects here (independent of window size).
     device;

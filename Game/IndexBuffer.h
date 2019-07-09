@@ -4,42 +4,45 @@
 
 #pragma once
 
-template<typename T>
-class IndexBuffer
+namespace DX
 {
-    public:
-        IndexBuffer() = default;
-        explicit IndexBuffer(_In_ ID3D11Device* device, _In_ T* data, uint32 indexCount)
+        template<typename T>
+        class IndexBuffer
         {
-            Create(device, data, indexCount);
-        }
+        public:
+            IndexBuffer() = default;
+            explicit IndexBuffer(_In_ ID3D11Device* device, _In_ T* data, uint32 indexCount)
+            {
+                Create(device, data, indexCount);
+            }
 
-        IndexBuffer(IndexBuffer const&) = default;
-        IndexBuffer& operator=(IndexBuffer const&) = default;
+            IndexBuffer(IndexBuffer const&) = default;
+            IndexBuffer& operator=(IndexBuffer const&) = default;
 
-        void Create(_In_ ID3D11Device* device, _In_ T* data, uint32 indexCount)
-        {
-            this->indexCount = indexCount;
-            
-            D3D11_BUFFER_DESC desc = { };
+            void Create(_In_ ID3D11Device* device, _In_ T* data, uint32 indexCount)
+            {
+                this->indexCount = indexCount;
 
-            desc.ByteWidth = static_cast<UINT>(sizeof(T)) * indexCount;
-            desc.Usage = D3D11_USAGE_DEFAULT;
-            desc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+                D3D11_BUFFER_DESC desc = { };
 
-            D3D11_SUBRESOURCE_DATA indexBufferData = { };
-            indexBufferData.pSysMem = data;
+                desc.ByteWidth = static_cast<UINT>(sizeof(T)) * indexCount;
+                desc.Usage = D3D11_USAGE_DEFAULT;
+                desc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 
-            DX::ThrowIfFailed(
-                device->CreateBuffer(&desc, &indexBufferData, buffer.ReleaseAndGetAddressOf())
-            );
-        }
+                D3D11_SUBRESOURCE_DATA indexBufferData = { };
+                indexBufferData.pSysMem = data;
 
-        ID3D11Buffer* Get() const { return buffer.Get(); }
-        ID3D11Buffer* const* GetAddressOf() const { return buffer.GetAddressOf(); }
-        uint32 IndexCount() const { return indexCount; }
+                DX::ThrowIfFailed(
+                    device->CreateBuffer(&desc, &indexBufferData, buffer.ReleaseAndGetAddressOf())
+                );
+            }
 
-    private:
-        Microsoft::WRL::ComPtr<ID3D11Buffer> buffer;
-        uint32 indexCount = 0;
-};
+            ID3D11Buffer* Get() const { return buffer.Get(); }
+            ID3D11Buffer* const* GetAddressOf() const { return buffer.GetAddressOf(); }
+            uint32 IndexCount() const { return indexCount; }
+
+        private:
+            Microsoft::WRL::ComPtr<ID3D11Buffer> buffer;
+            uint32 indexCount = 0;
+    };
+}

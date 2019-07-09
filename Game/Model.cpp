@@ -33,7 +33,7 @@ void Model::Draw(DirectX::XMMATRIX world, DirectX::XMMATRIX view, DirectX::XMMAT
     }
 }
 
-bool Model::LoadModel(std::string const &filePath)
+bool Model::LoadModel(std::string const& filePath)
 {
     directory = StringHelper::GetDirectoryFromPath(filePath);
     Assimp::Importer importer;
@@ -64,7 +64,7 @@ void Model::ProcessNode(aiNode* node, aiScene const* scene, DirectX::XMMATRIX co
     }
 }
 
-Mesh Model::ProcessMesh(aiMesh * mesh, aiScene const * scene, DirectX::XMMATRIX const& transformMatrix)
+Mesh Model::ProcessMesh(aiMesh* mesh, aiScene const* scene, DirectX::XMMATRIX const& transformMatrix)
 {
     std::vector<MD5Vertex> vertices;
     std::vector<DWORD> indices;

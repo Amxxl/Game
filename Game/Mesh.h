@@ -23,8 +23,8 @@ class Mesh
         uint32 GetIndexCount() const { return indexBuffer.IndexCount(); }
 
     private:
-        VertexBuffer<MD5Vertex> vertexBuffer;
-        IndexBuffer<DWORD> indexBuffer;
+        DX::VertexBuffer<MD5Vertex> vertexBuffer;
+        DX::IndexBuffer<DWORD> indexBuffer;
         std::vector<Texture> textures;
         ID3D11DeviceContext* deviceContext;
         DirectX::XMMATRIX transformMatrix;
