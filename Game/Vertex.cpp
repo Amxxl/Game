@@ -84,6 +84,13 @@ VertexLayout& VertexLayout::Append(ElementType type)
     return *this;
 }
 
+// Expermental function
+VertexLayout& VertexLayout::operator<<(ElementType type)
+{
+    elements.emplace_back(type, Size());
+    return *this;
+}
+
 size_t VertexLayout::Size() const
 {
     return elements.empty() ? 0u : elements.back().GetOffsetAfter();
@@ -117,60 +124,60 @@ ConstVertex::ConstVertex(Vertex const& vertex)
 {
 }
 
-VertexBuffer::VertexBuffer(VertexLayout layout)
+VertexBufferData::VertexBufferData(VertexLayout layout)
     : layout(std::move(layout))
 {
 }
 
-char const* VertexBuffer::GetData() const
+char const* VertexBufferData::GetData() const
 {
     return buffer.data();
 }
 
-VertexLayout const& VertexBuffer::GetLayout() const noexcept
+VertexLayout const& VertexBufferData::GetLayout() const noexcept
 {
     return layout;
 }
 
-size_t VertexBuffer::Size() const
+size_t VertexBufferData::Size() const
 {
     return buffer.size() / layout.Size();
 }
 
-size_t VertexBuffer::SizeBytes() const
+size_t VertexBufferData::SizeBytes() const
 {
     return buffer.size();
 }
 
-Vertex VertexBuffer::Back()
+Vertex VertexBufferData::Back()
 {
     assert(buffer.size() != 0u);
     return Vertex{ buffer.data() + buffer.size() - layout.Size(), layout };
 }
 
-Vertex VertexBuffer::Front()
+Vertex VertexBufferData::Front()
 {
     assert(buffer.size() != 0u);
     return Vertex{ buffer.data(), layout };
 }
 
-Vertex VertexBuffer::operator[](size_t index)
+Vertex VertexBufferData::operator[](size_t index)
 {
     assert(index < Size());
     return Vertex{ buffer.data() + layout.Size() * index, layout };
 }
 
-ConstVertex VertexBuffer::Back() const
+ConstVertex VertexBufferData::Back() const
 {
-    return const_cast<VertexBuffer*>(this)->Back();
+    return const_cast<VertexBufferData*>(this)->Back();
 }
 
-ConstVertex VertexBuffer::Front() const
+ConstVertex VertexBufferData::Front() const
 {
-    return const_cast<VertexBuffer*>(this)->Front();
+    return const_cast<VertexBufferData*>(this)->Front();
 }
 
-ConstVertex VertexBuffer::operator[](size_t index) const
+ConstVertex VertexBufferData::operator[](size_t index) const
 {
-    return const_cast<VertexBuffer&>(*this)[index];
+    return const_cast<VertexBufferData&>(*this)[index];
 }

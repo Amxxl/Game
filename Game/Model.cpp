@@ -38,7 +38,9 @@ bool Model::LoadModel(std::string const& filePath)
     directory = StringHelper::GetDirectoryFromPath(filePath);
     Assimp::Importer importer;
 
-    aiScene const* pScene = importer.ReadFile(filePath, aiProcess_Triangulate |
+    aiScene const* pScene = importer.ReadFile(filePath,
+        aiProcess_Triangulate |
+        aiProcess_JoinIdenticalVertices |
         aiProcess_ConvertToLeftHanded);
 
     if (pScene == nullptr)

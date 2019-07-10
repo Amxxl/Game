@@ -2,6 +2,7 @@
 
 #include "pch.h"
 
+
 class VertexLayout
 {
     public:
@@ -100,6 +101,7 @@ class VertexLayout
 
         Element const& ResolveByIndex(size_t index) const;
         VertexLayout& Append(ElementType type);
+        VertexLayout& operator<<(ElementType type);
         size_t Size() const;
         size_t GetElementCount() const noexcept;
         std::vector<D3D11_INPUT_ELEMENT_DESC> GetD3DLayout() const;
@@ -110,7 +112,7 @@ class VertexLayout
 
 class Vertex
 {
-    friend class VertexBuffer;
+    friend class VertexBufferData;
 
     public:
         template<VertexLayout::ElementType Type>
@@ -196,10 +198,10 @@ class ConstVertex
         Vertex vertex;
 };
 
-class VertexBuffer
+class VertexBufferData
 {
     public:
-        VertexBuffer(VertexLayout layout);
+        VertexBufferData(VertexLayout layout);
 
         char const* GetData() const;
 

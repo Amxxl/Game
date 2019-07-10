@@ -892,6 +892,7 @@
     <ClCompile Include="VertexShader.cpp">
       <Filter>Engine\Graphics\Pipeline\Bindable\Bindables</Filter>
     </ClCompile>
+    <ClCompile Include="VertexBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="bow.ico">
