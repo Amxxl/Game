@@ -79,6 +79,10 @@ class PlayScene : public Scene
         Model mdl;
         Model bridge;
 
+        // Expermental
+        std::unique_ptr<expr::Model> testModel;
+        DX::DeviceResources* m_pDeviceResources;
+
         //Camera camera;
         ThirdPersonCamera camera;
         DirectX::XMMATRIX m_world;

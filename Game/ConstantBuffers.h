@@ -9,7 +9,7 @@ namespace Bind
     class ConstantBuffer : public Bindable
     {
         public:
-            ConstantBuffer(DX::DeviceResources* deviceResources, T const& data, slot = 0u)
+            ConstantBuffer(DX::DeviceResources* deviceResources, T const& data, UINT slot = 0u)
                 : slot(slot)
             {
                 D3D11_BUFFER_DESC desc = {};
@@ -38,7 +38,7 @@ namespace Bind
                 desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
                 DX::ThrowIfFailed(
-                    GetDevice(deviceResources)->CreateBuffer(&desc, nullptr, &pConstantBuffer);
+                    GetDevice(deviceResources)->CreateBuffer(&desc, nullptr, &pConstantBuffer)
                 );
             }
 

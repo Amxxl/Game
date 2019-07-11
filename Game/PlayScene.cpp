@@ -28,6 +28,7 @@ PlayScene::~PlayScene()
 
 bool PlayScene::Load(SceneManager* sceneManager, Window& window)
 {
+    m_pDeviceResources = window.GetDeviceResources();
     m_deviceContext = window.GetDeviceResources()->GetDeviceContext();
 
     camera.SetProjectionValues(90.0f, 800.0f / 600.0f, 0.1f, 1500.0f);
@@ -95,6 +96,8 @@ bool PlayScene::Load(SceneManager* sceneManager, Window& window)
     model.Initialize("Data/10446_Palm_Tree_v1_max2010_iteration-2.obj", device, m_deviceContext);
     mdl.Initialize("Data/WoodCabin.dae", device, m_deviceContext);
     bridge.Initialize("Data/bridge.dae", device, m_deviceContext);
+
+    testModel = std::make_unique<expr::Model>(window.GetDeviceResources(), "Data/nanosuit.obj");
 
     spriteBatch = std::make_unique<DirectX::SpriteBatch>(m_deviceContext);
     font = std::make_unique<DirectX::SpriteFont>(device, L"Data/Fonts/Consolas14BI.spritefont");
@@ -220,6 +223,8 @@ void PlayScene::Update(DX::StepTimer const& timer)
 
     camera.SetOrigin(player.GetPositionFloat3());
     camera.UpdateMatrix();
+
+    m_pDeviceResources->SetCamera(&camera);
 }
 
 void PlayScene::Render()
@@ -248,7 +253,8 @@ void PlayScene::Render()
     mdl.Draw(m_world * DirectX::XMMatrixScaling(0.7f, 0.7f, 0.7f) * DirectX::XMMatrixTranslation(365.0f, 32.5f, 485.0f) * XMMatrixScaling(0.5f, 0.5f, 0.5f), camera.GetViewMatrix(), camera.GetProjectionMatrix());
 
     bridge.Draw(m_world * DirectX::XMMatrixRotationY(-77.0f * (3.1415f / 180.0f)) * DirectX::XMMatrixTranslation(257.0f, 58.0f, 381.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix());
-
+    
+    testModel->Draw(m_pDeviceResources, DirectX::XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f) * DirectX::XMMatrixTranslation(0.0f, 0.0f, 0.0f));
     water->Draw(m_world * XMMatrixTranslation(256.0f, 0.0f, 256.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix(), XMVectorSet(0.0f, 0.0f, 1.0f, 0.7f));
 
     std::ostringstream ss("");

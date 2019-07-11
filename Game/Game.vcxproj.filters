@@ -146,9 +146,6 @@
     <Filter Include="Game\MD5Model">
       <UniqueIdentifier>{1ad24ecb-6b22-4a55-ab97-de09f683ea53}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Graphics\Drawable">
-      <UniqueIdentifier>{8c6d0d66-e88e-4782-9c71-a812b2ab94f6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Graphics\Pipeline">
       <UniqueIdentifier>{c3829a29-e6fe-42aa-903e-92ef5736ea12}</UniqueIdentifier>
     </Filter>
@@ -157,6 +154,9 @@
     </Filter>
     <Filter Include="Engine\Graphics\Pipeline\Bindable\Bindables">
       <UniqueIdentifier>{d8acbc91-3fa1-4f2a-9efa-261f1a6acfa6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Pipeline\Drawable">
+      <UniqueIdentifier>{8c6d0d66-e88e-4782-9c71-a812b2ab94f6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -168,9 +168,6 @@
     </ClInclude>
     <ClInclude Include="pch.h">
       <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneNode.h">
-      <Filter>Game\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="PlayScene.h">
       <Filter>Game\Scenes</Filter>
@@ -718,9 +715,6 @@
     <ClInclude Include="Audio.h">
       <Filter>Engine\Audio</Filter>
     </ClInclude>
-    <ClInclude Include="Model.h">
-      <Filter>Engine\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Physics.h">
       <Filter>Engine\Physics</Filter>
     </ClInclude>
@@ -734,10 +728,10 @@
       <Filter>Engine\Graphics\Pipeline\Bindable</Filter>
     </ClInclude>
     <ClInclude Include="Mesh.h">
-      <Filter>Engine\Graphics\Drawable</Filter>
+      <Filter>Engine\Graphics\Pipeline\Drawable</Filter>
     </ClInclude>
     <ClInclude Include="Drawable.h">
-      <Filter>Engine\Graphics\Drawable</Filter>
+      <Filter>Engine\Graphics\Pipeline\Drawable</Filter>
     </ClInclude>
     <ClInclude Include="Vertex.h">
       <Filter>Engine\Graphics</Filter>
@@ -760,6 +754,18 @@
     <ClInclude Include="BindableCommon.h">
       <Filter>Engine\Graphics\Pipeline\Bindable</Filter>
     </ClInclude>
+    <ClInclude Include="DrawableBase.h">
+      <Filter>Engine\Graphics\Pipeline\Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>Engine\Graphics\Pipeline\Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="TransformCBuf.h">
+      <Filter>Engine\Graphics\Pipeline\Bindable\Bindables</Filter>
+    </ClInclude>
+    <ClInclude Include="Node.h">
+      <Filter>Engine\Graphics\Pipeline\Drawable</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scene.cpp">
@@ -770,9 +776,6 @@
     </ClCompile>
     <ClCompile Include="pch.cpp">
       <Filter>Common</Filter>
-    </ClCompile>
-    <ClCompile Include="SceneNode.cpp">
-      <Filter>Game\Scenes</Filter>
     </ClCompile>
     <ClCompile Include="PlayScene.cpp">
       <Filter>Game\Scenes</Filter>
@@ -859,9 +862,6 @@
     <ClCompile Include="Audio.cpp">
       <Filter>Engine\Audio</Filter>
     </ClCompile>
-    <ClCompile Include="Model.cpp">
-      <Filter>Engine\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="Physics.cpp">
       <Filter>Engine\Physics</Filter>
     </ClCompile>
@@ -872,10 +872,10 @@
       <Filter>Engine\Graphics\Pipeline\Bindable</Filter>
     </ClCompile>
     <ClCompile Include="Mesh.cpp">
-      <Filter>Engine\Graphics\Drawable</Filter>
+      <Filter>Engine\Graphics\Pipeline\Drawable</Filter>
     </ClCompile>
     <ClCompile Include="Drawable.cpp">
-      <Filter>Engine\Graphics\Drawable</Filter>
+      <Filter>Engine\Graphics\Pipeline\Drawable</Filter>
     </ClCompile>
     <ClCompile Include="Vertex.cpp">
       <Filter>Engine\Graphics</Filter>
@@ -892,7 +892,18 @@
     <ClCompile Include="VertexShader.cpp">
       <Filter>Engine\Graphics\Pipeline\Bindable\Bindables</Filter>
     </ClCompile>
-    <ClCompile Include="VertexBuffer.cpp" />
+    <ClCompile Include="VertexBuffer.cpp">
+      <Filter>Engine\Graphics\Buffers</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>Engine\Graphics\Pipeline\Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="TransformCBuf.cpp">
+      <Filter>Engine\Graphics\Pipeline\Bindable\Bindables</Filter>
+    </ClCompile>
+    <ClCompile Include="Node.cpp">
+      <Filter>Engine\Graphics\Pipeline\Drawable</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="bow.ico">
@@ -967,7 +978,10 @@
     <FxCompile Include="MD5ModelPixelShader.hlsl">
       <Filter>Assets\Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="terrain.hlsl">
+    <FxCompile Include="VertexShader.hlsl">
+      <Filter>Assets\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="PixelShader.hlsl">
       <Filter>Assets\Shaders</Filter>
     </FxCompile>
   </ItemGroup>

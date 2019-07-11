@@ -10,7 +10,7 @@ namespace Bind
             VertexShader(DX::DeviceResources* deviceResources, std::wstring const& path);
 
             virtual void Bind(DX::DeviceResources* deviceResources) noexcept override;
-            ID3DBlob* GetBytecode() const noexcept { pBytecodeBlob.Get(); }
+            ID3DBlob* GetBytecode() const noexcept { return pBytecodeBlob.Get(); }
 
         protected:
             Microsoft::WRL::ComPtr<ID3DBlob> pBytecodeBlob;

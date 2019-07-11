@@ -27,7 +27,7 @@ Application::~Application()
 // Initialize the Direct3D resources required to run.
 void Application::Initialize(int width, int height)
 {
-    m_window = std::make_unique<Window>(L"Game", width, height, true);
+    m_window = std::make_unique<Window>(L"Game", width, height, false);
 
     if (!m_window)
         Logger::Get()->error("Window creation process failed!");

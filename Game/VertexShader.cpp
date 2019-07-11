@@ -9,8 +9,8 @@ namespace Bind
 
         DX::ThrowIfFailed(
             GetDevice(deviceResources)->CreateVertexShader(pBytecodeBlob->GetBufferPointer(),
-                pBytecodeBlob->GetBufferSize(), nullptr, &pVertexShader
-            ));
+                pBytecodeBlob->GetBufferSize(), nullptr, &pVertexShader)
+        );
     }
 
     void VertexShader::Bind(DX::DeviceResources* deviceResources) noexcept

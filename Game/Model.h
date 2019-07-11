@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Mesh.h"
+#include "Node.h"
 #include "MD5ModelShader.h"
 
 class Model
@@ -29,3 +30,21 @@ class Model
         ID3D11DeviceContext* deviceContext;
         std::string directory = "";
 };
+
+namespace expr
+{
+    class Model
+    {
+        public:
+            Model(DX::DeviceResources* deviceResources, std::string const& fileName);
+            void Draw(DX::DeviceResources* deviceResources, DirectX::FXMMATRIX transform) const;
+
+        private:
+            static std::unique_ptr<Mesh> ParseMesh(DX::DeviceResources* deviceResources, aiMesh const& mesh);
+            std::unique_ptr<Node> ParseNode(aiNode const& node);
+
+        private:
+            std::unique_ptr<Node> pRoot;
+            std::vector<std::unique_ptr<Mesh>> meshPtrs;
+    };
+}

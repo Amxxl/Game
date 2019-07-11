@@ -228,3 +228,104 @@ int Model::GetTextureIndex(aiString* pStr)
     assert(pStr->length >= 2);
     return atoi(&pStr->C_Str()[1]);
 }
+
+namespace expr
+{
+    Model::Model(DX::DeviceResources* deviceResources, std::string const& fileName)
+    {
+        Assimp::Importer importer;
+        auto const pScene = importer.ReadFile(fileName,
+            aiProcess_Triangulate |
+            aiProcess_JoinIdenticalVertices |
+            aiProcess_ConvertToLeftHanded);
+
+        for (size_t i = 0; i < pScene->mNumMeshes; ++i)
+        {
+            meshPtrs.push_back(ParseMesh(deviceResources, *pScene->mMeshes[i]));
+        }
+
+        pRoot = ParseNode(*pScene->mRootNode);
+    }
+
+    void Model::Draw(DX::DeviceResources* deviceResources, DirectX::FXMMATRIX transform) const
+    {
+        pRoot->Draw(deviceResources, transform);
+    }
+
+    std::unique_ptr<Mesh> Model::ParseMesh(DX::DeviceResources* deviceResources, aiMesh const& mesh)
+    {
+        VertexBufferData vbuf(std::move(
+            VertexLayout{}
+            << VertexLayout::Position3D
+            << VertexLayout::Normal
+        ));
+
+        for (unsigned int i = 0; i < mesh.mNumVertices; ++i)
+        {
+            vbuf.EmplaceBack(
+                *reinterpret_cast<DirectX::XMFLOAT3*>(&mesh.mVertices[i]),
+                *reinterpret_cast<DirectX::XMFLOAT3*>(&mesh.mNormals[i])
+            );
+        }
+
+        std::vector<unsigned int> indices;
+        indices.reserve(static_cast<size_t>(mesh.mNumFaces) * 3);
+
+        for (unsigned int i = 0; i < mesh.mNumFaces; ++i)
+        {
+            auto const& face = mesh.mFaces[i];
+            assert(face.mNumIndices == 3);
+            indices.push_back(face.mIndices[0]);
+            indices.push_back(face.mIndices[1]);
+            indices.push_back(face.mIndices[2]);
+        }
+
+        std::vector<std::unique_ptr<Bind::Bindable>> bindablePtrs;
+
+        bindablePtrs.push_back(std::make_unique<Bind::VertexBuffer<VertexBufferData>>(deviceResources, vbuf));
+        bindablePtrs.push_back(std::make_unique<Bind::IndexBuffer<unsigned int>>(deviceResources, indices));
+
+        auto pvs = std::make_unique<Bind::VertexShader>(deviceResources, L"VertexShader.vs");
+        auto pvsbc = pvs->GetBytecode();
+        bindablePtrs.push_back(std::move(pvs));
+
+        bindablePtrs.push_back(std::make_unique<Bind::PixelShader>(deviceResources, L"PixelShader.ps"));
+
+        bindablePtrs.push_back(std::make_unique<Bind::InputLayout>(deviceResources, vbuf.GetLayout().GetD3DLayout(), pvsbc));
+
+        struct PSMaterialConstant
+        {
+            DirectX::XMFLOAT3 color = { 0.6f, 0.6f, 0.8f };
+            float specularIntensity = 0.6f;
+            float specularPower = 30.0f;
+            float padding[3];
+        } pmc;
+
+        bindablePtrs.push_back(std::make_unique<Bind::PixelConstantBuffer<PSMaterialConstant>>(deviceResources, pmc, 1u));
+
+        return std::make_unique<Mesh>(deviceResources, std::move(bindablePtrs));
+    }
+
+    std::unique_ptr<Node> Model::ParseNode(aiNode const& node)
+    {
+        auto const transform = DirectX::XMMatrixTranspose(DirectX::XMLoadFloat4x4(
+            reinterpret_cast<DirectX::XMFLOAT4X4 const*>(&node.mTransformation)
+        ));
+
+        std::vector<Mesh*> curMeshPtrs;
+        curMeshPtrs.reserve(node.mNumMeshes);
+        for (size_t i = 0; i < node.mNumMeshes; ++i)
+        {
+            auto const meshIndex = node.mMeshes[i];
+            curMeshPtrs.push_back(meshPtrs.at(meshIndex).get());
+        }
+
+        auto pNode = std::make_unique<Node>(std::move(curMeshPtrs), transform);
+        for (size_t i = 0; i < node.mNumChildren; ++i)
+        {
+            pNode->AddChild(ParseNode(*node.mChildren[i]));
+        }
+
+        return pNode;
+    }
+}
