@@ -29,6 +29,9 @@ class Window : public DX::IDeviceNotify, public EventDispatcher
         Input& GetInput() { return input; }
         Input const& GetInput() const { return input; }
 
+        void ShowCursor();
+        void HideCursor();
+
     private:
         Input input;
 
@@ -47,5 +50,6 @@ class Window : public DX::IDeviceNotify, public EventDispatcher
         std::wstring m_wsTitle;
         int m_iWidth, m_iHeight;
         bool m_bFullScreen;
+        bool m_bCursorVisible;
         HWND m_hWindow;
 };

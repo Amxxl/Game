@@ -12,10 +12,10 @@ namespace Bind
 
     void TransformCBuf::Bind(DX::DeviceResources* deviceResources) noexcept
     {
-        auto const modelView = parent.GetTransform() * deviceResources->GetCamera()->GetViewMatrix();
+        //auto const modelView = parent.GetTransform() * deviceResources->GetCamera()->GetViewMatrix();
         const Transforms tf =
         {
-            DirectX::XMMatrixTranspose(DirectX::XMMatrixIdentity()),
+            DirectX::XMMatrixTranspose(parent.GetTransform() * DirectX::XMMatrixIdentity()),
             DirectX::XMMatrixTranspose(deviceResources->GetCamera()->GetViewMatrix()),
             DirectX::XMMatrixTranspose(deviceResources->GetCamera()->GetProjectionMatrix())
             //DirectX::XMMatrixTranspose(modelView),

@@ -80,6 +80,7 @@ void Application::Tick()
         Update(m_timer);
     });
 
+    m_audio->Update();
     Render();
 }
 

@@ -7,6 +7,8 @@
 #include "Color.h"
 #include <assimp/material.h>
 
+#include "Bindable.h"
+
 enum class TextureStorageType
 {
     Invalid,
@@ -40,3 +42,17 @@ class Texture
         Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureView = nullptr;
         aiTextureType type = aiTextureType::aiTextureType_UNKNOWN;
 };
+
+namespace Bind
+{
+    class Texture : public Bindable
+    {
+        public:
+            Texture(DX::DeviceResources* deviceResources, std::wstring const& file);
+
+            virtual void Bind(DX::DeviceResources* deviceResources) noexcept override;
+
+        private:
+            Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> pTextureView;
+    };
+}

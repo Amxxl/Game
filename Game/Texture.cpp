@@ -80,3 +80,16 @@ void Texture::CreateColorTexture(ID3D11Device* device, uint16 width, uint16 heig
         device->CreateShaderResourceView(texture.Get(), &srvDesc, textureView.GetAddressOf())
     );
 }
+
+namespace Bind
+{
+    Texture::Texture(DX::DeviceResources* deviceResources, std::wstring const& file)
+    {
+        DirectX::CreateWICTextureFromFile(GetDevice(deviceResources), file.c_str(), nullptr, pTextureView.GetAddressOf());
+    }
+
+    void Texture::Bind(DX::DeviceResources* deviceResources) noexcept
+    {
+        GetContext(deviceResources)->PSSetShaderResources(0, 1, pTextureView.GetAddressOf());
+    }
+}

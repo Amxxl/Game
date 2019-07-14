@@ -91,6 +91,18 @@ void Window::OnDeviceRestored()
     Application::Get().CreateWindowSizeDependentResources();
 }
 
+void Window::ShowCursor()
+{
+    while (::ShowCursor(TRUE) < 0);
+    m_bCursorVisible = true;
+}
+
+void Window::HideCursor()
+{
+    while (::ShowCursor(FALSE) >= 0);
+    m_bCursorVisible = false;
+}
+
 LRESULT Window::HandleMessageSetup(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     if (message == WM_NCCREATE)
