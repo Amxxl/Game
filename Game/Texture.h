@@ -49,10 +49,12 @@ namespace Bind
     {
         public:
             Texture(DX::DeviceResources* deviceResources, std::wstring const& file);
+            Texture(DX::DeviceResources* deviceResources, uint8 const* data, size_t size);
 
             virtual void Bind(DX::DeviceResources* deviceResources) noexcept override;
 
         private:
-            Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> pTextureView;
+            Microsoft::WRL::ComPtr<ID3D11Resource> pTexture = nullptr;
+            Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> pTextureView = nullptr;
     };
 }

@@ -22,7 +22,7 @@ Window::Window(std::wstring const& name, int width, int height, bool fullScreen)
 
     WNDCLASSEXW wcex = { };
     wcex.cbSize = sizeof(WNDCLASSEXW);
-    wcex.style = CS_VREDRAW | CS_HREDRAW | CS_OWNDC;
+    wcex.style = CS_VREDRAW | CS_HREDRAW | CS_OWNDC | CS_DBLCLKS;
     wcex.lpfnWndProc = HandleMessageSetup;
     wcex.cbClsExtra = 0;
     wcex.cbWndExtra = 0;
@@ -299,7 +299,6 @@ LRESULT Window::HandleMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPa
         {
             Vector2i position(LOWORD(lParam), HIWORD(lParam));
             input.OnMouseButtonDoubleClicked(position, Input::MouseButton::Left);
-            Logger::Get()->info("Mouse button Left double clicked!");
             break;
         }
         case WM_RBUTTONDOWN:

@@ -85,7 +85,32 @@ namespace Bind
 {
     Texture::Texture(DX::DeviceResources* deviceResources, std::wstring const& file)
     {
-        DirectX::CreateWICTextureFromFile(GetDevice(deviceResources), file.c_str(), nullptr, pTextureView.GetAddressOf());
+        if (StringHelper::GetFileExtension(file) == L".dds")
+        {
+            DX::ThrowIfFailed(
+                DirectX::CreateDDSTextureFromFile(GetDevice(deviceResources),
+                    file.c_str(), nullptr, pTextureView.GetAddressOf())
+            );
+        }
+        else if (StringHelper::GetFileExtension(file) == L".tga")
+        {
+            assert("[.TGA] extension unsupported yet." && false);
+        }
+        else
+        {
+            DX::ThrowIfFailed(
+                DirectX::CreateWICTextureFromFile(GetDevice(deviceResources),
+                    file.c_str(), nullptr, pTextureView.GetAddressOf())
+            );
+        }
+    }
+
+    Texture::Texture(DX::DeviceResources* deviceResources, uint8 const* data, size_t size)
+    {
+        DX::ThrowIfFailed(
+            DirectX::CreateWICTextureFromMemory(GetDevice(deviceResources), data, size,
+                pTexture.GetAddressOf(), pTextureView.GetAddressOf())
+        );
     }
 
     void Texture::Bind(DX::DeviceResources* deviceResources) noexcept

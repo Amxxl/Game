@@ -122,33 +122,22 @@ TextureStorageType Model::DetermineTextureStorageType(aiScene const* pScene, aiM
     if (texturePath[0] == '*')
     {
         if (pScene->mTextures[0]->mHeight == 0)
-        {
             return TextureStorageType::EmbeddedIndexCompressed;
-        }
         else
-        {
-            assert("SUPPORT DOES NOT EXIST YET FOR INDEXED NON COMPRESSED TEXTURES!" && 0);
             return TextureStorageType::EmbeddedIndexNonCompressed;
-        }
     }
     // Check if texture is an embedded texture but not indexed (path will be the texture's name instead of #)
-    if (auto pTex = pScene->GetEmbeddedTexture(texturePath.c_str()))
+    else if (auto pTex = pScene->GetEmbeddedTexture(texturePath.c_str()))
     {
         if (pTex->mHeight == 0)
-        {
             return TextureStorageType::EmbeddedCompressed;
-        }
         else
-        {
-            assert("SUPPORT DOES NOT EXISTS YET FOR EMBEDDED NON COMPRESSED TEXTURES!" && 0);
             return TextureStorageType::EmbeddedIndexNonCompressed;
-        }
     }
     //Lastly check if texture is a filepath by checking for period before extension name.
-    if (texturePath.find('.') != std::string::npos)
-    {
+    else if (texturePath.find('.') != std::string::npos)
         return TextureStorageType::Disk;
-    }
+
     return TextureStorageType::None; // No texture exists
 }
 
@@ -197,6 +186,14 @@ std::vector<Texture> Model::LoadMaterialTextures(aiMaterial* pMaterial, aiTextur
                     materialTextures.push_back(embeddedIndexedTexture);
                     break;
                 }
+                case TextureStorageType::EmbeddedIndexNonCompressed:
+                {
+                    int index = GetTextureIndex(&path);
+                    Texture embeddedIndexNonCompressed(device, reinterpret_cast<uint8*>(pScene->mTextures[index]->pcData),
+                        pScene->mTextures[index]->mWidth * pScene->mTextures[index]->mHeight, textureType);
+                    materialTextures.push_back(embeddedIndexNonCompressed);
+                    break;
+                }
                 case TextureStorageType::EmbeddedCompressed:
                 {
                     aiTexture const* pTexture = pScene->GetEmbeddedTexture(path.C_Str());
@@ -204,6 +201,13 @@ std::vector<Texture> Model::LoadMaterialTextures(aiMaterial* pMaterial, aiTextur
                         pTexture->mWidth, textureType);
                     materialTextures.push_back(embeddedTexture);
                     break;
+                }
+                case TextureStorageType::EmbeddedNonCompressed:
+                {
+                    aiTexture const* pTexture = pScene->GetEmbeddedTexture(path.C_Str());
+                    Texture embeddedNonCompressed(device, reinterpret_cast<uint8*>(pTexture->pcData),
+                        pTexture->mWidth * pTexture->mHeight, textureType);
+                    materialTextures.push_back(embeddedNonCompressed);
                 }
                 case TextureStorageType::Disk:
                 {
@@ -258,6 +262,7 @@ namespace expr
             VertexLayout{}
             << VertexLayout::Position3D
             << VertexLayout::Normal
+            //<< VertexLayout::Texture2D
         ));
 
         for (unsigned int i = 0; i < mesh.mNumVertices; ++i)
@@ -265,6 +270,7 @@ namespace expr
             vbuf.EmplaceBack(
                 *reinterpret_cast<DirectX::XMFLOAT3*>(&mesh.mVertices[i]),
                 *reinterpret_cast<DirectX::XMFLOAT3*>(&mesh.mNormals[i])
+                //*reinterpret_cast<DirectX::XMFLOAT3*>(&mesh.mTextureCoords[0][i])
             );
         }
 
@@ -290,6 +296,8 @@ namespace expr
         bindablePtrs.push_back(std::move(pvs));
 
         bindablePtrs.push_back(std::make_unique<Bind::PixelShader>(deviceResources, L"PixelShader.ps"));
+
+        //bindablePtrs.push_back(std::make_unique<Bind::Texture>(deviceResources, L""));
 
         bindablePtrs.push_back(std::make_unique<Bind::InputLayout>(deviceResources, vbuf.GetLayout().GetD3DLayout(), pvsbc));
 

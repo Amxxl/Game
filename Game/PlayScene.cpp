@@ -97,7 +97,7 @@ bool PlayScene::Load(SceneManager* sceneManager, Window& window)
 
     spruce.Initialize("Data/spruce.obj", device, m_deviceContext);
 
-    testModel = std::make_unique<expr::Model>(window.GetDeviceResources(), "Data/nanosuit.obj");
+    testModel = std::make_unique<expr::Model>(window.GetDeviceResources(), "Data/nano.gltf");
 
     spriteBatch = std::make_unique<DirectX::SpriteBatch>(m_deviceContext);
     font = std::make_unique<DirectX::SpriteFont>(device, L"Data/Fonts/Consolas14BI.spritefont");
@@ -388,6 +388,5 @@ void PlayScene::OnMouseButtonReleased(Vector2i const& position, Input::MouseButt
 
 void PlayScene::OnMouseButtonDoubleClicked(Vector2i const& position, Input::MouseButton const button)
 {
-    // @todo: find out why not working.
-    Logger::Get()->info("Mouse button double clicked: ", static_cast<int>(button));
+    Logger::Get()->info("Mouse button double clicked: {}", static_cast<int>(button));
 }
