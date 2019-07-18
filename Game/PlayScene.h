@@ -68,16 +68,21 @@ class PlayScene : public Scene
         std::unique_ptr<DirectX::SpriteFont> font;
 
         ID3D11DeviceContext* m_deviceContext = nullptr;
+        Window* pWindow = nullptr;
 
         Terrain terrain;
         QuadTree quadTree;
         Frustum frustum;
         RenderableGameObject player;
         RenderableGameObject npc;
-        RenderableGameObject monster;
         Model model;
         Model mdl;
         Model bridge;
+        Model spruce;
+
+        // Expermental
+        std::unique_ptr<expr::Model> testModel;
+        DX::DeviceResources* m_pDeviceResources;
 
         //Camera camera;
         ThirdPersonCamera camera;
@@ -86,7 +91,7 @@ class PlayScene : public Scene
         float m_fps;
         bool in_jump;
 
-        DirectX::XMFLOAT3 playerPos;
+        //DirectX::XMFLOAT3 playerPos;
 
     private:
         bool paused;

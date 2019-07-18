@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include "ThirdPersonCamera.h"
+
 namespace DX
 {
     // Provides an interface for an application that owns DeviceResources to be notified of the device being lost or created.
@@ -70,6 +72,10 @@ namespace DX
             m_d3dAnnotation->SetMarker(name);
         }
 
+        // Temporary
+        void SetCamera(ThirdPersonCamera* camera) { m_camera = camera; }
+        ThirdPersonCamera* GetCamera() const { return m_camera; }
+
     private:
         void CreateFactory();
         void GetHardwareAdapter(IDXGIAdapter1** ppAdapter);
@@ -108,5 +114,8 @@ namespace DX
 
         // The IDeviceNotify can be held directly as it owns the DeviceResources.
         IDeviceNotify*                                        m_deviceNotify;
+
+        // Temporary.
+        ThirdPersonCamera*                                    m_camera;
     };
 }

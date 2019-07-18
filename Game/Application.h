@@ -56,6 +56,8 @@ class Application
 
         static Application& Get() { return *s_instance; }
 
+        Audio* GetAudio() const { return m_audio.get(); }
+
     private:
         void Update(DX::StepTimer const& timer);
         void Render();

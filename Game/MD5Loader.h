@@ -55,7 +55,7 @@ namespace axec//alibur
 
         Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> texture;
         DX::DynamicVertexBuffer<MD5Vertex> vertexBuffer;
-        DX::IndexBuffer<DWORD> indexBuffer;
+        Bind::IndexBuffer<DWORD> indexBuffer;
     };
 
     struct md5_anim_t

@@ -4,16 +4,23 @@
 
 #pragma once
 
-namespace DX
+#include "Bindable.h"
+
+namespace Bind
 {
         template<typename T>
-        class IndexBuffer
+        class IndexBuffer : public Bindable
         {
         public:
             IndexBuffer() = default;
             explicit IndexBuffer(_In_ ID3D11Device* device, _In_ T* data, uint32 indexCount)
             {
                 Create(device, data, indexCount);
+            }
+
+            explicit IndexBuffer(_In_ DX::DeviceResources* deviceResources, std::vector<T>& indices)
+            {
+                Create(GetDevice(deviceResources), indices.data(), static_cast<uint32>(indices.size()));
             }
 
             IndexBuffer(IndexBuffer const&) = default;
@@ -35,6 +42,11 @@ namespace DX
                 DX::ThrowIfFailed(
                     device->CreateBuffer(&desc, &indexBufferData, buffer.ReleaseAndGetAddressOf())
                 );
+            }
+
+            virtual void Bind(DX::DeviceResources* deviceResources) noexcept override
+            {
+                GetContext(deviceResources)->IASetIndexBuffer(buffer.Get(), DXGI_FORMAT_R32_UINT, 0u);
             }
 
             ID3D11Buffer* Get() const { return buffer.Get(); }

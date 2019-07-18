@@ -10,6 +10,9 @@
 #include "assimp/postprocess.h"
 #include "assimp/scene.h"
 
+#include "BindableCommon.h"
+#include "DrawableBase.h"
+
 class Mesh
 {
     public:
@@ -23,9 +26,22 @@ class Mesh
         uint32 GetIndexCount() const { return indexBuffer.IndexCount(); }
 
     private:
-        DX::VertexBuffer<MD5Vertex> vertexBuffer;
-        DX::IndexBuffer<DWORD> indexBuffer;
+        Bind::VertexBuffer<MD5Vertex> vertexBuffer;
+        Bind::IndexBuffer<DWORD> indexBuffer;
         std::vector<Texture> textures;
         ID3D11DeviceContext* deviceContext;
         DirectX::XMMATRIX transformMatrix;
 };
+
+namespace expr
+{
+    class Mesh : public DrawableBase<Mesh>
+    {
+        public:
+            Mesh(DX::DeviceResources* deviceResources, std::vector<std::unique_ptr<Bind::Bindable>> bindPtrs);
+            void Draw(DX::DeviceResources* deviceResources, DirectX::FXMMATRIX accumulatedTransform) const;
+            DirectX::XMMATRIX GetTransform() const noexcept override;
+        private:
+            mutable DirectX::XMFLOAT4X4 transform;
+    };
+}

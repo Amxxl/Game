@@ -8,32 +8,33 @@
 #include "Vertex.h"
 #include "Bindable.h"
 
-namespace DX // @todo: Move to Bind namespace.
+namespace Bind // @todo: Move to Bind namespace.
 {
     template<typename T>
-    class VertexBuffer : public Bind::Bindable
+    class VertexBuffer : public Bindable
     {
         public:
             VertexBuffer() = default;
 
             explicit VertexBuffer(_In_ ID3D11Device* device, _In_ T* data, uint32 vertexCount)
             {
+                assert("You must use another constructor for this template argument." && typeid(T) == typeid(VertexBufferData));
                 Create(device, data, vertexCount);
             }
 
-            // Only works with template argument: VertexBufferData.
+            // Constructor calling prevention if template argument isn't: VertexBufferData.
             template<typename = typename std::enable_if<std::is_same<T, VertexBufferData>::value>::type>
-            explicit VertexBuffer(_In_ ID3D11Device* device, _In_ VertexBufferData const& data)
+            explicit VertexBuffer(_In_ DX::DeviceResources* deviceResources, _In_ VertexBufferData const& data)
             {
-                Create(device, data);
+                Create(deviceResources, data);
             }
 
             VertexBuffer(VertexBuffer const&) = default;
             VertexBuffer& operator=(VertexBuffer const&) = default;
 
-            // Only works with template argument: VertexBufferData.
+            // Function calling prevention if template argument isn't: VertexBufferData.
             template<typename = typename std::enable_if<std::is_same<T, VertexBufferData>::value>::type>
-            void Create(_In_ ID3D11Device* device, _In_ VertexBufferData const& data)
+            void Create(_In_ DX::DeviceResources* deviceResources, _In_ VertexBufferData const& data)
             {
                 stride = static_cast<UINT>(data.GetLayout().Size());
 
@@ -47,12 +48,13 @@ namespace DX // @todo: Move to Bind namespace.
                 vertexBufferData.pSysMem = data.GetData();
 
                 DX::ThrowIfFailed(
-                    device->CreateBuffer(&desc, &vertexBufferData, &buffer)
+                    GetDevice(deviceResources)->CreateBuffer(&desc, &vertexBufferData, &buffer)
                 );
             }
 
             void Create(_In_ ID3D11Device* device, _In_ T* data, uint32 vertexCount)
             {
+                assert("You must use another function for this template argument." && typeid(T) == typeid(VertexBufferData));
                 this->vertexCount = vertexCount;
 
                 D3D11_BUFFER_DESC desc = { };
@@ -69,7 +71,7 @@ namespace DX // @todo: Move to Bind namespace.
                 );
             }
 
-            virtual void Bind(DeviceResources* deviceResources) noexcept override
+            virtual void Bind(DX::DeviceResources* deviceResources) noexcept override
             {
                 UINT const offset = 0;
                 GetContext(deviceResources)->IASetVertexBuffers(0u, 1u, buffer.GetAddressOf(), &stride, &offset);
