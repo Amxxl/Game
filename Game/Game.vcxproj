@@ -272,19 +272,18 @@
     <ClInclude Include="..\External\ReactPhysics3D\include\reactphysics3d.h" />
     <ClInclude Include="..\External\ReactPhysics3D\include\utils\Logger.h" />
     <ClInclude Include="..\External\ReactPhysics3D\include\utils\Profiler.h" />
-    <ClInclude Include="Audio.h" />
+    <ClInclude Include="Audio\Audio.h" />
     <ClInclude Include="Bindable.h" />
     <ClInclude Include="BindableCommon.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="ConstantBuffer.h" />
     <ClInclude Include="ConstantBuffers.h" />
-    <ClInclude Include="ConstantBufferTypes.h" />
     <ClInclude Include="DeviceResources.h" />
     <ClInclude Include="Drawable.h" />
     <ClInclude Include="DrawableBase.h" />
     <ClInclude Include="DynamicVertexBuffer.h" />
-    <ClInclude Include="Event.h" />
+    <ClInclude Include="Events\Event.h" />
     <ClInclude Include="Frustum.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="GameObject.h" />
@@ -292,7 +291,7 @@
     <ClInclude Include="Input.h" />
     <ClInclude Include="InputLayout.h" />
     <ClInclude Include="IntegerTypes.h" />
-    <ClInclude Include="KeyEvents.h" />
+    <ClInclude Include="Events\KeyEvents.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="MD5Loader.h" />
     <ClInclude Include="MD5Model.h" />
@@ -300,7 +299,7 @@
     <ClInclude Include="MD5Vertex.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
-    <ClInclude Include="MouseEvents.h" />
+    <ClInclude Include="Events\MouseEvents.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Physics.h" />
@@ -308,7 +307,6 @@
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="QuadTree.h" />
     <ClInclude Include="RenderableGameObject.h" />
-    <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="spdlog\async.h" />
@@ -379,14 +377,13 @@
     <ClInclude Include="VertexBufferTypes.h" />
     <ClInclude Include="VertexShader.h" />
     <ClInclude Include="Window.h" />
-    <ClInclude Include="WindowEvents.h" />
+    <ClInclude Include="Events\WindowEvents.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Audio.cpp" />
     <ClCompile Include="Bindable.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Color.cpp" />
-    <ClCompile Include="ConstantBufferTypes.cpp" />
     <ClCompile Include="DeviceResources.cpp" />
     <ClCompile Include="Drawable.cpp" />
     <ClCompile Include="Event.cpp" />
@@ -415,7 +412,6 @@
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="QuadTree.cpp" />
     <ClCompile Include="RenderableGameObject.cpp" />
-    <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="StepTimer.cpp" />
@@ -429,7 +425,6 @@
     <ClCompile Include="TransformCBuf.cpp" />
     <ClCompile Include="Vector3.cpp" />
     <ClCompile Include="Vertex.cpp" />
-    <ClCompile Include="VertexBuffer.cpp" />
     <ClCompile Include="VertexBufferTypes.cpp" />
     <ClCompile Include="VertexShader.cpp" />
     <ClCompile Include="Window.cpp" />

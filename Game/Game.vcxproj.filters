@@ -50,9 +50,6 @@
     <Filter Include="Engine\Audio">
       <UniqueIdentifier>{e77ca1a7-a601-4890-a4da-2a26f5303559}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Network">
-      <UniqueIdentifier>{fc3fda61-64a4-4962-aa8d-1224d2d941e5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\System\Events">
       <UniqueIdentifier>{4555aa68-3cb8-4767-b90a-c736a13dc183}</UniqueIdentifier>
     </Filter>
@@ -211,9 +208,6 @@
     <ClInclude Include="ConstantBuffer.h">
       <Filter>Engine\Graphics\Buffers</Filter>
     </ClInclude>
-    <ClInclude Include="ConstantBufferTypes.h">
-      <Filter>Engine\Graphics\Buffers\Types</Filter>
-    </ClInclude>
     <ClInclude Include="VertexBufferTypes.h">
       <Filter>Engine\Graphics\Buffers\Types</Filter>
     </ClInclude>
@@ -234,12 +228,6 @@
     </ClInclude>
     <ClInclude Include="Window.h">
       <Filter>Engine\System</Filter>
-    </ClInclude>
-    <ClInclude Include="Event.h">
-      <Filter>Engine\System\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="MouseEvents.h">
-      <Filter>Engine\System\Events</Filter>
     </ClInclude>
     <ClInclude Include="Vector2.h">
       <Filter>Engine\Math</Filter>
@@ -429,12 +417,6 @@
     </ClInclude>
     <ClInclude Include="Logger.h">
       <Filter>Engine\System\Logging</Filter>
-    </ClInclude>
-    <ClInclude Include="KeyEvents.h">
-      <Filter>Engine\System\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="WindowEvents.h">
-      <Filter>Engine\System\Events</Filter>
     </ClInclude>
     <ClInclude Include="StepTimer.h">
       <Filter>Engine\System\Timer</Filter>
@@ -712,14 +694,8 @@
     <ClInclude Include="..\External\ReactPhysics3D\include\utils\Profiler.h">
       <Filter>Engine\Physics\ReactPhysics3D\utils</Filter>
     </ClInclude>
-    <ClInclude Include="Audio.h">
-      <Filter>Engine\Audio</Filter>
-    </ClInclude>
     <ClInclude Include="Physics.h">
       <Filter>Engine\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="ResourceManager.h">
-      <Filter>Engine\Core</Filter>
     </ClInclude>
     <ClInclude Include="IntegerTypes.h">
       <Filter>Engine\Core</Filter>
@@ -766,6 +742,21 @@
     <ClInclude Include="Node.h">
       <Filter>Engine\Graphics\Pipeline\Drawable</Filter>
     </ClInclude>
+    <ClInclude Include="Events\Event.h">
+      <Filter>Engine\System\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\WindowEvents.h">
+      <Filter>Engine\System\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\MouseEvents.h">
+      <Filter>Engine\System\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\KeyEvents.h">
+      <Filter>Engine\System\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Audio.h">
+      <Filter>Engine\Audio</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scene.cpp">
@@ -807,9 +798,6 @@
     <ClCompile Include="QuadTree.cpp">
       <Filter>Game\Terrain</Filter>
     </ClCompile>
-    <ClCompile Include="ConstantBufferTypes.cpp">
-      <Filter>Engine\Graphics\Buffers\Types</Filter>
-    </ClCompile>
     <ClCompile Include="VertexBufferTypes.cpp">
       <Filter>Engine\Graphics\Buffers\Types</Filter>
     </ClCompile>
@@ -831,9 +819,6 @@
     </ClCompile>
     <ClCompile Include="Window.cpp">
       <Filter>Engine\System</Filter>
-    </ClCompile>
-    <ClCompile Include="Event.cpp">
-      <Filter>Engine\System\Events</Filter>
     </ClCompile>
     <ClCompile Include="Input.cpp">
       <Filter>Engine\System\Input</Filter>
@@ -859,14 +844,8 @@
     <ClCompile Include="Vector3.cpp">
       <Filter>Engine\Math</Filter>
     </ClCompile>
-    <ClCompile Include="Audio.cpp">
-      <Filter>Engine\Audio</Filter>
-    </ClCompile>
     <ClCompile Include="Physics.cpp">
       <Filter>Engine\Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="ResourceManager.cpp">
-      <Filter>Engine\Core</Filter>
     </ClCompile>
     <ClCompile Include="Bindable.cpp">
       <Filter>Engine\Graphics\Pipeline\Bindable</Filter>
@@ -892,9 +871,6 @@
     <ClCompile Include="VertexShader.cpp">
       <Filter>Engine\Graphics\Pipeline\Bindable\Bindables</Filter>
     </ClCompile>
-    <ClCompile Include="VertexBuffer.cpp">
-      <Filter>Engine\Graphics\Buffers</Filter>
-    </ClCompile>
     <ClCompile Include="Model.cpp">
       <Filter>Engine\Graphics\Pipeline\Drawable</Filter>
     </ClCompile>
@@ -903,6 +879,12 @@
     </ClCompile>
     <ClCompile Include="Node.cpp">
       <Filter>Engine\Graphics\Pipeline\Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="Audio.cpp">
+      <Filter>Engine\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Event.cpp">
+      <Filter>Engine\System\Events</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
