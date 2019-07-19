@@ -17,20 +17,29 @@ class Window : public DX::IDeviceNotify, public EventDispatcher
         Window& operator=(Window const&) = delete;
         Window(Window&&) = delete;
 
-        void SetTitle(std::wstring const& title);
-        HWND GetHandle() const { return m_hWindow; }
-
         virtual void OnDeviceLost() final override;
         virtual void OnDeviceRestored() final override;
 
-        DX::DeviceResources* GetDeviceResources() const { return m_deviceResources.get(); }
+        void SetTitle(std::wstring const& title);
 
+        void EnableCursor();
+        void DisableCursor();
+
+        DX::DeviceResources* GetDeviceResources() const { return m_deviceResources.get(); }
+        
+        HWND GetHandle() const { return m_hWindow; }
         Vector2i const GetSize() const { return { m_iWidth, m_iHeight }; }
         Input& GetInput() { return input; }
         Input const& GetInput() const { return input; }
 
-        void ShowCursor();
-        void HideCursor();
+    private:
+        void FreeCursor() noexcept;
+        void ConfineCursor() noexcept;
+        void ShowCursor() noexcept;
+        void HideCursor() noexcept;
+
+        void EnableImGuiMouse() noexcept;
+        void DisableImGuiMouse() noexcept;
 
     private:
         Input input;

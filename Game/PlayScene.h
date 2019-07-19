@@ -88,6 +88,9 @@ class PlayScene : public Scene
         ThirdPersonCamera camera;
         DirectX::XMMATRIX m_world;
 
+        // Mouse Point
+        POINT mousePoint;
+
         float m_fps;
         bool in_jump;
 

@@ -1,9 +1,10 @@
 #include "pch.h"
 #include "Vertex.h"
 
-VertexLayout::Element::Element(ElementType type, size_t offset)
+VertexLayout::Element::Element(ElementType type, size_t offset, UINT semanticIndex)
     : type(type)
     , offset(offset)
+    , semanticIndex(semanticIndex)
 {
 }
 
@@ -20,6 +21,11 @@ size_t VertexLayout::Element::GetOffset() const
 size_t VertexLayout::Element::Size() const
 {
     return SizeOf(type);
+}
+
+UINT VertexLayout::Element::GetSemanticIndex() const
+{
+    return semanticIndex;
 }
 
 constexpr size_t VertexLayout::Element::SizeOf(ElementType type)
@@ -55,19 +61,19 @@ D3D11_INPUT_ELEMENT_DESC VertexLayout::Element::GetDesc() const
     switch (type)
     {
         case Position2D:
-            return GenerateDesc<Position2D>(GetOffset());
+            return GenerateDesc<Position2D>(GetOffset(), GetSemanticIndex());
         case Position3D:
-            return GenerateDesc<Position3D>(GetOffset());
+            return GenerateDesc<Position3D>(GetOffset(), GetSemanticIndex());
         case Texture2D:
-            return GenerateDesc<Texture2D>(GetOffset());
+            return GenerateDesc<Texture2D>(GetOffset(), GetSemanticIndex());
         case Normal:
-            return GenerateDesc<Normal>(GetOffset());
+            return GenerateDesc<Normal>(GetOffset(), GetSemanticIndex());
         case Float3Color:
-            return GenerateDesc<Float3Color>(GetOffset());
+            return GenerateDesc<Float3Color>(GetOffset(), GetSemanticIndex());
         case Float4Color:
-            return GenerateDesc<Float4Color>(GetOffset());
+            return GenerateDesc<Float4Color>(GetOffset(), GetSemanticIndex());
         case RGBAColor:
-            return GenerateDesc<RGBAColor>(GetOffset());
+            return GenerateDesc<RGBAColor>(GetOffset(), GetSemanticIndex());
     }
     assert("Invalid element type." && false);
     return { "INVALID", 0, DXGI_FORMAT_UNKNOWN, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 };
@@ -80,14 +86,19 @@ VertexLayout::Element const& VertexLayout::ResolveByIndex(size_t index) const
 
 VertexLayout& VertexLayout::Append(ElementType type)
 {
-    elements.emplace_back(type, Size());
+    UINT semanticIndex = 0;
+    for (auto& i : elements)
+    {
+        if (i.GetType() == type)
+            semanticIndex++;
+    }
+    elements.emplace_back(type, Size(), semanticIndex);
     return *this;
 }
 
-// Expermental function
 VertexLayout& VertexLayout::operator<<(ElementType type)
 {
-    elements.emplace_back(type, Size());
+    this->Append(type);
     return *this;
 }
 

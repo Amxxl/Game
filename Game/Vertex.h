@@ -65,25 +65,28 @@ class VertexLayout
         class Element
         {
             public:
-                Element(ElementType type, size_t offset);
+                Element(ElementType type, size_t offset, UINT semanticIndex = 0);
                 size_t GetOffsetAfter() const;
                 size_t GetOffset() const;
                 size_t Size() const;
+                UINT GetSemanticIndex() const;
                 static constexpr size_t SizeOf(ElementType type);
                 ElementType GetType() const noexcept;
                 D3D11_INPUT_ELEMENT_DESC GetDesc() const;
 
             private:
                 template<ElementType type>
-                static constexpr D3D11_INPUT_ELEMENT_DESC GenerateDesc(size_t offset)
+                static constexpr D3D11_INPUT_ELEMENT_DESC GenerateDesc(size_t offset, UINT semanticIndex = 0)
                 {
-                    return { Map<type>::semantic, 0, Map<type>::dxgiFormat, 0, static_cast<UINT>(offset), D3D11_INPUT_PER_VERTEX_DATA, 0 };
+                    return { Map<type>::semantic, semanticIndex, Map<type>::dxgiFormat, 0, static_cast<UINT>(offset), D3D11_INPUT_PER_VERTEX_DATA, 0 };
                 }
 
             private:
                 ElementType type;
                 size_t offset;
+                UINT semanticIndex;
         };
+
     public:
         template<ElementType Type>
         Element const& Resolve() const

@@ -119,7 +119,7 @@ void PlayScene::Update(DX::StepTimer const& timer)
     m_fps = static_cast<float>(timer.GetFramesPerSecond());
 
     static float cameraSpeed = 40.0f;
-    static float speed = 1.0f;
+    static float speed = 20.0f;
 
     static int anim_index = 0;
 
@@ -132,10 +132,11 @@ void PlayScene::Update(DX::StepTimer const& timer)
 
     if (Input::IsKeyDown(Input::Key::W) || Input::IsMouseButtonDown(Input::MouseButton::Left) && Input::IsMouseButtonDown(Input::MouseButton::Right))
     {
-        Vector3f forward;
+        XMFLOAT3 forward;
         DirectX::XMStoreFloat3(&forward, camera.GetForwardVector());
 
-        player.AdjustPosition(forward.x * speed, 0.0f, forward.z * speed);
+        
+        player.AdjustPosition(player.GetForwardVector() * timer.GetElapsedSeconds() * speed);
         player.SetRotation(0.0f, atan2(forward.x, forward.z), 0.0f);
         anim_index = 1;
     }
@@ -145,6 +146,7 @@ void PlayScene::Update(DX::StepTimer const& timer)
         DirectX::XMStoreFloat3(&forward, camera.GetBackwardVector());
 
         player.AdjustPosition(forward.x, 0.0f, forward.z);
+        //player.AdjustPosition(player.GetBackwardVector() * timer.GetElapsedSeconds() * speed);
         player.SetRotation(0.0f, atan2(forward.x, forward.z), 0.0f);
         anim_index = 1;
     }
@@ -372,16 +374,32 @@ void PlayScene::OnMouseWheelScrolled(Vector2i const& position, float const delta
 
 void PlayScene::OnMouseButtonPressed(Vector2i const& position, Input::MouseButton const button)
 {
-    if (button == Input::MouseButton::Right)
-        pWindow->HideCursor();
+    if (button == Input::MouseButton::Left)
+    {
+        GetCursorPos(&mousePoint);
+        pWindow->DisableCursor();
+    }
+    else if (button == Input::MouseButton::Right)
+    {
+        GetCursorPos(&mousePoint);
+        pWindow->DisableCursor();
+    }
 
     Logger::Get()->info("Mouse button pressed: {}", static_cast<int>(button));
 }
 
 void PlayScene::OnMouseButtonReleased(Vector2i const& position, Input::MouseButton const button)
 {
-    if (button == Input::MouseButton::Right)
-        pWindow->ShowCursor();
+    if (button == Input::MouseButton::Left)
+    {
+        SetCursorPos(mousePoint.x, mousePoint.y);
+        pWindow->EnableCursor();
+    }
+    else if (button == Input::MouseButton::Right)
+    {
+        SetCursorPos(mousePoint.x, mousePoint.y);
+        pWindow->EnableCursor();
+    }
 
     Logger::Get()->info("Mouse button released: {}", static_cast<int>(button));
 }

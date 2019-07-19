@@ -22,7 +22,7 @@ Window::Window(std::wstring const& name, int width, int height, bool fullScreen)
 
     WNDCLASSEXW wcex = { };
     wcex.cbSize = sizeof(WNDCLASSEXW);
-    wcex.style = CS_VREDRAW | CS_HREDRAW | CS_OWNDC | CS_DBLCLKS;
+    wcex.style = /*CS_VREDRAW | CS_HREDRAW |*/ CS_OWNDC | CS_DBLCLKS;
     wcex.lpfnWndProc = HandleMessageSetup;
     wcex.cbClsExtra = 0;
     wcex.cbWndExtra = 0;
@@ -81,6 +81,22 @@ void Window::SetTitle(std::wstring const& title)
     SetWindowTextW(m_hWindow, title.c_str());
 }
 
+void Window::EnableCursor()
+{
+    m_bCursorVisible = true;
+    ShowCursor();
+    EnableImGuiMouse();
+    FreeCursor();
+}
+
+void Window::DisableCursor()
+{
+    m_bCursorVisible = false;
+    HideCursor();
+    DisableImGuiMouse();
+    ConfineCursor();
+}
+
 void Window::OnDeviceLost()
 {
 }
@@ -91,16 +107,37 @@ void Window::OnDeviceRestored()
     Application::Get().CreateWindowSizeDependentResources();
 }
 
-void Window::ShowCursor()
+void Window::FreeCursor() noexcept
 {
-    while (::ShowCursor(TRUE) < 0);
-    m_bCursorVisible = true;
+    ClipCursor(nullptr);
 }
 
-void Window::HideCursor()
+void Window::ConfineCursor() noexcept
+{
+    RECT rect = {};
+    GetClientRect(m_hWindow, &rect);
+    MapWindowPoints(m_hWindow, nullptr, reinterpret_cast<POINT*>(&rect), 2);
+    ClipCursor(&rect);
+}
+
+void Window::ShowCursor() noexcept
+{
+    while (::ShowCursor(TRUE) < 0);
+}
+
+void Window::HideCursor() noexcept
 {
     while (::ShowCursor(FALSE) >= 0);
-    m_bCursorVisible = false;
+}
+
+void Window::EnableImGuiMouse() noexcept
+{
+    ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_NoMouse;
+}
+
+void Window::DisableImGuiMouse() noexcept
+{
+    ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse;
 }
 
 LRESULT Window::HandleMessageSetup(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -297,12 +334,18 @@ LRESULT Window::HandleMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPa
         }
         case WM_LBUTTONDBLCLK:
         {
+            if (io.WantCaptureMouse)
+                return true;
+
             Vector2i position(LOWORD(lParam), HIWORD(lParam));
             input.OnMouseButtonDoubleClicked(position, Input::MouseButton::Left);
             break;
         }
         case WM_RBUTTONDOWN:
         {
+            if (io.WantCaptureMouse)
+                return true;
+
             Vector2i position(LOWORD(lParam), HIWORD(lParam));
             input.OnMouseButtonPressed(position, Input::MouseButton::Right);
             break;
