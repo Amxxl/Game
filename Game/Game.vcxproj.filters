@@ -80,9 +80,6 @@
     <Filter Include="Assets\Fonts">
       <UniqueIdentifier>{9dcb5e53-d856-476c-9727-7bc2e15df3c9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\System\Timer">
-      <UniqueIdentifier>{0f25843c-ff35-4a29-8fa0-ad09473afcac}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\GameObjects">
       <UniqueIdentifier>{7d3d595d-085d-4682-9b82-2e3fbf2256ca}</UniqueIdentifier>
     </Filter>
@@ -131,9 +128,6 @@
     <Filter Include="Engine\Physics\ReactPhysics3D\collision\narrowphase\SAT">
       <UniqueIdentifier>{d3f580b6-b07b-4dae-9b9a-a315a3a65a40}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\System\Input">
-      <UniqueIdentifier>{290517e8-aeb4-4ae3-8917-e15e2f08b3b1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Core">
       <UniqueIdentifier>{034ac408-a3a1-48ea-a112-9d93b4941b38}</UniqueIdentifier>
     </Filter>
@@ -154,6 +148,9 @@
     </Filter>
     <Filter Include="Engine\Graphics\Pipeline\Drawable">
       <UniqueIdentifier>{8c6d0d66-e88e-4782-9c71-a812b2ab94f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Platform">
+      <UniqueIdentifier>{b0b795fb-e447-4ac7-9190-3efcebcdceec}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -226,14 +223,8 @@
     <ClInclude Include="Frustum.h">
       <Filter>Engine\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Window.h">
-      <Filter>Engine\System</Filter>
-    </ClInclude>
     <ClInclude Include="Vector2.h">
       <Filter>Engine\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Input.h">
-      <Filter>Engine\System\Input</Filter>
     </ClInclude>
     <ClInclude Include="spdlog\async.h">
       <Filter>Engine\System\Logging\spdlog</Filter>
@@ -417,9 +408,6 @@
     </ClInclude>
     <ClInclude Include="Logger.h">
       <Filter>Engine\System\Logging</Filter>
-    </ClInclude>
-    <ClInclude Include="StepTimer.h">
-      <Filter>Engine\System\Timer</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
       <Filter>Game\GameObjects</Filter>
@@ -757,6 +745,15 @@
     <ClInclude Include="Audio\Audio.h">
       <Filter>Engine\Audio</Filter>
     </ClInclude>
+    <ClInclude Include="Window.h">
+      <Filter>Engine\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>Engine\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="StepTimer.h">
+      <Filter>Engine\Platform</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scene.cpp">
@@ -817,17 +814,8 @@
     <ClCompile Include="Frustum.cpp">
       <Filter>Engine\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Window.cpp">
-      <Filter>Engine\System</Filter>
-    </ClCompile>
-    <ClCompile Include="Input.cpp">
-      <Filter>Engine\System\Input</Filter>
-    </ClCompile>
     <ClCompile Include="Logger.cpp">
       <Filter>Engine\System\Logging</Filter>
-    </ClCompile>
-    <ClCompile Include="StepTimer.cpp">
-      <Filter>Engine\System\Timer</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
       <Filter>Game\GameObjects</Filter>
@@ -885,6 +873,15 @@
     </ClCompile>
     <ClCompile Include="Event.cpp">
       <Filter>Engine\System\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="Window.cpp">
+      <Filter>Engine\Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>Engine\Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="StepTimer.cpp">
+      <Filter>Engine\Platform</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

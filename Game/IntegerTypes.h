@@ -4,20 +4,20 @@
 
 #pragma once
 
-typedef char                  int8;
-typedef short                 int16;
-typedef int                   int32;
-typedef long long             int64;
+using int8   = char;
+using int16  = short;
+using int32  = int;
+using int64  = long long;
 
-typedef signed char           sint8;
-typedef signed short          sint16;
-typedef signed int            sint32;
-typedef signed long long      sint64;
+using sint8  = signed char;
+using sint16 = signed short;
+using sint32 = signed int;
+using sint64 = signed long long;
 
-typedef unsigned char         uint8;
-typedef unsigned short        uint16;
-typedef unsigned int          uint32;
-typedef unsigned long long    uint64;
+using uint8  = unsigned char;
+using uint16 = unsigned short;
+using uint32 = unsigned int;
+using uint64 = unsigned long long;
 
 static_assert(sizeof(int8) == 1, "Size of int8 must be 1 byte alignment.");
 static_assert(sizeof(int16) == 2, "Size of int16 must be 2 bytes alignment.");
