@@ -135,12 +135,46 @@ bool Frustum::CheckCube(DirectX::XMFLOAT3 const& center, float radius)
     return true;
 }
 
+bool Frustum::CheckRectangle(float minWidth, float minHeight, float minDepth, float maxWidth, float maxHeight, float maxDepth)
+{
+    for (unsigned int i = 0; i < 6; ++i)
+    {
+        if (PlaneDotCoord(m_planeNormals[i], { minWidth, minHeight, minDepth }) >= 0.0f)
+            continue;
+
+        if (PlaneDotCoord(m_planeNormals[i], { maxWidth, minHeight, minDepth }) >= 0.0f)
+            continue;
+
+        if (PlaneDotCoord(m_planeNormals[i], { minWidth, maxHeight, minDepth }) >= 0.0f)
+            continue;
+
+        if (PlaneDotCoord(m_planeNormals[i], { maxWidth, maxHeight, minDepth }) >= 0.0f)
+            continue;
+
+        if (PlaneDotCoord(m_planeNormals[i], { minWidth, minHeight, maxDepth }) >= 0.0f)
+            continue;
+
+        if (PlaneDotCoord(m_planeNormals[i], { maxWidth, minHeight, maxDepth }) >= 0.0f)
+            continue;
+
+        if (PlaneDotCoord(m_planeNormals[i], { minWidth, maxHeight, maxDepth }) >= 0.0f)
+            continue;
+
+        if (PlaneDotCoord(m_planeNormals[i], { maxWidth, maxHeight, maxDepth }) >= 0.0f)
+            continue;
+
+        return false;
+    }
+
+    return true;
+}
+
 float Frustum::PlaneDotCoord(DirectX::XMFLOAT4 const& plane, DirectX::XMFLOAT3 const& point)
 {
     DirectX::XMVECTOR p = DirectX::XMLoadFloat4(&plane);
     DirectX::XMVECTOR v = DirectX::XMLoadFloat3(&point);
 
-    float d;
-    DirectX::XMStoreFloat(&d, DirectX::XMPlaneDotCoord(p, v));
-    return d;
+    float dotProduct;
+    DirectX::XMStoreFloat(&dotProduct, DirectX::XMPlaneDotCoord(p, v));
+    return dotProduct;
 }

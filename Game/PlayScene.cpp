@@ -35,7 +35,7 @@ bool PlayScene::Load(SceneManager* sceneManager, Window& window)
 
     Application::Get().GetAudio()->LoadSound("Data/file.mp3", true, true);
 
-    camera.SetProjectionValues(90.0f, 800.0f / 600.0f, 0.1f, 1500.0f);
+    camera.SetProjectionValues(60.0f, 800.0f / 600.0f, 0.1f, 1500.0f);
     camera.SetPosition(0.0f, 20.0f, 0.0f);
     camera.SetLookAtPos(Vector3f(5.0f, 0.0f, 5.0f));
     camera.SetRotation(0.0f, 0.0f, 0.0f);
@@ -48,8 +48,9 @@ bool PlayScene::Load(SceneManager* sceneManager, Window& window)
     DirectX::CreateWICTextureFromFile(device, L"Data/sky.jpg", nullptr, skyTexture.ReleaseAndGetAddressOf());
 
     terrain.Initialize(m_deviceContext);
+    octree.Initialize(&terrain, m_deviceContext);
 
-    quadTree.Initialize(&terrain, m_deviceContext);
+    m_pDeviceResources->SetCamera(&camera);
 
     player.Initialize(m_deviceContext);
     player.SetPosition(205.0f, 16.5f, 215.0f);
@@ -97,7 +98,7 @@ bool PlayScene::Load(SceneManager* sceneManager, Window& window)
 
     spruce.Initialize("Data/spruce.obj", device, m_deviceContext);
 
-    testModel = std::make_unique<expr::Model>(window.GetDeviceResources(), "Data/nano.gltf");
+    testModel = std::make_unique<expr::Model>(window.GetDeviceResources(), "Data/10446_Palm_Tree_v1_max2010_iteration-2.obj");
 
     spriteBatch = std::make_unique<DirectX::SpriteBatch>(m_deviceContext);
     font = std::make_unique<DirectX::SpriteFont>(device, L"Data/Fonts/Consolas14BI.spritefont");
@@ -202,17 +203,20 @@ void PlayScene::Update(DX::StepTimer const& timer)
     if (Input::IsKeyDown(Input::Key::D3))
         anim_index = 5;
 
-    static float velocity = 15.0f;
+    //static float velocity = 15.0f;
 
     if (player.GetPositionFloat3().y > 16.5f)
     {
-        player.AdjustPosition(0.0f, -(deltaTime * velocity), 0.0f);
-        velocity += 15.0f * deltaTime;
+        acceleration += velocity * deltaTime;
+        //player.AdjustPosition(0.0f, -acceleration, 0.0f);
+        //velocity += 15.0f * deltaTime;
+        in_jump = false;
     }
 
     if (player.GetPositionFloat3().y <= 16.5f)
     {
-        velocity = 15.0f;
+        acceleration = 0.0f;
+        velocity = 1.0f;
         in_jump = false;
         player.SetPosition(player.GetPositionFloat3().x, 16.5f, player.GetPositionFloat3().z);
     }
@@ -228,22 +232,11 @@ void PlayScene::Update(DX::StepTimer const& timer)
 
     FMOD_VECTOR audioPos{ player.GetPositionFloat3().x, player.GetPositionFloat3().y, player.GetPositionFloat3().z };
     FMOD_VECTOR audioUp{ 0.0f, 1.0f, 0.0 };
-    //FMOD_VECTOR audioFor{ 1.0f, 0.0f, 1.0f };
 
     XMFLOAT3 testas;
     DirectX::XMStoreFloat3(&testas, player.GetForwardVector());
 
     FMOD_VECTOR audioFor{ testas.x, testas.y, testas.z };
-
-    /*static FMOD_VECTOR lastPos = { 0.0f, 0.0f, 0.0f };
-    FMOD_VECTOR audioVel;
-    audioVel.x = (player.GetPositionFloat3().x - lastPos.x) * (1000.f / 50.0f);
-    audioVel.y = (player.GetPositionFloat3().y - lastPos.x) * (1000.f / 50.0f);
-    audioVel.z = (player.GetPositionFloat3().z - lastPos.x) * (1000.f / 50.0f);
-
-    lastPos.x = player.GetPositionFloat3().x;
-    lastPos.y = player.GetPositionFloat3().y;
-    lastPos.z = player.GetPositionFloat3().z;*/
 
     Application::Get().GetAudio()->GetSystem()->set3DListenerAttributes(0, &audioPos, nullptr, &audioFor, &audioUp);
 }
@@ -258,8 +251,9 @@ void PlayScene::Render()
 
     sky->Draw(effect.get(), inputLayout.Get());
 
-    frustum.Construct(200.0f, camera.GetViewMatrix(), camera.GetProjectionMatrix());
-    quadTree.Draw(m_deviceContext, &frustum, m_world, camera.GetViewMatrix(), camera.GetProjectionMatrix());
+    // Terrain drawing.
+    frustum.Construct(500.0f, camera.GetViewMatrix(), camera.GetProjectionMatrix());
+    octree.Draw(m_deviceContext, &frustum, m_world, camera.GetViewMatrix(), camera.GetProjectionMatrix());
 
 
     model.Draw(m_world * DirectX::XMMatrixScaling(0.08f, 0.08f, 0.08f) * DirectX::XMMatrixRotationX(3.1415f / 2.0f) * DirectX::XMMatrixTranslation(200.0f, 16.0f, 200.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix());
@@ -275,7 +269,9 @@ void PlayScene::Render()
     bridge.Draw(m_world * DirectX::XMMatrixRotationY(-77.0f * (3.1415f / 180.0f)) * DirectX::XMMatrixTranslation(257.0f, 58.0f, 381.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix());
     
     testModel->Draw(m_pDeviceResources, DirectX::XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f) * DirectX::XMMatrixTranslation(0.0f, 0.0f, 0.0f));
+    
     water->Draw(m_world * XMMatrixTranslation(256.0f, 0.0f, 256.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix(), XMVectorSet(0.0f, 0.0f, 1.0f, 0.7f));
+
 
     std::ostringstream ss("");
     ss << "FPS: " << m_fps;
@@ -291,12 +287,8 @@ void PlayScene::Render()
 
     ImGui::Begin("Debug");
 
-    ss.str("");
-    ss << "Quad tree optimization draw count: " << quadTree.GetDrawCount();
-    ImGui::Text(ss.str().c_str());
-
     ImGui::Text("Position");
-    ImGui::SliderFloat("R", &camera.r, 0.0f, 80.0f, "%.1f");
+    ImGui::SliderFloat("R", &camera.r, 0.0f, 40.0f, "%.1f");
     ImGui::SliderAngle("Theta", &camera.theta, -180.0f, 180.0f);
     ImGui::SliderAngle("Phi", &camera.phi, -89.0f, 89.0f);
     
@@ -366,8 +358,8 @@ void PlayScene::OnMouseWheelScrolled(Vector2i const& position, float const delta
 {
     camera.r -= delta;
 
-    if (camera.r > 60.0f)
-        camera.r = 60.0f;
+    if (camera.r > 40.0f)
+        camera.r = 40.0f;
     else if (camera.r < 1.0f)
         camera.r = 1.0f;
 }
@@ -376,12 +368,10 @@ void PlayScene::OnMouseButtonPressed(Vector2i const& position, Input::MouseButto
 {
     if (button == Input::MouseButton::Left)
     {
-        GetCursorPos(&mousePoint);
         pWindow->DisableCursor();
     }
     else if (button == Input::MouseButton::Right)
     {
-        GetCursorPos(&mousePoint);
         pWindow->DisableCursor();
     }
 
@@ -392,12 +382,10 @@ void PlayScene::OnMouseButtonReleased(Vector2i const& position, Input::MouseButt
 {
     if (button == Input::MouseButton::Left)
     {
-        SetCursorPos(mousePoint.x, mousePoint.y);
         pWindow->EnableCursor();
     }
     else if (button == Input::MouseButton::Right)
     {
-        SetCursorPos(mousePoint.x, mousePoint.y);
         pWindow->EnableCursor();
     }
 

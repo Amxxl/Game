@@ -17,6 +17,8 @@ Terrain::~Terrain()
         delete[] m_heightMap;
         m_heightMap = nullptr;
     }
+
+    ShutdownTerrainCells();
 }
 
 void Terrain::Initialize(ID3D11DeviceContext* deviceContext)
@@ -25,11 +27,12 @@ void Terrain::Initialize(ID3D11DeviceContext* deviceContext)
     m_terrainHeight = 512;
     m_heightScale = 400.0f;
 
-    this->LoadRawHeightMap("Data/terrain.raw");
-    this->SetTerrainCoordinates();
-    this->SetTextureCoordinates();
-    this->SetTextureCoordinates1();
-    this->CalculateNormals();
+    LoadRawHeightMap("Data/terrain.raw");
+    SetTerrainCoordinates();
+    CalculateNormals();
+
+    SetTextureCoordinates();
+    SetTextureCoordinates1();
 
     int index, index1, index2, index3, index4;
     float u, v;
@@ -60,7 +63,7 @@ void Terrain::Initialize(ID3D11DeviceContext* deviceContext)
             // Modify the texture coordinates to cover the top edge.
             if (u == 1.0f) { u = 0.0f; }
             if (v == 1.0f) { v = 0.0f; }
-            
+
 
             // Now create two triangles for that quad.
             // Triangle 1 - Upper left.
@@ -152,11 +155,136 @@ void Terrain::Initialize(ID3D11DeviceContext* deviceContext)
             index++;
         }
     }
+    //LoadTerrainCells(DX::GetDevice(deviceContext));
 }
 
 void Terrain::CopyVertexArray(void* vertexList)
 {
     memcpy(vertexList, m_vertices, sizeof(DirectX::VertexPositionNormalColorDualTexture) * m_vertexCount);
+}
+
+bool Terrain::DrawCell(ID3D11DeviceContext* deviceContext, int cellId, Frustum* frustum)
+{
+    float minWidth, minHeight, minDepth, maxWidth, maxHeight, maxDepth;
+    bool result;
+
+    // Get the dimensions of the terrain cell.
+    m_pTerrainCells[cellId].GetCellDimensions(minWidth, minHeight, minDepth, maxWidth, maxHeight, maxDepth);
+
+    // Check if the cell is visible. If it is not visible then just return and don't draw it.
+    result = frustum->CheckRectangle(minWidth, minHeight, minDepth, maxWidth, maxHeight, maxDepth);
+
+    if (!result)
+    {
+        // Increment the number of cells that were culled.
+        m_iCellsCulled++;
+        return false;
+    }
+
+    // If it is visible then draw it.
+    m_pTerrainCells[cellId].Draw(deviceContext);
+
+    // Add the polygons in the cell to the draw count.
+    m_iDrawCount += (m_pTerrainCells[cellId].GetVertexCount() / 3);
+
+    // Increment the number of cells that were actually drawn.
+    m_iCellsDrawn++;
+
+    return true;
+}
+
+void Terrain::DrawCellLines(ID3D11DeviceContext* deviceContext, int cellId)
+{
+    m_pTerrainCells[cellId].DrawLineBuffers(deviceContext);
+}
+
+int Terrain::GetCellIndexCount(int cellId)
+{
+    return m_pTerrainCells[cellId].GetIndexCount();
+}
+
+int Terrain::GetCellLinesIndexCount(int cellId)
+{
+    return m_pTerrainCells[cellId].GetLineBuffersIndexCount();
+}
+
+int Terrain::GetCellCount()
+{
+    return m_iCellCount;
+}
+
+int Terrain::GetDrawCount()
+{
+    return m_iDrawCount;
+}
+
+int Terrain::GetCellsDrawn()
+{
+    return m_iCellsDrawn;
+}
+
+int Terrain::GetCellsCulled()
+{
+    return m_iCellsCulled;
+}
+
+bool Terrain::GetHeightAtPosition(float x, float z, float& height)
+{
+    int i, cellId, index;
+    float vertex1[3], vertex2[3], vertex3[3];
+    bool foundHeight;
+    float minWidth, minHeight, minDepth, maxWidth, maxHeight, maxDepth;
+
+
+    // Loop through all of the terrain cells to find out which one the inputX and inputZ would be inside.
+    cellId = -1;
+    for (i = 0; i < m_iCellCount; i++)
+    {
+        // Get the current cell dimensions.
+        m_pTerrainCells[i].GetCellDimensions(minWidth, minHeight, minDepth, maxWidth, maxHeight, maxDepth);
+
+        // Check to see if the positions are in this cell.
+        if ((x < maxWidth) && (x > minWidth) && (z < maxDepth) && (z > minDepth))
+        {
+            cellId = i;
+            i = m_iCellCount;
+        }
+    }
+
+    // If we didn't find a cell then the input position is off the terrain grid.
+    if (cellId == -1)
+    {
+        return false;
+    }
+
+    // If this is the right cell then check all the triangles in this cell to see what the height of the triangle at this position is.
+    for (i = 0; i < (m_pTerrainCells[cellId].GetVertexCount() / 3); i++)
+    {
+        index = i * 3;
+
+        vertex1[0] = m_pTerrainCells[cellId].pVertexList[index].x;
+        vertex1[1] = m_pTerrainCells[cellId].pVertexList[index].y;
+        vertex1[2] = m_pTerrainCells[cellId].pVertexList[index].z;
+        index++;
+
+        vertex2[0] = m_pTerrainCells[cellId].pVertexList[index].x;
+        vertex2[1] = m_pTerrainCells[cellId].pVertexList[index].y;
+        vertex2[2] = m_pTerrainCells[cellId].pVertexList[index].z;
+        index++;
+
+        vertex3[0] = m_pTerrainCells[cellId].pVertexList[index].x;
+        vertex3[1] = m_pTerrainCells[cellId].pVertexList[index].y;
+        vertex3[2] = m_pTerrainCells[cellId].pVertexList[index].z;
+
+        // Check to see if this is the polygon we are looking for.
+        foundHeight = GetHeightOfTriangle(x, z, height, vertex1, vertex2, vertex3);
+        if (foundHeight)
+        {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 void Terrain::SetTerrainCoordinates()
@@ -394,6 +522,183 @@ void Terrain::CalculateNormals()
     // Release the temporary normals.
     delete[] normals;
     normals = nullptr;
+}
+
+bool Terrain::LoadTerrainCells(ID3D11Device* device)
+{
+    int cellWidth, cellHeight, cellRowCount, i, j, index;
+    bool result;
+
+    // Set the height and width of each terrain cell to a fixed 33x33 vertex array.
+    cellWidth = 33;
+    cellHeight = 33;
+
+    // Calculate the number of cells needed to store the terrain data.
+    cellRowCount = (m_terrainWidth - 1) / (cellWidth - 1);
+    m_iCellCount = cellRowCount * cellRowCount;
+
+    // Create the terrain cell array.
+    m_pTerrainCells = new TerrainCell[m_iCellCount];
+    if (!m_pTerrainCells)
+        return false;
+
+    // Loop through and initialize all the terrain cells.
+    for (j = 0; j < cellRowCount; ++j)
+    {
+        for (i = 0; i < cellRowCount; ++i)
+        {
+            index = (cellRowCount * j) + i;
+
+            result = m_pTerrainCells[index].Initialize(device, m_heightMap, i, j, cellWidth, cellHeight, m_terrainWidth);
+
+            if (!result)
+                return false;
+        }
+    }
+    return true;
+}
+
+void Terrain::ShutdownTerrainCells()
+{
+    if (m_pTerrainCells)
+    {
+        for (int i = 0; i < m_iCellCount; ++i)
+            m_pTerrainCells[i].Shutdown();
+
+        delete[] m_pTerrainCells;
+        m_pTerrainCells = nullptr;
+    }
+}
+
+bool Terrain::GetHeightOfTriangle(float x, float z, float& height, float v0[3], float v1[3], float v2[3])
+{
+    float startVector[3], directionVector[3], edge1[3], edge2[3], normal[3];
+    float Q[3], e1[3], e2[3], e3[3], edgeNormal[3], temp[3];
+    float magnitude, D, denominator, numerator, t, determinant;
+
+    // Starting position of the ray that is being cast.
+    startVector[0] = x;
+    startVector[1] = 0.0f;
+    startVector[2] = z;
+
+    // The direction the ray is being cast.
+    directionVector[0] = 0.0f;
+    directionVector[1] = -1.0f;
+    directionVector[2] = 0.0f;
+
+    // Calculate the two edges from the three points given.
+    edge1[0] = v1[0] - v0[0];
+    edge1[1] = v1[1] - v0[1];
+    edge1[2] = v1[2] - v0[2];
+
+    edge2[0] = v2[0] - v0[0];
+    edge2[1] = v2[1] - v0[1];
+    edge2[2] = v2[2] - v0[2];
+
+    // Calculate the normal of the triangle from the two edges.
+    normal[0] = (edge1[1] * edge2[2]) - (edge1[2] * edge2[1]);
+    normal[1] = (edge1[2] * edge2[0]) - (edge1[0] * edge2[2]);
+    normal[2] = (edge1[0] * edge2[1]) - (edge1[1] * edge2[0]);
+
+    magnitude = (float)sqrt((normal[0] * normal[0]) + (normal[1] * normal[1]) + (normal[2] * normal[2]));
+    normal[0] = normal[0] / magnitude;
+    normal[1] = normal[1] / magnitude;
+    normal[2] = normal[2] / magnitude;
+
+    // Find the distance from the origin to the plane.
+    D = ((-normal[0] * v0[0]) + (-normal[1] * v0[1]) + (-normal[2] * v0[2]));
+
+    // Get the denominator of the equation.
+    denominator = ((normal[0] * directionVector[0]) + (normal[1] * directionVector[1]) + (normal[2] * directionVector[2]));
+
+    // Make sure the result doesn't get too close to zero to prevent divide by zero.
+    if (fabs(denominator) < 0.0001f)
+    {
+        return false;
+    }
+
+    // Get the numerator of the equation.
+    numerator = -1.0f * (((normal[0] * startVector[0]) + (normal[1] * startVector[1]) + (normal[2] * startVector[2])) + D);
+
+    // Calculate where we intersect the triangle.
+    t = numerator / denominator;
+
+    // Find the intersection vector.
+    Q[0] = startVector[0] + (directionVector[0] * t);
+    Q[1] = startVector[1] + (directionVector[1] * t);
+    Q[2] = startVector[2] + (directionVector[2] * t);
+
+    // Find the three edges of the triangle.
+    e1[0] = v1[0] - v0[0];
+    e1[1] = v1[1] - v0[1];
+    e1[2] = v1[2] - v0[2];
+
+    e2[0] = v2[0] - v1[0];
+    e2[1] = v2[1] - v1[1];
+    e2[2] = v2[2] - v1[2];
+
+    e3[0] = v0[0] - v2[0];
+    e3[1] = v0[1] - v2[1];
+    e3[2] = v0[2] - v2[2];
+
+    // Calculate the normal for the first edge.
+    edgeNormal[0] = (e1[1] * normal[2]) - (e1[2] * normal[1]);
+    edgeNormal[1] = (e1[2] * normal[0]) - (e1[0] * normal[2]);
+    edgeNormal[2] = (e1[0] * normal[1]) - (e1[1] * normal[0]);
+
+    // Calculate the determinant to see if it is on the inside, outside, or directly on the edge.
+    temp[0] = Q[0] - v0[0];
+    temp[1] = Q[1] - v0[1];
+    temp[2] = Q[2] - v0[2];
+
+    determinant = ((edgeNormal[0] * temp[0]) + (edgeNormal[1] * temp[1]) + (edgeNormal[2] * temp[2]));
+
+    // Check if it is outside.
+    if (determinant > 0.001f)
+    {
+        return false;
+    }
+
+    // Calculate the normal for the second edge.
+    edgeNormal[0] = (e2[1] * normal[2]) - (e2[2] * normal[1]);
+    edgeNormal[1] = (e2[2] * normal[0]) - (e2[0] * normal[2]);
+    edgeNormal[2] = (e2[0] * normal[1]) - (e2[1] * normal[0]);
+
+    // Calculate the determinant to see if it is on the inside, outside, or directly on the edge.
+    temp[0] = Q[0] - v1[0];
+    temp[1] = Q[1] - v1[1];
+    temp[2] = Q[2] - v1[2];
+
+    determinant = ((edgeNormal[0] * temp[0]) + (edgeNormal[1] * temp[1]) + (edgeNormal[2] * temp[2]));
+
+    // Check if it is outside.
+    if (determinant > 0.001f)
+    {
+        return false;
+    }
+
+    // Calculate the normal for the third edge.
+    edgeNormal[0] = (e3[1] * normal[2]) - (e3[2] * normal[1]);
+    edgeNormal[1] = (e3[2] * normal[0]) - (e3[0] * normal[2]);
+    edgeNormal[2] = (e3[0] * normal[1]) - (e3[1] * normal[0]);
+
+    // Calculate the determinant to see if it is on the inside, outside, or directly on the edge.
+    temp[0] = Q[0] - v2[0];
+    temp[1] = Q[1] - v2[1];
+    temp[2] = Q[2] - v2[2];
+
+    determinant = ((edgeNormal[0] * temp[0]) + (edgeNormal[1] * temp[1]) + (edgeNormal[2] * temp[2]));
+
+    // Check if it is outside.
+    if (determinant > 0.001f)
+    {
+        return false;
+    }
+
+    // Now we have our height.
+    height = Q[1];
+
+    return true;
 }
 
 bool Terrain::LoadRawHeightMap(char const* fileName)

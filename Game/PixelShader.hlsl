@@ -1,17 +1,24 @@
+Texture2D diffuseTexture : register(t0);
+//Texture2D specularTexture;
+
+SamplerState sampleType;
+
 cbuffer ObjectCBuf
 {
-    float3 materialColor;
     float specularIntensity;
     float specularPower;
+    float padding[2];
 };
 
 struct PixelInputType
 {
     float4 position : SV_Position;
     float3 normal : Normal;
+    float2 tex : TEXCOORD;
 };
 
 float4 main(PixelInputType input) : SV_TARGET
 {
-	return float4(1.0f, 1.0f, 1.0f, 1.0f);
+    float4 textureColor = diffuseTexture.Sample(sampleType, input.tex);
+    return textureColor;
 }

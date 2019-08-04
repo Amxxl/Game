@@ -83,7 +83,8 @@ void Texture::CreateColorTexture(ID3D11Device* device, uint16 width, uint16 heig
 
 namespace Bind
 {
-    Texture::Texture(DX::DeviceResources* deviceResources, std::wstring const& file)
+    Texture::Texture(DX::DeviceResources* deviceResources, std::wstring const& file, unsigned int slot)
+        : slot(slot)
     {
         if (StringHelper::GetFileExtension(file) == L".dds")
         {
@@ -94,7 +95,7 @@ namespace Bind
         }
         else if (StringHelper::GetFileExtension(file) == L".tga")
         {
-            assert("[.TGA] extension unsupported yet." && false);
+            assert("[.TGA] extension not supported yet." && false);
         }
         else
         {
@@ -105,7 +106,8 @@ namespace Bind
         }
     }
 
-    Texture::Texture(DX::DeviceResources* deviceResources, uint8 const* data, size_t size)
+    Texture::Texture(DX::DeviceResources* deviceResources, uint8 const* data, size_t size, unsigned int slot)
+        : slot(slot)
     {
         DX::ThrowIfFailed(
             DirectX::CreateWICTextureFromMemory(GetDevice(deviceResources), data, size,
@@ -115,6 +117,6 @@ namespace Bind
 
     void Texture::Bind(DX::DeviceResources* deviceResources) noexcept
     {
-        GetContext(deviceResources)->PSSetShaderResources(0, 1, pTextureView.GetAddressOf());
+        GetContext(deviceResources)->PSSetShaderResources(slot, 1u, pTextureView.GetAddressOf());
     }
 }

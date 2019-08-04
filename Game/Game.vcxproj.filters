@@ -730,9 +730,6 @@
     <ClInclude Include="Node.h">
       <Filter>Engine\Graphics\Pipeline\Drawable</Filter>
     </ClInclude>
-    <ClInclude Include="Events\Event.h">
-      <Filter>Engine\System\Events</Filter>
-    </ClInclude>
     <ClInclude Include="Events\WindowEvents.h">
       <Filter>Engine\System\Events</Filter>
     </ClInclude>
@@ -753,6 +750,15 @@
     </ClInclude>
     <ClInclude Include="StepTimer.h">
       <Filter>Engine\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\Event.h">
+      <Filter>Engine\System\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Octree.h">
+      <Filter>Game\Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="Sampler.h">
+      <Filter>Engine\Graphics\Pipeline\Bindable\Bindables</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -871,9 +877,6 @@
     <ClCompile Include="Audio.cpp">
       <Filter>Engine\Audio</Filter>
     </ClCompile>
-    <ClCompile Include="Event.cpp">
-      <Filter>Engine\System\Events</Filter>
-    </ClCompile>
     <ClCompile Include="Window.cpp">
       <Filter>Engine\Platform</Filter>
     </ClCompile>
@@ -882,6 +885,15 @@
     </ClCompile>
     <ClCompile Include="StepTimer.cpp">
       <Filter>Engine\Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="Events\Event.cpp">
+      <Filter>Engine\System\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="Octree.cpp">
+      <Filter>Game\Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="Sampler.cpp">
+      <Filter>Engine\Graphics\Pipeline\Bindable\Bindables</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

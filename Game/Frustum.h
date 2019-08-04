@@ -29,6 +29,9 @@ class Frustum
         bool CheckSphere(DirectX::XMFLOAT3 const& center, float radius);
         bool CheckCube(DirectX::XMFLOAT3 const& center, float radius);
 
+        bool CheckRectangle(float minWidth, float minHeight, float minDepth, float maxWidth, float maxHeight, float maxDepth);
+
+
         DirectX::XMFLOAT4 const& GetPlane(Plane id)     { return m_planeNormals[id];           }
 
         DirectX::XMFLOAT4 const& GetNearPlane()   const { return m_planeNormals[NEAR_PLANE];   }

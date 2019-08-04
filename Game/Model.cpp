@@ -237,15 +237,18 @@ namespace expr
 {
     Model::Model(DX::DeviceResources* deviceResources, std::string const& fileName)
     {
+        directory = StringHelper::GetDirectoryFromPath(fileName);
+
         Assimp::Importer importer;
         auto const pScene = importer.ReadFile(fileName,
             aiProcess_Triangulate |
             aiProcess_JoinIdenticalVertices |
-            aiProcess_ConvertToLeftHanded);
+            aiProcess_ConvertToLeftHanded |
+            aiProcess_GenNormals);
 
         for (size_t i = 0; i < pScene->mNumMeshes; ++i)
         {
-            meshPtrs.push_back(ParseMesh(deviceResources, *pScene->mMeshes[i]));
+            meshPtrs.push_back(ParseMesh(deviceResources, *pScene->mMeshes[i], pScene->mMaterials));
         }
 
         pRoot = ParseNode(*pScene->mRootNode);
@@ -256,21 +259,21 @@ namespace expr
         pRoot->Draw(deviceResources, transform);
     }
 
-    std::unique_ptr<Mesh> Model::ParseMesh(DX::DeviceResources* deviceResources, aiMesh const& mesh)
+    std::unique_ptr<Mesh> Model::ParseMesh(DX::DeviceResources* deviceResources, aiMesh const& mesh, aiMaterial const* const* pMaterials)
     {
         VertexBufferData vbuf(std::move(
             VertexLayout{}
             << VertexLayout::Position3D
             << VertexLayout::Normal
-            //<< VertexLayout::Texture2D
+            << VertexLayout::Texture2D
         ));
 
         for (unsigned int i = 0; i < mesh.mNumVertices; ++i)
         {
             vbuf.EmplaceBack(
                 *reinterpret_cast<DirectX::XMFLOAT3*>(&mesh.mVertices[i]),
-                *reinterpret_cast<DirectX::XMFLOAT3*>(&mesh.mNormals[i])
-                //*reinterpret_cast<DirectX::XMFLOAT3*>(&mesh.mTextureCoords[0][i])
+                *reinterpret_cast<DirectX::XMFLOAT3*>(&mesh.mNormals[i]),
+                *reinterpret_cast<DirectX::XMFLOAT3*>(&mesh.mTextureCoords[0][i])
             );
         }
 
@@ -288,6 +291,33 @@ namespace expr
 
         std::vector<std::unique_ptr<Bind::Bindable>> bindablePtrs;
 
+        bool hasSpecularMap = false;
+        float shininess = 32.0f;
+
+        if (mesh.mMaterialIndex >= 0)
+        {
+            auto& material = *pMaterials[mesh.mMaterialIndex];
+
+            aiString texFileName;
+            material.GetTexture(aiTextureType_DIFFUSE, 0, &texFileName);
+            
+            std::wstring texDir = StringHelper::StringToWide(directory + '\\' + texFileName.C_Str());
+            bindablePtrs.push_back(std::make_unique<Bind::Texture>(deviceResources, texDir.c_str()));
+        
+            /*
+            if (material.GetTexture(aiTextureType_SPECULAR, 0, &texFileName) == aiReturn_SUCCESS)
+            {
+                std::wstring stexDir = StringHelper::StringToWide(directory + '\\' + texFileName.C_Str());
+                bindablePtrs.push_back(std::make_unique<Bind::Texture>(deviceResources, stexDir.c_str(), 1));
+            }
+            else
+            {
+                material.Get(AI_MATKEY_SHININESS, shininess);
+            }*/
+        
+            bindablePtrs.push_back(std::make_unique<Bind::Sampler>(deviceResources));
+        }
+
         bindablePtrs.push_back(std::make_unique<Bind::VertexBuffer<VertexBufferData>>(deviceResources, vbuf));
         bindablePtrs.push_back(std::make_unique<Bind::IndexBuffer<unsigned int>>(deviceResources, indices));
 
@@ -303,11 +333,12 @@ namespace expr
 
         struct PSMaterialConstant
         {
-            DirectX::XMFLOAT3 color = { 0.6f, 0.6f, 0.8f };
-            float specularIntensity = 0.6f;
-            float specularPower = 30.0f;
-            float padding[3];
+            float specularIntensity = 0.8f;
+            float specularPower;
+            float padding[2];
         } pmc;
+
+        pmc.specularPower = shininess;
 
         bindablePtrs.push_back(std::make_unique<Bind::PixelConstantBuffer<PSMaterialConstant>>(deviceResources, pmc, 1u));
 

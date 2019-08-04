@@ -8,7 +8,7 @@
 #include "Vertex.h"
 #include "Bindable.h"
 
-namespace Bind // @todo: Move to Bind namespace.
+namespace Bind
 {
     template<typename T>
     class VertexBuffer : public Bindable
@@ -89,4 +89,10 @@ namespace Bind // @todo: Move to Bind namespace.
             uint32 stride = static_cast<uint32>(sizeof(T));
             uint32 vertexCount = 0;
     };
+}
+
+namespace DX
+{
+    template<typename T>
+    using VertexBuffer = Bind::VertexBuffer<T>;
 }

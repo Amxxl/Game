@@ -40,11 +40,12 @@ namespace expr
             void Draw(DX::DeviceResources* deviceResources, DirectX::FXMMATRIX transform) const;
 
         private:
-            static std::unique_ptr<Mesh> ParseMesh(DX::DeviceResources* deviceResources, aiMesh const& mesh);
+            std::unique_ptr<Mesh> ParseMesh(DX::DeviceResources* deviceResources, aiMesh const& mesh, aiMaterial const* const* pMaterials);
             std::unique_ptr<Node> ParseNode(aiNode const& node);
 
         private:
             std::unique_ptr<Node> pRoot;
             std::vector<std::unique_ptr<Mesh>> meshPtrs;
+            std::string directory = "";
     };
 }

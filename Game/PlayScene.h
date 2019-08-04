@@ -14,7 +14,8 @@
 #include "Camera.h"
 #include "ThirdPersonCamera.h"
 #include "Terrain.h"
-#include "QuadTree.h"
+#include "Octree.h"
+
 #include "Frustum.h"
 #include "Model.h"
 #include "RenderableGameObject.h"
@@ -71,8 +72,9 @@ class PlayScene : public Scene
         Window* pWindow = nullptr;
 
         Terrain terrain;
-        QuadTree quadTree;
+        Octree octree;
         Frustum frustum;
+
         RenderableGameObject player;
         RenderableGameObject npc;
         Model model;
@@ -88,13 +90,10 @@ class PlayScene : public Scene
         ThirdPersonCamera camera;
         DirectX::XMMATRIX m_world;
 
-        // Mouse Point
-        POINT mousePoint;
-
+        float velocity = 1.0f;
+        float acceleration = 0.0f;
         float m_fps;
         bool in_jump;
-
-        //DirectX::XMFLOAT3 playerPos;
 
     private:
         bool paused;

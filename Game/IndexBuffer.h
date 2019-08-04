@@ -58,3 +58,9 @@ namespace Bind
             uint32 indexCount = 0;
     };
 }
+
+namespace DX
+{
+    template<typename T>
+    using IndexBuffer = Bind::IndexBuffer<T>;
+}

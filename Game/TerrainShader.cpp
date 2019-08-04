@@ -75,7 +75,8 @@ void TerrainShader::RenderShader(ID3D11DeviceContext* deviceContext, int numIndi
     deviceContext->VSSetShader(vertexShader.Get(), nullptr, 0);
     deviceContext->PSSetShader(pixelShader.Get(), nullptr, 0);
 
-    ID3D11SamplerState* samplerState = states->LinearClamp();
+    ID3D11SamplerState* samplerState = states->AnisotropicClamp();
+
     deviceContext->PSSetSamplers(0, 1, &samplerState);
     deviceContext->PSSetSamplers(1, 1, &samplerState);
 

@@ -92,7 +92,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <FloatingPointModel>Fast</FloatingPointModel>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
-      <AdditionalIncludeDirectories>$(SolutionDir)\DirectXTK\Inc;$(SolutionDir)\ImGui\include;$(SolutionDir)\External\Assimp\include;$(SolutionDir)\External\ReactPhysics3D\include;$(SolutionDir)\External\FMOD\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\DirectXTK\Inc;$(SolutionDir)\ImGui\include;$(SolutionDir)\External\Assimp\include;$(SolutionDir)\External\ReactPhysics3D\include;$(SolutionDir)\External\FMOD\include;$(ProjectDir)Events;$(ProjectDir)Graphics;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -113,7 +113,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <FloatingPointModel>Fast</FloatingPointModel>
-      <AdditionalIncludeDirectories>$(SolutionDir)\DirectXTK\Inc;$(SolutionDir)\ImGui\include;$(SolutionDir)\External\Assimp\include;$(SolutionDir)\External\ReactPhysics3D\include;$(SolutionDir)\External\FMOD\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\DirectXTK\Inc;$(SolutionDir)\ImGui\include;$(SolutionDir)\External\Assimp\include;$(SolutionDir)\External\ReactPhysics3D\include;$(SolutionDir)\External\FMOD\include;$(ProjectDir)Events;$(ProjectDir)Graphics;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -137,7 +137,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <FloatingPointModel>Fast</FloatingPointModel>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
-      <AdditionalIncludeDirectories>$(SolutionDir)\DirectXTK\Inc;$(SolutionDir)\ImGui\include;$(SolutionDir)\External\Assimp\include;$(SolutionDir)\External\ReactPhysics3D\include;$(SolutionDir)\External\FMOD\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\DirectXTK\Inc;$(SolutionDir)\ImGui\include;$(SolutionDir)\External\Assimp\include;$(SolutionDir)\External\ReactPhysics3D\include;$(SolutionDir)\External\FMOD\include;$(ProjectDir)Events;$(ProjectDir)Graphics;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -162,7 +162,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <FloatingPointModel>Fast</FloatingPointModel>
-      <AdditionalIncludeDirectories>$(SolutionDir)\DirectXTK\Inc;$(SolutionDir)\ImGui\include;$(SolutionDir)\External\Assimp\include;$(SolutionDir)\External\ReactPhysics3D\include;$(SolutionDir)\External\FMOD\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\DirectXTK\Inc;$(SolutionDir)\ImGui\include;$(SolutionDir)\External\Assimp\include;$(SolutionDir)\External\ReactPhysics3D\include;$(SolutionDir)\External\FMOD\include;$(ProjectDir)Events;$(ProjectDir)Graphics;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -301,12 +301,14 @@
     <ClInclude Include="Model.h" />
     <ClInclude Include="Events\MouseEvents.h" />
     <ClInclude Include="Node.h" />
+    <ClInclude Include="Octree.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Physics.h" />
     <ClInclude Include="PixelShader.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="QuadTree.h" />
     <ClInclude Include="RenderableGameObject.h" />
+    <ClInclude Include="Sampler.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="spdlog\async.h" />
@@ -386,7 +388,7 @@
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="DeviceResources.cpp" />
     <ClCompile Include="Drawable.cpp" />
-    <ClCompile Include="Event.cpp" />
+    <ClCompile Include="Events\Event.cpp" />
     <ClCompile Include="Frustum.cpp" />
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -401,6 +403,7 @@
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="Node.cpp" />
+    <ClCompile Include="Octree.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -412,6 +415,7 @@
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="QuadTree.cpp" />
     <ClCompile Include="RenderableGameObject.cpp" />
+    <ClCompile Include="Sampler.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="StepTimer.cpp" />

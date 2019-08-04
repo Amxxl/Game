@@ -22,13 +22,13 @@ Window::Window(std::wstring const& name, int width, int height, bool fullScreen)
 
     WNDCLASSEXW wcex = { };
     wcex.cbSize = sizeof(WNDCLASSEXW);
-    wcex.style = /*CS_VREDRAW | CS_HREDRAW |*/ CS_OWNDC | CS_DBLCLKS;
+    wcex.style = /*CS_VREDRAW | CS_HREDRAW |*/ CS_OWNDC;// | CS_DBLCLKS;
     wcex.lpfnWndProc = HandleMessageSetup;
     wcex.cbClsExtra = 0;
     wcex.cbWndExtra = 0;
     wcex.hInstance = m_hInstance;
     wcex.hIcon = LoadIcon(wcex.hInstance, L"IDI_ICON");
-    wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
+    wcex.hCursor = nullptr;//LoadCursor(nullptr, IDC_ARROW);
     wcex.hbrBackground = reinterpret_cast<HBRUSH>(COLOR_WINDOW + 3);
     wcex.lpszMenuName = nullptr;
     wcex.lpszClassName = m_wsTitle.c_str();
@@ -83,7 +83,11 @@ void Window::SetTitle(std::wstring const& title)
 
 void Window::EnableCursor()
 {
+    if (m_bCursorVisible == true)
+        return;
+
     m_bCursorVisible = true;
+    SetCursorPos(m_mousePoint.x, m_mousePoint.y);
     ShowCursor();
     EnableImGuiMouse();
     FreeCursor();
@@ -91,7 +95,11 @@ void Window::EnableCursor()
 
 void Window::DisableCursor()
 {
+    if (m_bCursorVisible == false)
+        return;
+
     m_bCursorVisible = false;
+    GetCursorPos(&m_mousePoint);
     HideCursor();
     DisableImGuiMouse();
     ConfineCursor();

@@ -9,12 +9,14 @@ struct VertexInputType
 {
     float4 position : SV_Position;
     float3 normal : Normal;
+    float2 tex : Texcoord;
 };
 
 struct PixelInputType
 {
     float4 position : SV_Position;
     float3 normal : Normal;
+    float2 tex : Texcoord;
 };
 
 PixelInputType main(VertexInputType input)
@@ -28,6 +30,8 @@ PixelInputType main(VertexInputType input)
     output.position = mul(input.position, worldMatrix);
     output.position = mul(output.position, viewMatrix);
     output.position = mul(output.position, projectionMatrix);
+
+    output.tex = input.tex;
 
     // Calculate the normal vector against the world matrix only.
     output.normal = mul(input.normal, (float3x3)worldMatrix);

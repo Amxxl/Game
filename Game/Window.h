@@ -61,4 +61,6 @@ class Window : public DX::IDeviceNotify, public EventDispatcher
         bool m_bFullScreen;
         bool m_bCursorVisible;
         HWND m_hWindow;
+
+        POINT m_mousePoint;
 };
