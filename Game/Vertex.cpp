@@ -98,7 +98,7 @@ VertexLayout& VertexLayout::Append(ElementType type)
 
 VertexLayout& VertexLayout::operator<<(ElementType type)
 {
-    this->Append(type);
+    Append(type);
     return *this;
 }
 

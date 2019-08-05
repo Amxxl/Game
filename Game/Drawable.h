@@ -2,15 +2,6 @@
 
 #include "DeviceResources.h"
 #include "StepTimer.h"
-//#include "BindableCommon.h"
-/*
-namespace Bind
-{
-    class Bindable;
-
-    template<typename T>
-    class IndexBuffer;
-}*/
 
 namespace Bind
 {

@@ -27,7 +27,6 @@ float4 MD5ModelPixelShader(PixelInputType input) : SV_TARGET
     // Sample the pixel color from the texture using the sampler at this texture coordinate location.
     textureColor = shaderTexture.Sample(SampleType, input.tex);
 
-    color = ambientColor;
     lightDir = -lightDirection;
     lightIntensity = saturate(dot(input.normal, lightDir));
 

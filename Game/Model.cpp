@@ -273,7 +273,7 @@ namespace expr
             vbuf.EmplaceBack(
                 *reinterpret_cast<DirectX::XMFLOAT3*>(&mesh.mVertices[i]),
                 *reinterpret_cast<DirectX::XMFLOAT3*>(&mesh.mNormals[i]),
-                *reinterpret_cast<DirectX::XMFLOAT3*>(&mesh.mTextureCoords[0][i])
+                *reinterpret_cast<DirectX::XMFLOAT2*>(&mesh.mTextureCoords[0][i])
             );
         }
 
@@ -325,22 +325,36 @@ namespace expr
         auto pvsbc = pvs->GetBytecode();
         bindablePtrs.push_back(std::move(pvs));
 
-        bindablePtrs.push_back(std::make_unique<Bind::PixelShader>(deviceResources, L"PixelShader.ps"));
-
-        //bindablePtrs.push_back(std::make_unique<Bind::Texture>(deviceResources, L""));
-
         bindablePtrs.push_back(std::make_unique<Bind::InputLayout>(deviceResources, vbuf.GetLayout().GetD3DLayout(), pvsbc));
 
+        bindablePtrs.push_back(std::make_unique<Bind::PixelShader>(deviceResources, L"PixelShader.ps"));
+
+        /**
         struct PSMaterialConstant
         {
             float specularIntensity = 0.8f;
             float specularPower;
             float padding[2];
         } pmc;
+        */
+        struct LightBufferType
+        {
+            DirectX::XMFLOAT4 ambientColor;
+            DirectX::XMFLOAT4 diffuseColor;
+            DirectX::XMFLOAT3 lightDirection;
+            float padding;
+        };
 
-        pmc.specularPower = shininess;
+        LightBufferType light;
+        light.ambientColor = DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
+        light.diffuseColor = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+        light.lightDirection = DirectX::XMFLOAT3(1.0f, 0.0f, 1.0f);
+        light.padding = 0.0f;
 
-        bindablePtrs.push_back(std::make_unique<Bind::PixelConstantBuffer<PSMaterialConstant>>(deviceResources, pmc, 1u));
+
+        //pmc.specularPower = shininess;
+
+        bindablePtrs.push_back(std::make_unique<Bind::PixelConstantBuffer<LightBufferType>>(deviceResources, light, 0u));
 
         return std::make_unique<Mesh>(deviceResources, std::move(bindablePtrs));
     }

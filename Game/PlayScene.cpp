@@ -35,7 +35,7 @@ bool PlayScene::Load(SceneManager* sceneManager, Window& window)
 
     Application::Get().GetAudio()->LoadSound("Data/file.mp3", true, true);
 
-    camera.SetProjectionValues(60.0f, 800.0f / 600.0f, 0.1f, 1500.0f);
+    camera.SetProjectionValues(90.0f, 800.0f / 600.0f, 0.1f, 1500.0f);
     camera.SetPosition(0.0f, 20.0f, 0.0f);
     camera.SetLookAtPos(Vector3f(5.0f, 0.0f, 5.0f));
     camera.SetRotation(0.0f, 0.0f, 0.0f);
@@ -98,7 +98,7 @@ bool PlayScene::Load(SceneManager* sceneManager, Window& window)
 
     spruce.Initialize("Data/spruce.obj", device, m_deviceContext);
 
-    testModel = std::make_unique<expr::Model>(window.GetDeviceResources(), "Data/10446_Palm_Tree_v1_max2010_iteration-2.obj");
+    testModel = std::make_unique<expr::Model>(window.GetDeviceResources(), "Data/Models/Cabin/WoodenCabinObj.obj");
 
     spriteBatch = std::make_unique<DirectX::SpriteBatch>(m_deviceContext);
     font = std::make_unique<DirectX::SpriteFont>(device, L"Data/Fonts/Consolas14BI.spritefont");
@@ -267,8 +267,12 @@ void PlayScene::Render()
     spruce.Draw(m_world * DirectX::XMMatrixScaling(2.0f, 2.0f, 2.0f) * DirectX::XMMatrixRotationX(AI_MATH_PI / 2) * DirectX::XMMatrixTranslation(250.0f, 16.5f, 200.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix());
 
     bridge.Draw(m_world * DirectX::XMMatrixRotationY(-77.0f * (3.1415f / 180.0f)) * DirectX::XMMatrixTranslation(257.0f, 58.0f, 381.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix());
-    
-    testModel->Draw(m_pDeviceResources, DirectX::XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f) * DirectX::XMMatrixTranslation(0.0f, 0.0f, 0.0f));
+  
+    state = std::make_unique<DirectX::CommonStates>(DX::GetDevice(m_deviceContext));
+    ID3D11RasterizerState* cullNone = state->CullNone();
+    m_deviceContext->RSSetState(cullNone);
+
+    testModel->Draw(m_pDeviceResources, DirectX::XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f) * DirectX::XMMatrixTranslation(0.0f, 10.0f, 0.0f));
     
     water->Draw(m_world * XMMatrixTranslation(256.0f, 0.0f, 256.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix(), XMVectorSet(0.0f, 0.0f, 1.0f, 0.7f));
 

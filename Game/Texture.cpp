@@ -104,6 +104,7 @@ namespace Bind
                     file.c_str(), nullptr, pTextureView.GetAddressOf())
             );
         }
+
     }
 
     Texture::Texture(DX::DeviceResources* deviceResources, uint8 const* data, size_t size, unsigned int slot)
