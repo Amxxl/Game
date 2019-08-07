@@ -226,6 +226,7 @@ class Input : public EventDispatcher
         void OnMouseLeave();
 
     private:
+        void OnKeyChar(size_t const key, bool repeated);
         void OnKeyPressed(size_t const key, bool repeated);
         void OnKeyReleased(size_t const key);
 

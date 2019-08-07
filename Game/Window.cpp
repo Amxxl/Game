@@ -502,6 +502,11 @@ LRESULT Window::HandleMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPa
             input.OnKeyReleased(static_cast<size_t>(wParam));
             break;
         }
+        case WM_CHAR:
+        {
+            input.OnKeyChar(static_cast<size_t>(wParam), lParam & 0x40000000);
+            break;
+        }
         case WM_MENUCHAR:
             // A menu is active and the user presses a key that does not correspond
             // to any mnemonic or accelerator key. Ignore so we don't produce an error beep.

@@ -103,6 +103,18 @@ void Input::OnMouseLeave()
     DispatchEvent<EventMouseLeave>();
 }
 
+void Input::OnKeyChar(size_t const key, bool repeated)
+{
+    if (key >= Key::None && key <= Key::OemClear)
+    {
+        // Don't do autorepeat if it's disabled.
+        if (repeated && !IsAutorepeatEnabled())
+            return;
+
+        DispatchEvent<EventKeyChar>(key, repeated);
+    }
+}
+
 void Input::OnKeyPressed(size_t const key, bool repeated)
 {
     if (key >= Key::None && key <= Key::OemClear)
