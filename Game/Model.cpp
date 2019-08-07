@@ -314,8 +314,10 @@ namespace expr
             {
                 material.Get(AI_MATKEY_SHININESS, shininess);
             }*/
+
+            //LoadMaterialTextures(deviceResources, bintablePtrs,)
         
-            bindablePtrs.push_back(std::make_unique<Bind::Sampler>(deviceResources));
+            bindablePtrs.push_back(std::make_unique<Bind::Sampler>(deviceResources, Bind::Sampler::State::POINT_CLAMP));
         }
 
         bindablePtrs.push_back(std::make_unique<Bind::VertexBuffer<VertexBufferData>>(deviceResources, vbuf));
@@ -381,4 +383,97 @@ namespace expr
 
         return pNode;
     }
+    /*
+    void Model::LoadMaterialTextures(DX::DeviceResources* deviceResources, aiMesh const& mesh, std::vector<std::unique_ptr<Bind::Bindable>>& bindables, aiTextureType textureType, aiScene const* pScene, aiMaterial const* const* pMaterials)
+    {
+        std::vector<Texture> materialTextures;
+        TextureStorageType storeType = TextureStorageType::Invalid;
+
+
+        if (mesh.mMaterialIndex >= 0)
+        {
+            auto& material = *pMaterials[mesh.mMaterialIndex];
+            unsigned int texturesCount = material.GetTextureCount(textureType);
+
+            if (texturesCount <= 0) // If there are no textures.
+            {
+                storeType = TextureStorageType::None;
+                aiColor3D aiColor(0.0f, 0.0f, 0.0f);
+
+                switch (textureType)
+                {
+                case aiTextureType::aiTextureType_DIFFUSE:
+                {
+                    material.Get(AI_MATKEY_COLOR_DIFFUSE, aiColor);
+                    if (aiColor.IsBlack())
+                    {
+                        //materialTextures.push_back(Texture(device, Colors::UnloadedTextureColor, textureType));
+                        bindables.push_back(std::make_unique<Bind::Texture>(deviceResources, ""));
+                        return;
+                    }
+
+                    //materialTextures.push_back(Texture(device, Color(static_cast<uint8>(aiColor.r * 255), static_cast<uint8>(aiColor.g * 255), static_cast<uint8>(aiColor.b * 255)), textureType));
+                    return;
+                }
+                }
+            }
+            else
+            {
+                for (UINT i = 0; i < texturesCount; ++i)
+                {
+                    aiString path;
+                    material.GetTexture(textureType, i, &path);
+                    storeType = DetermineTextureStorageType(pScene, pMaterial, i, textureType);
+
+                    switch (storeType)
+                    {
+                    case TextureStorageType::EmbeddedIndexCompressed:
+                    {
+                        int index = GetTextureIndex(&path);
+                        Texture embeddedIndexedTexture(device, reinterpret_cast<uint8*>(pScene->mTextures[index]->pcData),
+                            pScene->mTextures[index]->mWidth, textureType);
+                        materialTextures.push_back(embeddedIndexedTexture);
+                        break;
+                    }
+                    case TextureStorageType::EmbeddedIndexNonCompressed:
+                    {
+                        int index = GetTextureIndex(&path);
+                        Texture embeddedIndexNonCompressed(device, reinterpret_cast<uint8*>(pScene->mTextures[index]->pcData),
+                            pScene->mTextures[index]->mWidth * pScene->mTextures[index]->mHeight, textureType);
+                        materialTextures.push_back(embeddedIndexNonCompressed);
+                        break;
+                    }
+                    case TextureStorageType::EmbeddedCompressed:
+                    {
+                        aiTexture const* pTexture = pScene->GetEmbeddedTexture(path.C_Str());
+                        Texture embeddedTexture(device, reinterpret_cast<uint8*>(pTexture->pcData),
+                            pTexture->mWidth, textureType);
+                        materialTextures.push_back(embeddedTexture);
+                        break;
+                    }
+                    case TextureStorageType::EmbeddedNonCompressed:
+                    {
+                        aiTexture const* pTexture = pScene->GetEmbeddedTexture(path.C_Str());
+                        Texture embeddedNonCompressed(device, reinterpret_cast<uint8*>(pTexture->pcData),
+                            pTexture->mWidth * pTexture->mHeight, textureType);
+                        materialTextures.push_back(embeddedNonCompressed);
+                    }
+                    case TextureStorageType::Disk:
+                    {
+                        std::string fileName = directory + '\\' + path.C_Str();
+                        Texture diskTexture(device, fileName, textureType);
+                        materialTextures.push_back(diskTexture);
+                        break;
+                    }
+                    }
+                }
+            }
+        }
+
+        if (materialTextures.size() == 0)
+        {
+            materialTextures.push_back(Texture(device, Colors::UnhandledTextureColor, textureType));
+        }
+        return materialTextures;
+    }*/
 }

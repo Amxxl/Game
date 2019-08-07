@@ -43,6 +43,18 @@ namespace expr
             std::unique_ptr<Mesh> ParseMesh(DX::DeviceResources* deviceResources, aiMesh const& mesh, aiMaterial const* const* pMaterials);
             std::unique_ptr<Node> ParseNode(aiNode const& node);
 
+
+        private:
+            /*
+            void LoadMaterialTextures(DX::DeviceResources* deviceResources, aiMesh const& mesh,
+                std::vector<std::unique_ptr<Bind::Bindable>>& bindables, aiTextureType textureType,
+                aiScene const* pScene, aiMaterial const* const* pMaterials);
+
+            TextureStorageType DetermineTextureStorageType(aiScene const* pScene, aiMaterial* pMaterial,
+                unsigned int index, aiTextureType textureType);
+
+            int GetTextureIndex(aiString* pStr);*/
+
         private:
             std::unique_ptr<Node> pRoot;
             std::vector<std::unique_ptr<Mesh>> meshPtrs;
