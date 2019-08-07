@@ -39,6 +39,7 @@ class Application
         void OnWindowMoved();
         void OnWindowSizeChanged(int width, int height);
 
+        void OnEvent(EventKeyChar const& event);
         void OnEvent(EventKeyPressed const& event);
         void OnEvent(EventKeyReleased const& event);
         void OnEvent(EventMouseMoved const& event);

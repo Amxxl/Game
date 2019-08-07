@@ -40,6 +40,7 @@ class PlayScene : public Scene
 
         bool const IsPaused() const { return paused; }
 
+        virtual void OnKeyChar(size_t key) final override;
         virtual void OnKeyPressed(size_t key) final override;
         virtual void OnKeyReleased(size_t key) final override;
 

@@ -22,6 +22,7 @@ class SceneManager
         void PushScene(Scene* scene);
         void PopScene();
 
+        void OnKeyChar(size_t key);
         void OnKeyPressed(size_t key);
         void OnKeyReleased(size_t key);
 

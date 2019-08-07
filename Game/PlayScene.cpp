@@ -306,6 +306,11 @@ void PlayScene::Render()
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 }
 
+void PlayScene::OnKeyChar(size_t key)
+{
+    Logger::Get()->info("EventKeyChar: {}", static_cast<char>(key));
+}
+
 void PlayScene::OnKeyPressed(size_t key)
 {
     if (!in_jump && key == Input::Key::Space)

@@ -56,6 +56,12 @@ void SceneManager::PopScene()
         scenes.back()->Resume();
 }
 
+void SceneManager::OnKeyChar(size_t key)
+{
+    if (!scenes.empty())
+        scenes.back()->OnKeyChar(key);
+}
+
 void SceneManager::OnKeyPressed(size_t key)
 {
     if (!scenes.empty())

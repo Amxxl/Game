@@ -28,6 +28,7 @@ class Scene
         virtual void Resume() = 0;
 
     public:
+        virtual void OnKeyChar(size_t key) {}
         virtual void OnKeyPressed(size_t key) {}
         virtual void OnKeyReleased(size_t key) {}
 

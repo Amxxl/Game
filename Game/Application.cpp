@@ -63,6 +63,7 @@ void Application::Initialize(int width, int height)
     m_timer.SetTargetElapsedSeconds(1.0 / 60);
     */
 
+    m_window->GetInput().AddEventListener<EventKeyChar>(*this);
     m_window->GetInput().AddEventListener<EventKeyPressed>(*this);
     m_window->GetInput().AddEventListener<EventKeyReleased>(*this);
     m_window->GetInput().AddEventListener<EventMouseMoved>(*this);
@@ -188,6 +189,11 @@ void Application::OnWindowSizeChanged(int width, int height)
 
     // TODO: Game window is being resized.
 
+}
+
+void Application::OnEvent(EventKeyChar const& event)
+{
+    m_sceneManager->OnKeyChar(event.key);
 }
 
 void Application::OnEvent(EventKeyPressed const& event)
