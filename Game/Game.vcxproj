@@ -281,7 +281,6 @@
     <ClInclude Include="ConstantBuffer.h" />
     <ClInclude Include="ConstantBuffers.h" />
     <ClInclude Include="Core\IntegerTypes.h" />
-    <ClInclude Include="Core\ResourceManager.h" />
     <ClInclude Include="DeviceResources.h" />
     <ClInclude Include="Drawable.h" />
     <ClInclude Include="DynamicVertexBuffer.h" />
@@ -389,7 +388,6 @@
     <ClCompile Include="BindableCache.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Color.cpp" />
-    <ClCompile Include="Core\ResourceManager.cpp" />
     <ClCompile Include="DeviceResources.cpp" />
     <ClCompile Include="Drawable.cpp" />
     <ClCompile Include="Events\Event.cpp" />

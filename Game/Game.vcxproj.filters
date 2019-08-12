@@ -760,9 +760,6 @@
     <ClInclude Include="Core\IntegerTypes.h">
       <Filter>Engine\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Core\ResourceManager.h">
-      <Filter>Engine\Core</Filter>
-    </ClInclude>
     <ClInclude Include="BindableCache.h">
       <Filter>Engine\Graphics\Pipeline\Bindable</Filter>
     </ClInclude>
@@ -903,9 +900,6 @@
     </ClCompile>
     <ClCompile Include="PointLight.cpp">
       <Filter>Engine\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\ResourceManager.cpp">
-      <Filter>Engine\Core</Filter>
     </ClCompile>
     <ClCompile Include="BindableCache.cpp">
       <Filter>Engine\Graphics\Pipeline\Bindable</Filter>
