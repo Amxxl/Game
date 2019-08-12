@@ -685,9 +685,6 @@
     <ClInclude Include="Physics.h">
       <Filter>Engine\Physics</Filter>
     </ClInclude>
-    <ClInclude Include="IntegerTypes.h">
-      <Filter>Engine\Core</Filter>
-    </ClInclude>
     <ClInclude Include="Bindable.h">
       <Filter>Engine\Graphics\Pipeline\Bindable</Filter>
     </ClInclude>
@@ -717,9 +714,6 @@
     </ClInclude>
     <ClInclude Include="BindableCommon.h">
       <Filter>Engine\Graphics\Pipeline\Bindable</Filter>
-    </ClInclude>
-    <ClInclude Include="DrawableBase.h">
-      <Filter>Engine\Graphics\Pipeline\Drawable</Filter>
     </ClInclude>
     <ClInclude Include="Model.h">
       <Filter>Engine\Graphics\Pipeline\Drawable</Filter>
@@ -759,6 +753,18 @@
     </ClInclude>
     <ClInclude Include="Sampler.h">
       <Filter>Engine\Graphics\Pipeline\Bindable\Bindables</Filter>
+    </ClInclude>
+    <ClInclude Include="PointLight.h">
+      <Filter>Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\IntegerTypes.h">
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\ResourceManager.h">
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="BindableCache.h">
+      <Filter>Engine\Graphics\Pipeline\Bindable</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -895,6 +901,15 @@
     <ClCompile Include="Sampler.cpp">
       <Filter>Engine\Graphics\Pipeline\Bindable\Bindables</Filter>
     </ClCompile>
+    <ClCompile Include="PointLight.cpp">
+      <Filter>Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\ResourceManager.cpp">
+      <Filter>Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="BindableCache.cpp">
+      <Filter>Engine\Graphics\Pipeline\Bindable</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="bow.ico">
@@ -973,6 +988,9 @@
       <Filter>Assets\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="PixelShader.hlsl">
+      <Filter>Assets\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="PixelShaderSpec.hlsl">
       <Filter>Assets\Shaders</Filter>
     </FxCompile>
   </ItemGroup>

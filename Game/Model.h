@@ -2,37 +2,21 @@
 
 #include "Mesh.h"
 #include "Node.h"
-#include "MD5ModelShader.h"
 
-class Model
-{
-    public:
-        Model();
-        ~Model();
-
-        bool Initialize(std::string const& filePath, ID3D11Device* device, ID3D11DeviceContext* deviceContext);
-
-        void Draw(DirectX::XMMATRIX world, DirectX::XMMATRIX view, DirectX::XMMATRIX proj);
-
-    private:
-        bool LoadModel(std::string const& filePath);
-        void ProcessNode(aiNode* node, aiScene const* scene, DirectX::XMMATRIX const& parentTransformMatrix);
-        Mesh ProcessMesh(aiMesh* mesh, aiScene const* scene, DirectX::XMMATRIX const& transformMatrix);
-        TextureStorageType DetermineTextureStorageType(aiScene const* pScene, aiMaterial* pMat, unsigned int index, aiTextureType textureType);
-        std::vector<Texture> LoadMaterialTextures(aiMaterial* pMaterial, aiTextureType textureType, aiScene const* pScene);
-        int GetTextureIndex(aiString* pStr);
-
-    private:
-        MD5ModelShader shader;
-        std::vector<Mesh> meshes;
-        Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> texture;
-        ID3D11Device* device;
-        ID3D11DeviceContext* deviceContext;
-        std::string directory = "";
-};
+#include "Texture.h"
 
 namespace expr
 {
+    enum class TextureStorageType
+    {
+        None,
+        IndexCompressed,
+        IndexNonCompressed,
+        EmbeddedCompressed,
+        EmbeddedNonCompressed,
+        Disk
+    };
+
     class Model
     {
         public:
@@ -40,20 +24,23 @@ namespace expr
             void Draw(DX::DeviceResources* deviceResources, DirectX::FXMMATRIX transform) const;
 
         private:
-            std::unique_ptr<Mesh> ParseMesh(DX::DeviceResources* deviceResources, aiMesh const& mesh, aiMaterial const* const* pMaterials);
+            std::unique_ptr<Mesh> ParseMesh(DX::DeviceResources* deviceResources, aiScene const* pScene, aiMesh const& mesh, aiMaterial const* const* pMaterials);
             std::unique_ptr<Node> ParseNode(aiNode const& node);
 
-
         private:
-            /*
-            void LoadMaterialTextures(DX::DeviceResources* deviceResources, aiMesh const& mesh,
-                std::vector<std::unique_ptr<Bind::Bindable>>& bindables, aiTextureType textureType,
-                aiScene const* pScene, aiMaterial const* const* pMaterials);
+            TextureStorageType DetermineTextureStorageType(aiScene const* pScene,
+                aiMaterial* pMaterial, aiTextureType textureType);
 
-            TextureStorageType DetermineTextureStorageType(aiScene const* pScene, aiMaterial* pMaterial,
-                unsigned int index, aiTextureType textureType);
+            std::unique_ptr<Bind::Texture> LoadMaterialTextureType(DX::DeviceResources* deviceResources,
+                aiScene const* pScene, aiMaterial* pMaterial, aiTextureType textureType, unsigned int slot = 0);
 
-            int GetTextureIndex(aiString* pStr);*/
+            std::unique_ptr<Bind::Texture> LoadMaterialColor(DX::DeviceResources* deviceResources,
+                aiScene const* pScene, aiMaterial* pMaterial, aiTextureType textureType, unsigned int slot = 0);
+            
+            std::unique_ptr<Bind::Texture> LoadMaterialTexture(DX::DeviceResources* deviceResoruces,
+                aiScene const* pScene, aiMaterial* pMaterial, aiTextureType textureType, unsigned int slot = 0);
+
+            int GetTextureIndex(aiString* pStr);
 
         private:
             std::unique_ptr<Node> pRoot;

@@ -1,61 +1,26 @@
 #include "pch.h"
 #include "Mesh.h"
 
-Mesh::Mesh(ID3D11Device* device, ID3D11DeviceContext* deviceContext, std::vector<MD5Vertex>& vertices, std::vector<DWORD>& indices, std::vector<Texture>& textures, DirectX::XMMATRIX const& transformMatrix)
+namespace expr
 {
-    this->deviceContext = deviceContext;
-    this->textures = textures;
-    this->transformMatrix = transformMatrix;
-
-    vertexBuffer.Create(device, vertices.data(), static_cast<uint32>(vertices.size()));
-    indexBuffer.Create(device, indices.data(), static_cast<uint32>(indices.size()));
-}
-
-void Mesh::Draw()
-{
-    uint32 offset = 0;
-
-    for (uint32 i = 0; i < textures.size(); ++i)
+    Mesh::Mesh(DX::DeviceResources* deviceResources, std::vector<std::shared_ptr<Bind::Bindable>> bindPtrs)
     {
-        if (textures[i].GetType() == aiTextureType::aiTextureType_DIFFUSE)
-        {
-            deviceContext->PSSetShaderResources(0, 1, textures[i].GetAddressOf());
-            break;
-        }
-    }
+        AddBind(std::make_unique<Bind::Topology>(deviceResources, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
 
-    deviceContext->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), vertexBuffer.StridePtr(), &offset);
-    deviceContext->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
-}
-
-expr::Mesh::Mesh(DX::DeviceResources* deviceResources, std::vector<std::unique_ptr<Bind::Bindable>> bindPtrs)
-{
-    if (!IsStaticInitialized())
-    {
-        AddStaticBind(std::make_unique<Bind::Topology>(deviceResources, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
-    }
-
-    for (auto& pb : bindPtrs)
-    {
-        if (auto pi = dynamic_cast<Bind::IndexBuffer<unsigned int>*>(pb.get()))
-        {
-            AddIndexBuffer(std::unique_ptr<Bind::IndexBuffer<unsigned int>>{ pi });
-            pb.release();
-        }
-        else
+        for (auto& pb : bindPtrs)
             AddBind(std::move(pb));
+
+        AddBind(std::make_unique<Bind::TransformCBuf>(deviceResources, *this));
     }
 
-    AddBind(std::make_unique<Bind::TransformCBuf>(deviceResources, *this));
-}
+    void Mesh::Draw(DX::DeviceResources* deviceResources, DirectX::FXMMATRIX accumulatedTransform) const
+    {
+        DirectX::XMStoreFloat4x4(&transform, accumulatedTransform);
+        Drawable::Draw(deviceResources);
+    }
 
-void expr::Mesh::Draw(DX::DeviceResources* deviceResources, DirectX::FXMMATRIX accumulatedTransform) const
-{
-    DirectX::XMStoreFloat4x4(&transform, accumulatedTransform);
-    Drawable::Draw(deviceResources);
-}
-
-DirectX::XMMATRIX expr::Mesh::GetTransform() const noexcept
-{
-    return DirectX::XMLoadFloat4x4(&transform);
+    DirectX::XMMATRIX Mesh::GetTransform() const noexcept
+    {
+        return DirectX::XMLoadFloat4x4(&transform);
+    }
 }

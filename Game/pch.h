@@ -93,6 +93,8 @@
 #include "WICTextureLoader.h"
 //#include "XboxDDSTextureLoader.h"
 
+#include "DeviceResources.h"
+
 #include <chrono>
 #include <sstream>
 

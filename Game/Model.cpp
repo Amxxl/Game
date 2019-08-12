@@ -2,236 +2,6 @@
 #include "Model.h"
 #include "StringHelper.h"
 
-Model::Model()
-{
-}
-
-
-Model::~Model()
-{
-}
-
-bool Model::Initialize(std::string const& filePath, ID3D11Device* device, ID3D11DeviceContext* deviceContext)
-{
-    this->device = device;
-    this->deviceContext = deviceContext;
-    
-    if (!LoadModel(filePath))
-        return false;
-
-    shader.InitializeShaders(deviceContext);
-    return true;
-}
-
-void Model::Draw(DirectX::XMMATRIX world, DirectX::XMMATRIX view, DirectX::XMMATRIX proj)
-{
-    for (uint32 i = 0; i < meshes.size(); ++i)
-    {
-        shader.SetShaderParameters(deviceContext, meshes[i].GetTransformMatrix() * world, view, proj);
-        meshes[i].Draw();
-        shader.RenderShader(deviceContext, meshes[i].GetIndexCount());
-    }
-}
-
-bool Model::LoadModel(std::string const& filePath)
-{
-    directory = StringHelper::GetDirectoryFromPath(filePath);
-    Assimp::Importer importer;
-
-    aiScene const* pScene = importer.ReadFile(filePath,
-        aiProcess_Triangulate |
-        aiProcess_JoinIdenticalVertices |
-        aiProcess_ConvertToLeftHanded);
-
-    if (pScene == nullptr)
-        return false;
-
-    this->ProcessNode(pScene->mRootNode, pScene, DirectX::XMMatrixIdentity());
-    return true;
-}
-
-void Model::ProcessNode(aiNode* node, aiScene const* scene, DirectX::XMMATRIX const& parentTransformMatrix)
-{
-    DirectX::XMMATRIX nodeTransformMatrix = DirectX::XMMatrixTranspose(DirectX::XMMATRIX(&node->mTransformation.a1)) * parentTransformMatrix;
-
-    for (uint32 i = 0; i < node->mNumMeshes; ++i)
-    {
-        aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-        meshes.push_back(ProcessMesh(mesh, scene, nodeTransformMatrix));
-    }
-
-    for (uint32 i = 0; i < node->mNumChildren; ++i)
-    {
-        ProcessNode(node->mChildren[i], scene, nodeTransformMatrix);
-    }
-}
-
-Mesh Model::ProcessMesh(aiMesh* mesh, aiScene const* scene, DirectX::XMMATRIX const& transformMatrix)
-{
-    std::vector<MD5Vertex> vertices;
-    std::vector<DWORD> indices;
-
-    // Get vertices
-    for (uint32 i = 0; i < mesh->mNumVertices; ++i)
-    {
-        MD5Vertex vertex;
-        vertex.position.x = mesh->mVertices[i].x;
-        vertex.position.y = mesh->mVertices[i].y;
-        vertex.position.z = mesh->mVertices[i].z;
-
-        vertex.normal.x = mesh->mNormals[i].x;
-        vertex.normal.y = mesh->mNormals[i].y;
-        vertex.normal.z = mesh->mNormals[i].z;
-
-        if (mesh->mTextureCoords[0])
-        {
-            vertex.textureCoordinate.x = static_cast<float>(mesh->mTextureCoords[0][i].x);
-            vertex.textureCoordinate.y = static_cast<float>(mesh->mTextureCoords[0][i].y);
-        }
-
-        vertices.push_back(vertex);
-    }
-
-    // Get indices
-    for (uint32 i = 0; i < mesh->mNumFaces; ++i)
-    {
-        aiFace face = mesh->mFaces[i];
-
-        for (uint32 j = 0; j < face.mNumIndices; ++j)
-            indices.push_back(face.mIndices[j]);
-    }
-
-    std::vector<Texture> textures;
-    aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-    std::vector<Texture> diffuseTextures = LoadMaterialTextures(material, aiTextureType::aiTextureType_DIFFUSE, scene);
-    textures.insert(textures.end(), diffuseTextures.begin(), diffuseTextures.end());
-
-    return Mesh(device, deviceContext, vertices, indices, textures, transformMatrix);
-}
-
-TextureStorageType Model::DetermineTextureStorageType(aiScene const* pScene, aiMaterial* pMat, unsigned int index, aiTextureType textureType)
-{
-    if (pMat->GetTextureCount(textureType) == 0)
-        return TextureStorageType::None;
-
-    aiString path;
-    pMat->GetTexture(textureType, index, &path);
-    std::string texturePath = path.C_Str();
-
-    // Check if texture is an embedded indexed texture by seeing if the file path is an index #
-    if (texturePath[0] == '*')
-    {
-        if (pScene->mTextures[0]->mHeight == 0)
-            return TextureStorageType::EmbeddedIndexCompressed;
-        else
-            return TextureStorageType::EmbeddedIndexNonCompressed;
-    }
-    // Check if texture is an embedded texture but not indexed (path will be the texture's name instead of #)
-    else if (auto pTex = pScene->GetEmbeddedTexture(texturePath.c_str()))
-    {
-        if (pTex->mHeight == 0)
-            return TextureStorageType::EmbeddedCompressed;
-        else
-            return TextureStorageType::EmbeddedIndexNonCompressed;
-    }
-    //Lastly check if texture is a filepath by checking for period before extension name.
-    else if (texturePath.find('.') != std::string::npos)
-        return TextureStorageType::Disk;
-
-    return TextureStorageType::None; // No texture exists
-}
-
-std::vector<Texture> Model::LoadMaterialTextures(aiMaterial* pMaterial, aiTextureType textureType, aiScene const* pScene)
-{
-    std::vector<Texture> materialTextures;
-    TextureStorageType storeType = TextureStorageType::Invalid;
-    unsigned int textureCount = pMaterial->GetTextureCount(textureType);
-
-    if (textureCount == 0) // If there are no textures.
-    {
-        storeType = TextureStorageType::None;
-        aiColor3D aiColor(0.0f, 0.0f, 0.0f);
-
-        switch (textureType)
-        {
-            case aiTextureType::aiTextureType_DIFFUSE:
-            {
-                pMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, aiColor);
-                if (aiColor.IsBlack())
-                {
-                    materialTextures.push_back(Texture(device, Colors::UnloadedTextureColor, textureType));
-                    return materialTextures;
-                }
-
-                materialTextures.push_back(Texture(device, Color(static_cast<uint8>(aiColor.r * 255), static_cast<uint8>(aiColor.g * 255), static_cast<uint8>(aiColor.b * 255)), textureType));
-                return materialTextures;
-            }
-        }
-    }
-    else
-    {
-        for (UINT i = 0; i < textureCount; ++i)
-        {
-            aiString path;
-            pMaterial->GetTexture(textureType, i, &path);
-            storeType = DetermineTextureStorageType(pScene, pMaterial, i, textureType);
-
-            switch (storeType)
-            {
-                case TextureStorageType::EmbeddedIndexCompressed:
-                {
-                    int index = GetTextureIndex(&path);
-                    Texture embeddedIndexedTexture(device, reinterpret_cast<uint8*>(pScene->mTextures[index]->pcData),
-                        pScene->mTextures[index]->mWidth, textureType);
-                    materialTextures.push_back(embeddedIndexedTexture);
-                    break;
-                }
-                case TextureStorageType::EmbeddedIndexNonCompressed:
-                {
-                    int index = GetTextureIndex(&path);
-                    Texture embeddedIndexNonCompressed(device, reinterpret_cast<uint8*>(pScene->mTextures[index]->pcData),
-                        pScene->mTextures[index]->mWidth * pScene->mTextures[index]->mHeight, textureType);
-                    materialTextures.push_back(embeddedIndexNonCompressed);
-                    break;
-                }
-                case TextureStorageType::EmbeddedCompressed:
-                {
-                    aiTexture const* pTexture = pScene->GetEmbeddedTexture(path.C_Str());
-                    Texture embeddedTexture(device, reinterpret_cast<uint8*>(pTexture->pcData),
-                        pTexture->mWidth, textureType);
-                    materialTextures.push_back(embeddedTexture);
-                    break;
-                }
-                case TextureStorageType::EmbeddedNonCompressed:
-                {
-                    aiTexture const* pTexture = pScene->GetEmbeddedTexture(path.C_Str());
-                    Texture embeddedNonCompressed(device, reinterpret_cast<uint8*>(pTexture->pcData),
-                        pTexture->mWidth * pTexture->mHeight, textureType);
-                    materialTextures.push_back(embeddedNonCompressed);
-                }
-                case TextureStorageType::Disk:
-                {
-                    std::string fileName = directory + '\\' + path.C_Str();
-                    Texture diskTexture(device, fileName, textureType);
-                    materialTextures.push_back(diskTexture);
-                    break;
-                }
-            }
-        }
-    }
-
-    if (materialTextures.size() == 0)
-    {
-        materialTextures.push_back(Texture(device, Colors::UnhandledTextureColor, textureType));
-    }
-    return materialTextures;
-}
-
-int Model::GetTextureIndex(aiString* pStr)
-{
-    assert(pStr->length >= 2);
-    return atoi(&pStr->C_Str()[1]);
-}
 
 namespace expr
 {
@@ -248,7 +18,7 @@ namespace expr
 
         for (size_t i = 0; i < pScene->mNumMeshes; ++i)
         {
-            meshPtrs.push_back(ParseMesh(deviceResources, *pScene->mMeshes[i], pScene->mMaterials));
+            meshPtrs.push_back(ParseMesh(deviceResources, pScene, *pScene->mMeshes[i], pScene->mMaterials));
         }
 
         pRoot = ParseNode(*pScene->mRootNode);
@@ -259,7 +29,7 @@ namespace expr
         pRoot->Draw(deviceResources, transform);
     }
 
-    std::unique_ptr<Mesh> Model::ParseMesh(DX::DeviceResources* deviceResources, aiMesh const& mesh, aiMaterial const* const* pMaterials)
+    std::unique_ptr<Mesh> Model::ParseMesh(DX::DeviceResources* deviceResources, aiScene const* pScene, aiMesh const& mesh, aiMaterial const* const* pMaterials)
     {
         VertexBufferData vbuf(std::move(
             VertexLayout{}
@@ -289,7 +59,7 @@ namespace expr
             indices.push_back(face.mIndices[2]);
         }
 
-        std::vector<std::unique_ptr<Bind::Bindable>> bindablePtrs;
+        std::vector<std::shared_ptr<Bind::Bindable>> bindablePtrs;
 
         bool hasSpecularMap = false;
         float shininess = 32.0f;
@@ -298,26 +68,30 @@ namespace expr
         {
             auto& material = *pMaterials[mesh.mMaterialIndex];
 
+            aiMaterial* pMaterial = pScene->mMaterials[mesh.mMaterialIndex];//&(*pMaterials[mesh.mMaterialIndex]);
             aiString texFileName;
             material.GetTexture(aiTextureType_DIFFUSE, 0, &texFileName);
             
-            std::wstring texDir = StringHelper::StringToWide(directory + '\\' + texFileName.C_Str());
-            bindablePtrs.push_back(std::make_unique<Bind::Texture>(deviceResources, texDir.c_str()));
+            bindablePtrs.push_back(Bind::Texture::Resolve(deviceResources, directory + '\\' + texFileName.C_Str(), 0));
         
-            /*
+            //bindablePtrs.push_back(LoadMaterialTextureType(deviceResources, pScene, pMaterial, aiTextureType_DIFFUSE, 0));
+
+            //hasSpecularMap = true;
+            //bindablePtrs.push_back(LoadMaterialTextureType(deviceResources, pScene, pMaterial, aiTextureType_SPECULAR, 1));
+            
             if (material.GetTexture(aiTextureType_SPECULAR, 0, &texFileName) == aiReturn_SUCCESS)
             {
-                std::wstring stexDir = StringHelper::StringToWide(directory + '\\' + texFileName.C_Str());
-                bindablePtrs.push_back(std::make_unique<Bind::Texture>(deviceResources, stexDir.c_str(), 1));
+                bindablePtrs.push_back(Bind::Texture::Resolve(deviceResources, directory + '\\' + texFileName.C_Str(), 1));
+                hasSpecularMap = true;
             }
             else
             {
                 material.Get(AI_MATKEY_SHININESS, shininess);
-            }*/
+            }
 
             //LoadMaterialTextures(deviceResources, bintablePtrs,)
         
-            bindablePtrs.push_back(std::make_unique<Bind::Sampler>(deviceResources, Bind::Sampler::State::POINT_CLAMP));
+            bindablePtrs.push_back(std::make_unique<Bind::Sampler>(deviceResources, Bind::Sampler::State::ANISOTROPIC_WRAP));
         }
 
         bindablePtrs.push_back(std::make_unique<Bind::VertexBuffer<VertexBufferData>>(deviceResources, vbuf));
@@ -329,34 +103,27 @@ namespace expr
 
         bindablePtrs.push_back(std::make_unique<Bind::InputLayout>(deviceResources, vbuf.GetLayout().GetD3DLayout(), pvsbc));
 
-        bindablePtrs.push_back(std::make_unique<Bind::PixelShader>(deviceResources, L"PixelShader.ps"));
 
-        /**
-        struct PSMaterialConstant
+        if (hasSpecularMap)
         {
-            float specularIntensity = 0.8f;
-            float specularPower;
-            float padding[2];
-        } pmc;
-        */
-        struct LightBufferType
+            bindablePtrs.push_back(std::make_unique<Bind::PixelShader>(deviceResources, L"Data/Shaders/PixelShaderSpec.ps"));
+        }
+        else
         {
-            DirectX::XMFLOAT4 ambientColor;
-            DirectX::XMFLOAT4 diffuseColor;
-            DirectX::XMFLOAT3 lightDirection;
-            float padding;
-        };
-
-        LightBufferType light;
-        light.ambientColor = DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
-        light.diffuseColor = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-        light.lightDirection = DirectX::XMFLOAT3(1.0f, 0.0f, 1.0f);
-        light.padding = 0.0f;
+            bindablePtrs.push_back(std::make_unique<Bind::PixelShader>(deviceResources, L"PixelShader.ps"));
 
 
-        //pmc.specularPower = shininess;
+            struct PSMaterialConstant
+            {
+                float specularIntensity = 0.8f;
+                float specularPower;
+                float padding[2];
+            } pmc;
 
-        bindablePtrs.push_back(std::make_unique<Bind::PixelConstantBuffer<LightBufferType>>(deviceResources, light, 0u));
+            pmc.specularPower = shininess;
+
+            bindablePtrs.push_back(std::make_unique<Bind::PixelConstantBuffer<PSMaterialConstant>>(deviceResources, pmc, 1u));
+        }
 
         return std::make_unique<Mesh>(deviceResources, std::move(bindablePtrs));
     }
@@ -383,97 +150,110 @@ namespace expr
 
         return pNode;
     }
-    /*
-    void Model::LoadMaterialTextures(DX::DeviceResources* deviceResources, aiMesh const& mesh, std::vector<std::unique_ptr<Bind::Bindable>>& bindables, aiTextureType textureType, aiScene const* pScene, aiMaterial const* const* pMaterials)
+
+    TextureStorageType Model::DetermineTextureStorageType(aiScene const* pScene,
+        aiMaterial* pMaterial, aiTextureType textureType)
     {
-        std::vector<Texture> materialTextures;
-        TextureStorageType storeType = TextureStorageType::Invalid;
+        if (!pMaterial->GetTextureCount(textureType))
+            return TextureStorageType::None;
 
+        aiString path;
+        pMaterial->GetTexture(textureType, 0, &path);
+        std::string texturePath = path.C_Str();
 
-        if (mesh.mMaterialIndex >= 0)
+        if (texturePath[0] == '*')
         {
-            auto& material = *pMaterials[mesh.mMaterialIndex];
-            unsigned int texturesCount = material.GetTextureCount(textureType);
-
-            if (texturesCount <= 0) // If there are no textures.
-            {
-                storeType = TextureStorageType::None;
-                aiColor3D aiColor(0.0f, 0.0f, 0.0f);
-
-                switch (textureType)
-                {
-                case aiTextureType::aiTextureType_DIFFUSE:
-                {
-                    material.Get(AI_MATKEY_COLOR_DIFFUSE, aiColor);
-                    if (aiColor.IsBlack())
-                    {
-                        //materialTextures.push_back(Texture(device, Colors::UnloadedTextureColor, textureType));
-                        bindables.push_back(std::make_unique<Bind::Texture>(deviceResources, ""));
-                        return;
-                    }
-
-                    //materialTextures.push_back(Texture(device, Color(static_cast<uint8>(aiColor.r * 255), static_cast<uint8>(aiColor.g * 255), static_cast<uint8>(aiColor.b * 255)), textureType));
-                    return;
-                }
-                }
-            }
+            if (pScene->mTextures[0]->mHeight == 0)
+                return TextureStorageType::IndexCompressed;
             else
-            {
-                for (UINT i = 0; i < texturesCount; ++i)
-                {
-                    aiString path;
-                    material.GetTexture(textureType, i, &path);
-                    storeType = DetermineTextureStorageType(pScene, pMaterial, i, textureType);
+                return TextureStorageType::IndexNonCompressed;
+        }
+        else if (auto pTexture = pScene->GetEmbeddedTexture(texturePath.c_str()))
+        {
+            if (pTexture->mHeight == 0)
+                return TextureStorageType::EmbeddedCompressed;
+            else
+                return TextureStorageType::EmbeddedNonCompressed;
+        }
+        else if (texturePath.find('.') != std::string::npos)
+            return TextureStorageType::Disk;
 
-                    switch (storeType)
-                    {
-                    case TextureStorageType::EmbeddedIndexCompressed:
-                    {
-                        int index = GetTextureIndex(&path);
-                        Texture embeddedIndexedTexture(device, reinterpret_cast<uint8*>(pScene->mTextures[index]->pcData),
-                            pScene->mTextures[index]->mWidth, textureType);
-                        materialTextures.push_back(embeddedIndexedTexture);
-                        break;
-                    }
-                    case TextureStorageType::EmbeddedIndexNonCompressed:
-                    {
-                        int index = GetTextureIndex(&path);
-                        Texture embeddedIndexNonCompressed(device, reinterpret_cast<uint8*>(pScene->mTextures[index]->pcData),
-                            pScene->mTextures[index]->mWidth * pScene->mTextures[index]->mHeight, textureType);
-                        materialTextures.push_back(embeddedIndexNonCompressed);
-                        break;
-                    }
-                    case TextureStorageType::EmbeddedCompressed:
-                    {
-                        aiTexture const* pTexture = pScene->GetEmbeddedTexture(path.C_Str());
-                        Texture embeddedTexture(device, reinterpret_cast<uint8*>(pTexture->pcData),
-                            pTexture->mWidth, textureType);
-                        materialTextures.push_back(embeddedTexture);
-                        break;
-                    }
-                    case TextureStorageType::EmbeddedNonCompressed:
-                    {
-                        aiTexture const* pTexture = pScene->GetEmbeddedTexture(path.C_Str());
-                        Texture embeddedNonCompressed(device, reinterpret_cast<uint8*>(pTexture->pcData),
-                            pTexture->mWidth * pTexture->mHeight, textureType);
-                        materialTextures.push_back(embeddedNonCompressed);
-                    }
-                    case TextureStorageType::Disk:
-                    {
-                        std::string fileName = directory + '\\' + path.C_Str();
-                        Texture diskTexture(device, fileName, textureType);
-                        materialTextures.push_back(diskTexture);
-                        break;
-                    }
-                    }
+        return TextureStorageType::None;
+    }
+
+    std::unique_ptr<Bind::Texture> Model::LoadMaterialTextureType(DX::DeviceResources* deviceResources,
+        aiScene const* pScene, aiMaterial* pMaterial, aiTextureType textureType, unsigned int slot)
+    {
+        auto storageType = DetermineTextureStorageType(pScene, pMaterial, textureType);
+
+        if (storageType == TextureStorageType::None)
+            return LoadMaterialColor(deviceResources, pScene, pMaterial, textureType, slot);
+        else
+            return LoadMaterialTexture(deviceResources, pScene, pMaterial, textureType, slot);
+
+        return nullptr;
+    }
+
+    std::unique_ptr<Bind::Texture> Model::LoadMaterialColor(DX::DeviceResources* deviceResources,
+        aiScene const* pScene, aiMaterial* pMaterial, aiTextureType textureType, unsigned int slot)
+    {
+        Color color(255, 0, 0);
+        return std::make_unique<Bind::Texture>(deviceResources, color, slot);
+    }
+
+    std::unique_ptr<Bind::Texture> Model::LoadMaterialTexture(DX::DeviceResources* deviceResources,
+        aiScene const* pScene, aiMaterial* pMaterial, aiTextureType textureType, unsigned int slot)
+    {
+        for (unsigned int i = 0; i < pMaterial->GetTextureCount(textureType) && i < 1; ++i)
+        {
+            aiString path;
+            pMaterial->GetTexture(textureType, i, &path);
+            auto storageType = DetermineTextureStorageType(pScene, pMaterial, textureType);
+
+            switch (storageType)
+            {
+                case TextureStorageType::IndexCompressed:
+                {
+                    int index = GetTextureIndex(&path);
+                    return std::make_unique<Bind::Texture>(deviceResources,
+                        reinterpret_cast<uint8*>(pScene->mTextures[index]->pcData),
+                        pScene->mTextures[index]->mWidth, 0);
                 }
+                case TextureStorageType::IndexNonCompressed:
+                {
+                    int index = GetTextureIndex(&path);
+                    return std::make_unique<Bind::Texture>(deviceResources,
+                        reinterpret_cast<uint8*>(pScene->mTextures[index]->pcData),
+                        pScene->mTextures[index]->mWidth * pScene->mTextures[index]->mHeight, slot);
+                }
+                case TextureStorageType::EmbeddedCompressed:
+                {
+                    aiTexture const* pTexture = pScene->GetEmbeddedTexture(path.C_Str());
+                    return std::make_unique<Bind::Texture>(deviceResources,
+                        reinterpret_cast<uint8*>(pTexture->pcData), pTexture->mWidth, slot);
+                }
+                case TextureStorageType::EmbeddedNonCompressed:
+                {
+                    aiTexture const* pTexture = pScene->GetEmbeddedTexture(path.C_Str());
+                    return std::make_unique<Bind::Texture>(deviceResources,
+                        reinterpret_cast<uint8*>(pTexture->pcData),
+                        pTexture->mWidth * pTexture->mHeight, slot);
+                }
+                case TextureStorageType::Disk:
+                {
+                    std::string dir = directory + '\\' + path.C_Str();
+                    return std::make_unique<Bind::Texture>(deviceResources, dir, slot);
+                }
+                default:
+                    return nullptr;
             }
         }
+        return nullptr;
+    }
 
-        if (materialTextures.size() == 0)
-        {
-            materialTextures.push_back(Texture(device, Colors::UnhandledTextureColor, textureType));
-        }
-        return materialTextures;
-    }*/
+    int Model::GetTextureIndex(aiString* pStr)
+    {
+        assert(pStr->length >= 2 || pStr->C_Str()[0] != '*');
+        return std::stoi(&pStr->C_Str()[1]);
+    }
 }

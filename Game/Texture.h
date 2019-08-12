@@ -9,55 +9,29 @@
 
 #include "Bindable.h"
 
-enum class TextureStorageType
-{
-    Invalid,
-    None,
-    EmbeddedIndexCompressed,
-    EmbeddedIndexNonCompressed,
-    EmbeddedCompressed,
-    EmbeddedNonCompressed,
-    Disk
-};
-
-class Texture
-{
-    public:
-        Texture(ID3D11Device* device, Color const& color, aiTextureType type);
-        Texture(ID3D11Device* device, uint16 width, uint16 height, Color const* color, aiTextureType type);
-        Texture(ID3D11Device* device, std::string const& filePath, aiTextureType type);
-        Texture(ID3D11Device* device, uint8 const* pData, size_t size, aiTextureType type);
-
-        aiTextureType const& GetType() const { return type; }
-
-        ID3D11ShaderResourceView* Get() const { return textureView.Get(); }
-        ID3D11ShaderResourceView* const* GetAddressOf() const { return textureView.GetAddressOf(); }
-
-    private:
-        void Create1x1ColorTexture(ID3D11Device* device, Color const& color, aiTextureType type);
-        void CreateColorTexture(ID3D11Device* device, uint16 width, uint16 height, Color const* color, aiTextureType type);
-
-    private:
-        Microsoft::WRL::ComPtr<ID3D11Resource> texture = nullptr;
-        Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureView = nullptr;
-        aiTextureType type = aiTextureType::aiTextureType_UNKNOWN;
-};
-
 namespace Bind
 {
     class Texture : public Bindable
     {
         public:
             Texture(DX::DeviceResources* deviceResources, std::wstring const& file, unsigned int slot = 0);
-            Texture(DX::DeviceResources* deviceResources, uint8 const* data, size_t size, unsigned int slot = 0);
+            Texture(DX::DeviceResources* deviceResources, std::string const& file, unsigned int slot = 0);
+            Texture(DX::DeviceResources* deviceResources, uint8 const* pData, size_t size, unsigned int slot = 0);
+            Texture(DX::DeviceResources* deviceResources, uint16 width, uint16 height, Color const* color, unsigned int slot = 0);
+            Texture(DX::DeviceResources* deviceResources, Color color, unsigned int slot = 0);
 
             virtual void Bind(DX::DeviceResources* deviceResources) noexcept override;
+
+            static std::shared_ptr<Texture> Resolve(DX::DeviceResources* deviceResources, std::string const& path, unsigned int slot = 0);
+            static std::string GenerateUID(std::string const& path, UINT slot = 0);
+            std::string const& GetUID() const noexcept override;
 
         protected:
             Microsoft::WRL::ComPtr<ID3D11Resource> pTexture = nullptr;
             Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> pTextureView = nullptr;
 
         private:
-            unsigned int slot = 0;
+            std::string path;
+            unsigned int slot;
     };
 }

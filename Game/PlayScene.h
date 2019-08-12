@@ -19,6 +19,7 @@
 #include "Frustum.h"
 #include "Model.h"
 #include "RenderableGameObject.h"
+#include "PointLight.h"
 
 #include "MouseEvents.h"
 #include "KeyEvents.h"
@@ -78,13 +79,16 @@ class PlayScene : public Scene
 
         RenderableGameObject player;
         RenderableGameObject npc;
-        Model model;
-        Model mdl;
-        Model bridge;
-        Model spruce;
+
+        std::unique_ptr<PointLight> light;
 
         // Expermental
         std::unique_ptr<expr::Model> testModel;
+        std::unique_ptr<expr::Model> house;
+        std::unique_ptr<expr::Model> tree;
+        std::unique_ptr<expr::Model> bridge;
+        std::unique_ptr<expr::Model> spruce;
+
         DX::DeviceResources* m_pDeviceResources;
 
         //Camera camera;

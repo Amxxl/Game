@@ -3,6 +3,7 @@
 #include "DeviceResources.h"
 #include "StepTimer.h"
 
+
 namespace Bind
 {
     class Bindable;
@@ -13,36 +14,30 @@ namespace Bind
 
 class Drawable
 {
-    template<class T>
-    friend class DrawableBase;
-
     public:
         Drawable() = default;
         Drawable(Drawable const&) = delete;
         virtual ~Drawable() = default;
 
-        virtual DirectX::XMMATRIX GetTransform() const noexcept = 0;
         void Draw(DX::DeviceResources* deviceResources) const;
-        virtual void Update(DX::StepTimer const& timer) noexcept {}
+
+        virtual DirectX::XMMATRIX GetTransform() const noexcept = 0;
 
     protected:
         template<class T>
         T* QueryBindable() noexcept
         {
-            for (auto& pb : binds)
+            for (auto& pBind : binds)
             {
-                if (auto pt = dynamic_cast<T*>(pb.get()))
-                    return pt;
+                if (auto pTemp = dynamic_cast<T*>(pBind.get()))
+                    return pTemp;
             }
             return nullptr;
         }
-        void AddBind(std::unique_ptr<Bind::Bindable> bind);
-        void AddIndexBuffer(std::unique_ptr<Bind::IndexBuffer<unsigned int>> indexBuffer);
 
-    private:
-        virtual std::vector<std::unique_ptr<Bind::Bindable>> const& GetStaticBinds() const noexcept = 0;
+        void AddBind(std::shared_ptr<Bind::Bindable> bind);
 
     private:
         Bind::IndexBuffer<unsigned int> const* pIndexBuffer = nullptr;
-        std::vector<std::unique_ptr<Bind::Bindable>> binds;
+        std::vector<std::shared_ptr<Bind::Bindable>> binds;
 };

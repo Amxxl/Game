@@ -40,6 +40,8 @@ bool PlayScene::Load(SceneManager* sceneManager, Window& window)
     camera.SetLookAtPos(Vector3f(5.0f, 0.0f, 5.0f));
     camera.SetRotation(0.0f, 0.0f, 0.0f);
 
+    light = std::make_unique<PointLight>(m_pDeviceResources);
+
     sky = DirectX::GeometricPrimitive::CreateSphere(m_deviceContext, 2000.0f, 16, true, true);
     water = DirectX::GeometricPrimitive::CreateBox(m_deviceContext, Vector3f(512.0f, 22.0f, 512.0f), false, false);
 
@@ -92,13 +94,12 @@ bool PlayScene::Load(SceneManager* sceneManager, Window& window)
 
     sky->CreateInputLayout(effect.get(), inputLayout.ReleaseAndGetAddressOf());
 
-    model.Initialize("Data/10446_Palm_Tree_v1_max2010_iteration-2.obj", device, m_deviceContext);
-    mdl.Initialize("Data/WoodCabin.dae", device, m_deviceContext);
-    bridge.Initialize("Data/bridge.dae", device, m_deviceContext);
+    testModel = std::make_unique<expr::Model>(window.GetDeviceResources(), "Data/Models/NanoSuit/nanosuit.obj");
 
-    spruce.Initialize("Data/spruce.obj", device, m_deviceContext);
-
-    testModel = std::make_unique<expr::Model>(window.GetDeviceResources(), "Data/Models/Cabin/WoodenCabinObj.obj");
+    tree = std::make_unique<expr::Model>(window.GetDeviceResources(), "Data/10446_Palm_Tree_v1_max2010_iteration-2.obj");
+    house = std::make_unique<expr::Model>(window.GetDeviceResources(), "Data/WoodCabin.dae");
+    bridge = std::make_unique<expr::Model>(window.GetDeviceResources(), "Data/bridge.dae");
+    spruce = std::make_unique<expr::Model>(window.GetDeviceResources(), "Data/spruce.obj");
 
     spriteBatch = std::make_unique<DirectX::SpriteBatch>(m_deviceContext);
     font = std::make_unique<DirectX::SpriteFont>(device, L"Data/Fonts/Consolas14BI.spritefont");
@@ -255,25 +256,23 @@ void PlayScene::Render()
     frustum.Construct(500.0f, camera.GetViewMatrix(), camera.GetProjectionMatrix());
     octree.Draw(m_deviceContext, &frustum, m_world, camera.GetViewMatrix(), camera.GetProjectionMatrix());
 
-
-    model.Draw(m_world * DirectX::XMMatrixScaling(0.08f, 0.08f, 0.08f) * DirectX::XMMatrixRotationX(3.1415f / 2.0f) * DirectX::XMMatrixTranslation(200.0f, 16.0f, 200.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix());
-
     player.Draw(m_deviceContext, camera.GetViewMatrix(), camera.GetProjectionMatrix());
     npc.Draw(m_deviceContext, camera.GetViewMatrix(), camera.GetProjectionMatrix());
 
-    mdl.Draw(m_world * DirectX::XMMatrixTranslation(465.0f, 32.5f, 485.0f) * XMMatrixScaling(0.5f, 0.5f, 0.5f), camera.GetViewMatrix(), camera.GetProjectionMatrix());
-    mdl.Draw(m_world * DirectX::XMMatrixScaling(0.7f, 0.7f, 0.7f) * DirectX::XMMatrixTranslation(365.0f, 32.5f, 485.0f) * XMMatrixScaling(0.5f, 0.5f, 0.5f), camera.GetViewMatrix(), camera.GetProjectionMatrix());
-
-    spruce.Draw(m_world * DirectX::XMMatrixScaling(2.0f, 2.0f, 2.0f) * DirectX::XMMatrixRotationX(AI_MATH_PI / 2) * DirectX::XMMatrixTranslation(250.0f, 16.5f, 200.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix());
-
-    bridge.Draw(m_world * DirectX::XMMatrixRotationY(-77.0f * (3.1415f / 180.0f)) * DirectX::XMMatrixTranslation(257.0f, 58.0f, 381.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix());
-  
     state = std::make_unique<DirectX::CommonStates>(DX::GetDevice(m_deviceContext));
     ID3D11RasterizerState* cullNone = state->CullNone();
     m_deviceContext->RSSetState(cullNone);
 
+    light->Bind(m_pDeviceResources, camera.GetViewMatrix());
+    spruce->Draw(m_pDeviceResources, m_world * DirectX::XMMatrixScaling(2.0f, 2.0f, 2.0f) * DirectX::XMMatrixRotationX(AI_MATH_PI / 2) * DirectX::XMMatrixTranslation(250.0f, 16.5f, 200.0f));
+    bridge->Draw(m_pDeviceResources, m_world * DirectX::XMMatrixRotationY(-77.0f * (3.1415f / 180.0f)) * DirectX::XMMatrixTranslation(257.0f, 58.0f, 381.0f));
+    tree->Draw(m_pDeviceResources, m_world * DirectX::XMMatrixScaling(0.08f, 0.08f, 0.08f) * DirectX::XMMatrixRotationX(3.1415f / 2.0f) * DirectX::XMMatrixTranslation(200.0f, 16.0f, 200.0f));
     testModel->Draw(m_pDeviceResources, DirectX::XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f) * DirectX::XMMatrixTranslation(0.0f, 10.0f, 0.0f));
     
+    light->Bind(m_pDeviceResources, camera.GetViewMatrix());
+    house->Draw(m_pDeviceResources, m_world * DirectX::XMMatrixTranslation(465.0f, 32.5f, 485.0f) * XMMatrixScaling(0.5f, 0.5f, 0.5f));
+    house->Draw(m_pDeviceResources, m_world* DirectX::XMMatrixScaling(0.7f, 0.7f, 0.7f)* DirectX::XMMatrixTranslation(365.0f, 32.5f, 485.0f)* XMMatrixScaling(0.5f, 0.5f, 0.5f));
+
     water->Draw(m_world * XMMatrixTranslation(256.0f, 0.0f, 256.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix(), XMVectorSet(0.0f, 0.0f, 1.0f, 0.7f));
 
 
@@ -295,13 +294,16 @@ void PlayScene::Render()
     ImGui::SliderFloat("R", &camera.r, 0.0f, 40.0f, "%.1f");
     ImGui::SliderAngle("Theta", &camera.theta, -180.0f, 180.0f);
     ImGui::SliderAngle("Phi", &camera.phi, -89.0f, 89.0f);
-    
+
     ImGui::Text("Orientation");
     ImGui::SliderAngle("Roll", &camera.roll, -180.0f, 180.0f);
     ImGui::SliderAngle("Pitch", &camera.pitch, -180.0f, 180.0f);
     ImGui::SliderAngle("Yaw", &camera.yaw, -180.0f, 180.0f);
 
     ImGui::End();
+
+    light->SpawnControlWindow();
+
     ImGui::Render();
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 }

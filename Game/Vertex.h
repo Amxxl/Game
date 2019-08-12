@@ -29,19 +29,19 @@ class VertexLayout
         {
             using SysType = DirectX::XMFLOAT3;
             static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
-            static constexpr char const* semantic = "SV_POSITION";
+            static constexpr char const* semantic = "Position";
         };
         template<> struct Map<Texture2D>
         {
             using SysType = DirectX::XMFLOAT2;
             static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32_FLOAT;
-            static constexpr char const* semantic = "TEXCOORD";
+            static constexpr char const* semantic = "Texcoord";
         };
         template<> struct Map<Normal>
         {
             using SysType = DirectX::XMFLOAT3;
             static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
-            static constexpr char const* semantic = "NORMAL";
+            static constexpr char const* semantic = "Normal";
         };
         template<> struct Map<Float3Color>
         {

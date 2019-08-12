@@ -10,8 +10,6 @@
 #include "TerrainShader.h"
 #include "Frustum.h"
 
-#include "DrawableBase.h"
-
 class Octree
 {
     public:
