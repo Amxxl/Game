@@ -2,6 +2,7 @@
 
 #include "pch.h"
 #include "Bindable.h"
+#include "BindableCache.h"
 
 namespace Bind
 {
@@ -76,6 +77,32 @@ namespace Bind
             {
                 GetContext(deviceResources)->VSSetConstantBuffers(slot, 1u, pConstantBuffer.GetAddressOf());
             }
+
+            static std::shared_ptr<VertexConstantBuffer> Resolve(DX::DeviceResources* deviceResources, T& data, UINT slot = 0)
+            {
+                return BindableCache::Resolve<VertexConstantBuffer>(deviceResources, data, slot);
+            }
+
+            static std::shared_ptr<VertexConstantBuffer> Resolve(DX::DeviceResources* deviceResources, UINT slot = 0)
+            {
+                return BindableCache::Resolve<VertexConstantBuffer>(deviceResources, slot);
+            }
+
+            static std::string GenerateUID(T const&, UINT slot)
+            {
+                return GenerateUID(slot);
+            }
+            
+            static std::string GenerateUID(UINT slot = 0)
+            {
+                using namespace std::string_literals;
+                return typeid(VertexConstantBuffer).name() + "#"s + std::to_string(slot);
+            }
+
+            virtual std::string const& GetUID() const noexcept override
+            {
+                return GenerateUID(slot);
+            }
     };
 
     template<typename T>
@@ -92,6 +119,32 @@ namespace Bind
             virtual void Bind(DX::DeviceResources* deviceResources) noexcept override
             {
                 GetContext(deviceResources)->PSSetConstantBuffers(slot, 1u, pConstantBuffer.GetAddressOf());
+            }
+
+            static std::shared_ptr<PixelConstantBuffer> Resolve(DX::DeviceResources* deviceResources, T& data, UINT slot = 0)
+            {
+                return BindableCache::Resolve<PixelConstantBuffer>(deviceResources, data, slot);
+            }
+
+            static std::shared_ptr<PixelConstantBuffer> Resolve(DX::DeviceResources* deviceResources, UINT slot = 0)
+            {
+                return BindableCache::Resolve<PixelConstantBuffer>(deviceResources, slot);
+            }
+
+            static std::string GenerateUID(T const&, UINT slot)
+            {
+                return GenerateUID(slot);
+            }
+
+            static std::string GenerateUID(UINT slot = 0)
+            {
+                using namespace std::string_literals;
+                return typeid(PixelConstantBuffer).name() + "#"s + std::to_string(slot);
+            }
+
+            virtual std::string const& GetUID() const noexcept override
+            {
+                return GenerateUID(slot);
             }
     };
 }

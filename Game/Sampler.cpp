@@ -1,9 +1,11 @@
 #include "pch.h"
 #include "Sampler.h"
+#include "BindableCache.h"
 
 namespace Bind
 {
     Sampler::Sampler(DX::DeviceResources* deviceResources, State state)
+        : state(state)
     {
         switch (state)
         {
@@ -31,6 +33,22 @@ namespace Bind
     void Sampler::Bind(DX::DeviceResources* deviceResources) noexcept
     {
         GetContext(deviceResources)->PSSetSamplers(0, 1, pSampler.GetAddressOf());
+    }
+
+    std::shared_ptr<Sampler> Sampler::Resolve(DX::DeviceResources* deviceResources, State state)
+    {
+        return BindableCache::Resolve<Sampler>(deviceResources, state);
+    }
+
+    std::string Sampler::GenerateUID(State state)
+    {
+        using namespace std::string_literals;
+        return typeid(Sampler).name() + "#"s + std::to_string(static_cast<int>(state));
+    }
+
+    std::string const& Sampler::GetUID() const noexcept
+    {
+        return GenerateUID(state);
     }
 
     void Sampler::Create(DX::DeviceResources* deviceResources, D3D11_FILTER filter, D3D11_TEXTURE_ADDRESS_MODE addressMode)

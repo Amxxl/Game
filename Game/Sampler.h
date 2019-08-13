@@ -21,10 +21,16 @@ namespace Bind
 
             virtual void Bind(DX::DeviceResources* deviceResources) noexcept override;
 
+            
+            static std::shared_ptr<Sampler> Resolve(DX::DeviceResources* deviceResources, State state);
+            static std::string GenerateUID(State state);
+            virtual std::string const& GetUID() const noexcept override;
+
         private:
             void Create(DX::DeviceResources* deviceResources, D3D11_FILTER fileter, D3D11_TEXTURE_ADDRESS_MODE addressMode);
 
         protected:
+            State state;
             Microsoft::WRL::ComPtr<ID3D11SamplerState> pSampler;
     };
 }

@@ -16,8 +16,6 @@ namespace Bind
                 DirectX::XMMATRIX world;
                 DirectX::XMMATRIX view;
                 DirectX::XMMATRIX proj;
-                //DirectX::XMMATRIX modelViewProj;
-                //DirectX::XMMATRIX model;
             };
 
         private:

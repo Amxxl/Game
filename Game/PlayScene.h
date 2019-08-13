@@ -83,11 +83,11 @@ class PlayScene : public Scene
         std::unique_ptr<PointLight> light;
 
         // Expermental
-        std::unique_ptr<expr::Model> testModel;
-        std::unique_ptr<expr::Model> house;
-        std::unique_ptr<expr::Model> tree;
-        std::unique_ptr<expr::Model> bridge;
-        std::unique_ptr<expr::Model> spruce;
+        std::unique_ptr<Model> testModel;
+        std::unique_ptr<Model> house;
+        std::unique_ptr<Model> tree;
+        std::unique_ptr<Model> bridge;
+        std::unique_ptr<Model> spruce;
 
         DX::DeviceResources* m_pDeviceResources;
 

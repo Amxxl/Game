@@ -94,12 +94,12 @@ bool PlayScene::Load(SceneManager* sceneManager, Window& window)
 
     sky->CreateInputLayout(effect.get(), inputLayout.ReleaseAndGetAddressOf());
 
-    testModel = std::make_unique<expr::Model>(window.GetDeviceResources(), "Data/Models/NanoSuit/nanosuit.obj");
+    testModel = std::make_unique<Model>(window.GetDeviceResources(), "Data/Models/NanoSuit/nanosuit.obj");
 
-    tree = std::make_unique<expr::Model>(window.GetDeviceResources(), "Data/10446_Palm_Tree_v1_max2010_iteration-2.obj");
-    house = std::make_unique<expr::Model>(window.GetDeviceResources(), "Data/WoodCabin.dae");
-    bridge = std::make_unique<expr::Model>(window.GetDeviceResources(), "Data/bridge.dae");
-    spruce = std::make_unique<expr::Model>(window.GetDeviceResources(), "Data/spruce.obj");
+    tree = std::make_unique<Model>(window.GetDeviceResources(), "Data/10446_Palm_Tree_v1_max2010_iteration-2.obj");
+    house = std::make_unique<Model>(window.GetDeviceResources(), "Data/WoodCabin.dae");
+    bridge = std::make_unique<Model>(window.GetDeviceResources(), "Data/bridge.dae");
+    spruce = std::make_unique<Model>(window.GetDeviceResources(), "Data/spruce.obj");
 
     spriteBatch = std::make_unique<DirectX::SpriteBatch>(m_deviceContext);
     font = std::make_unique<DirectX::SpriteFont>(device, L"Data/Fonts/Consolas14BI.spritefont");

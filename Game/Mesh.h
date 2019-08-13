@@ -6,16 +6,13 @@
 
 #include "BindableCommon.h"
 
-namespace expr
+class Mesh : public Drawable
 {
-    class Mesh : public Drawable
-    {
-        public:
-            Mesh(DX::DeviceResources* deviceResources, std::vector<std::shared_ptr<Bind::Bindable>> bindPtrs);
-            void Draw(DX::DeviceResources* deviceResources, DirectX::FXMMATRIX accumulatedTransform) const;
-            DirectX::XMMATRIX GetTransform() const noexcept override;
-        
-        private:
-            mutable DirectX::XMFLOAT4X4 transform;
-    };
-}
+    public:
+        Mesh(DX::DeviceResources* deviceResources, std::vector<std::shared_ptr<Bind::Bindable>> bindPtrs);
+        void Draw(DX::DeviceResources* deviceResources, DirectX::FXMMATRIX accumulatedTransform) const;
+        DirectX::XMMATRIX GetTransform() const noexcept override;
+    
+    private:
+        mutable DirectX::XMFLOAT4X4 transform;
+};

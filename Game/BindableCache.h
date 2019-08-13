@@ -24,6 +24,8 @@ namespace Bind
                 return std::static_pointer_cast<T>(i->second);
             }
 
+            static void Clear();
+
         private:
             static std::unordered_map<std::string, std::shared_ptr<Bindable>> binds;
     };
