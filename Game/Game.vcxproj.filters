@@ -208,9 +208,6 @@
     <ClInclude Include="VertexBufferTypes.h">
       <Filter>Engine\Graphics\Buffers\Types</Filter>
     </ClInclude>
-    <ClInclude Include="Texture.h">
-      <Filter>Engine\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Application.h">
       <Filter>Engine\System</Filter>
     </ClInclude>
@@ -733,9 +730,6 @@
     <ClInclude Include="Events\KeyEvents.h">
       <Filter>Engine\System\Events</Filter>
     </ClInclude>
-    <ClInclude Include="Audio\Audio.h">
-      <Filter>Engine\Audio</Filter>
-    </ClInclude>
     <ClInclude Include="Window.h">
       <Filter>Engine\Platform</Filter>
     </ClInclude>
@@ -762,6 +756,12 @@
     </ClInclude>
     <ClInclude Include="BindableCache.h">
       <Filter>Engine\Graphics\Pipeline\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Engine\Graphics\Pipeline\Bindable\Bindables</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio.h">
+      <Filter>Engine\Audio</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -806,9 +806,6 @@
     </ClCompile>
     <ClCompile Include="VertexBufferTypes.cpp">
       <Filter>Engine\Graphics\Buffers\Types</Filter>
-    </ClCompile>
-    <ClCompile Include="Texture.cpp">
-      <Filter>Engine\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Application.cpp">
       <Filter>Engine\System</Filter>
@@ -877,9 +874,6 @@
     <ClCompile Include="Node.cpp">
       <Filter>Engine\Graphics\Pipeline\Drawable</Filter>
     </ClCompile>
-    <ClCompile Include="Audio.cpp">
-      <Filter>Engine\Audio</Filter>
-    </ClCompile>
     <ClCompile Include="Window.cpp">
       <Filter>Engine\Platform</Filter>
     </ClCompile>
@@ -903,6 +897,12 @@
     </ClCompile>
     <ClCompile Include="BindableCache.cpp">
       <Filter>Engine\Graphics\Pipeline\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Engine\Graphics\Pipeline\Bindable\Bindables</Filter>
+    </ClCompile>
+    <ClCompile Include="Audio.cpp">
+      <Filter>Engine\Audio</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -985,6 +985,12 @@
       <Filter>Assets\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="PixelShaderSpec.hlsl">
+      <Filter>Assets\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="colorVS.hlsl">
+      <Filter>Assets\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="colorPS.hlsl">
       <Filter>Assets\Shaders</Filter>
     </FxCompile>
   </ItemGroup>

@@ -97,7 +97,7 @@ std::unique_ptr<Mesh> Model::ParseMesh(DX::DeviceResources* deviceResources, aiS
     auto pvsbc = pvs->GetBytecode();
     bindablePtrs.push_back(std::move(pvs));
 
-    bindablePtrs.push_back(std::make_unique<Bind::InputLayout>(deviceResources, vbuf.GetLayout().GetD3DLayout(), pvsbc));
+    bindablePtrs.push_back(Bind::InputLayout::Resolve(deviceResources, vbuf.GetLayout(), pvsbc));
 
 
     if (hasSpecularMap)

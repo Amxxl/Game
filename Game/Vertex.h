@@ -24,42 +24,49 @@ class VertexLayout
             using SysType = DirectX::XMFLOAT2;
             static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32_FLOAT;
             static constexpr char const* semantic = "Position";
+            static constexpr char const* code = "P2";
         };
         template<> struct Map<Position3D>
         {
             using SysType = DirectX::XMFLOAT3;
             static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
             static constexpr char const* semantic = "Position";
+            static constexpr char const* code = "P3";
         };
         template<> struct Map<Texture2D>
         {
             using SysType = DirectX::XMFLOAT2;
             static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32_FLOAT;
             static constexpr char const* semantic = "Texcoord";
+            static constexpr char const* code = "T2";
         };
         template<> struct Map<Normal>
         {
             using SysType = DirectX::XMFLOAT3;
             static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
             static constexpr char const* semantic = "Normal";
+            static constexpr char const* code = "N";
         };
         template<> struct Map<Float3Color>
         {
             using SysType = DirectX::XMFLOAT3;
             static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
             static constexpr char const* semantic = "Color";
+            static constexpr char const* code = "C3";
         };
         template<> struct Map<Float4Color>
         {
             using SysType = DirectX::XMFLOAT4;
             static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32A32_FLOAT;
             static constexpr char const* semantic = "Color";
+            static constexpr char const* code = "C4";
         };
         template<> struct Map<RGBAColor>
         {
             using SysType = uint32;
             static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R8G8B8A8_UNORM;
             static constexpr char const* semantic = "Color";
+            static constexpr char const* code = "C8";
         };
 
         class Element
@@ -73,6 +80,7 @@ class VertexLayout
                 static constexpr size_t SizeOf(ElementType type);
                 ElementType GetType() const noexcept;
                 D3D11_INPUT_ELEMENT_DESC GetDesc() const;
+                char const* GetCode() const noexcept;
 
             private:
                 template<ElementType type>
@@ -108,6 +116,8 @@ class VertexLayout
         size_t Size() const;
         size_t GetElementCount() const noexcept;
         std::vector<D3D11_INPUT_ELEMENT_DESC> GetD3DLayout() const;
+        std::string GetCode() const;
+
 
     private:
         std::vector<Element> elements;

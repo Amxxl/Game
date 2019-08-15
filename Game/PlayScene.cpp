@@ -100,10 +100,15 @@ bool PlayScene::Load(SceneManager* sceneManager, Window& window)
     house = std::make_unique<Model>(window.GetDeviceResources(), "Data/WoodCabin.dae");
     bridge = std::make_unique<Model>(window.GetDeviceResources(), "Data/bridge.dae");
     spruce = std::make_unique<Model>(window.GetDeviceResources(), "Data/spruce.obj");
+    grass = std::make_unique<Model>(window.GetDeviceResources(), "Data/grass.obj");
+    well = std::make_unique<Model>(window.GetDeviceResources(), "Data/Models/Well/well.dae");
+    //huge_tree = std::make_unique<Model>(window.GetDeviceResources(), "Data/Models/Tree/huge_tree.obj");
 
     spriteBatch = std::make_unique<DirectX::SpriteBatch>(m_deviceContext);
     font = std::make_unique<DirectX::SpriteFont>(device, L"Data/Fonts/Consolas14BI.spritefont");
 
+
+    state = std::make_unique<DirectX::CommonStates>(DX::GetDevice(m_deviceContext));
     return true;
 }
 
@@ -209,9 +214,9 @@ void PlayScene::Update(DX::StepTimer const& timer)
     if (player.GetPositionFloat3().y > 16.5f)
     {
         acceleration += velocity * deltaTime;
-        //player.AdjustPosition(0.0f, -acceleration, 0.0f);
-        //velocity += 15.0f * deltaTime;
-        in_jump = false;
+        player.AdjustPosition(0.0f, -acceleration, 0.0f);
+        velocity += 15.0f * deltaTime;
+        in_jump = true;
     }
 
     if (player.GetPositionFloat3().y <= 16.5f)
@@ -224,7 +229,6 @@ void PlayScene::Update(DX::StepTimer const& timer)
 
     player.Update(m_deviceContext, deltaTime, anim_index);
     npc.Update(m_deviceContext, deltaTime, 0);
-
 
     camera.SetOrigin(player.GetPositionFloat3());
     camera.UpdateMatrix();
@@ -259,19 +263,27 @@ void PlayScene::Render()
     player.Draw(m_deviceContext, camera.GetViewMatrix(), camera.GetProjectionMatrix());
     npc.Draw(m_deviceContext, camera.GetViewMatrix(), camera.GetProjectionMatrix());
 
-    state = std::make_unique<DirectX::CommonStates>(DX::GetDevice(m_deviceContext));
     ID3D11RasterizerState* cullNone = state->CullNone();
     m_deviceContext->RSSetState(cullNone);
 
     light->Bind(m_pDeviceResources, camera.GetViewMatrix());
+
     spruce->Draw(m_pDeviceResources, m_world * DirectX::XMMatrixScaling(2.0f, 2.0f, 2.0f) * DirectX::XMMatrixRotationX(AI_MATH_PI / 2) * DirectX::XMMatrixTranslation(250.0f, 16.5f, 200.0f));
     bridge->Draw(m_pDeviceResources, m_world * DirectX::XMMatrixRotationY(-77.0f * (3.1415f / 180.0f)) * DirectX::XMMatrixTranslation(257.0f, 58.0f, 381.0f));
     tree->Draw(m_pDeviceResources, m_world * DirectX::XMMatrixScaling(0.08f, 0.08f, 0.08f) * DirectX::XMMatrixRotationX(3.1415f / 2.0f) * DirectX::XMMatrixTranslation(200.0f, 16.0f, 200.0f));
     testModel->Draw(m_pDeviceResources, DirectX::XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f) * DirectX::XMMatrixTranslation(0.0f, 10.0f, 0.0f));
-    
-    light->Bind(m_pDeviceResources, camera.GetViewMatrix());
+    well->Draw(m_pDeviceResources, m_world * DirectX::XMMatrixScaling(3.0f, 3.0f, 3.0f) * DirectX::XMMatrixTranslation(168.0f, 16.5f, 220));
+    //huge_tree->Draw(m_pDeviceResources, m_world * DirectX::XMMatrixTranslation(138.0f, 16.5f, 220.0f));
     house->Draw(m_pDeviceResources, m_world * DirectX::XMMatrixTranslation(465.0f, 32.5f, 485.0f) * XMMatrixScaling(0.5f, 0.5f, 0.5f));
-    house->Draw(m_pDeviceResources, m_world* DirectX::XMMatrixScaling(0.7f, 0.7f, 0.7f)* DirectX::XMMatrixTranslation(365.0f, 32.5f, 485.0f)* XMMatrixScaling(0.5f, 0.5f, 0.5f));
+    house->Draw(m_pDeviceResources, m_world * DirectX::XMMatrixScaling(0.7f, 0.7f, 0.7f)* DirectX::XMMatrixTranslation(365.0f, 32.5f, 485.0f) * XMMatrixScaling(0.5f, 0.5f, 0.5f));
+   
+    for (unsigned int y = 0; y < 20; ++y)
+    {
+        for (unsigned int x = 0; x < 20; ++x)
+        {
+            grass->Draw(m_pDeviceResources, m_world * DirectX::XMMatrixTranslation(float(x) * 10.0f, 16.5f, float(y) * 10.0f));
+        }
+    }
 
     water->Draw(m_world * XMMatrixTranslation(256.0f, 0.0f, 256.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix(), XMVectorSet(0.0f, 0.0f, 1.0f, 0.7f));
 

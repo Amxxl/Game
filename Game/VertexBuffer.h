@@ -22,8 +22,14 @@ namespace Bind
                 Create(device, data, vertexCount);
             }
 
+            explicit VertexBuffer(_In_ ID3D11Device* device, _In_ std::vector<T>& vertices)
+            {
+                assert("You must use another constructor for this template argument." && typeid(T) == typeid(VertexBufferData));
+                Create(device, vertices.data(), vertices.size());
+            }
+
             // Constructor calling prevention if template argument isn't: VertexBufferData.
-            template<typename = typename std::enable_if<std::is_same<T, VertexBufferData>::value>::type>
+            template<typename = typename std::enable_if<std::is_same_v<T, VertexBufferData>>::type>
             explicit VertexBuffer(_In_ DX::DeviceResources* deviceResources, _In_ VertexBufferData const& data)
             {
                 Create(deviceResources, data);
@@ -33,7 +39,7 @@ namespace Bind
             VertexBuffer& operator=(VertexBuffer const&) = default;
 
             // Function calling prevention if template argument isn't: VertexBufferData.
-            template<typename = typename std::enable_if<std::is_same<T, VertexBufferData>::value>::type>
+            template<typename = typename std::enable_if<std::is_same_v<T, VertexBufferData>>::type>
             void Create(_In_ DX::DeviceResources* deviceResources, _In_ VertexBufferData const& data)
             {
                 stride = static_cast<UINT>(data.GetLayout().Size());

@@ -79,6 +79,30 @@ D3D11_INPUT_ELEMENT_DESC VertexLayout::Element::GetDesc() const
     return { "INVALID", 0, DXGI_FORMAT_UNKNOWN, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 };
 }
 
+char const* VertexLayout::Element::GetCode() const noexcept
+{
+    switch (type)
+    {
+        case Position2D:
+            return Map<Position2D>::code;
+        case Position3D:
+            return Map<Position3D>::code;
+        case Texture2D:
+            return Map<Texture2D>::code;
+        case Normal:
+            return Map<Normal>::code;
+        case Float3Color:
+            return Map<Float3Color>::code;
+        case Float4Color:
+            return Map<Float4Color>::code;
+        case RGBAColor:
+            return Map<RGBAColor>::code;
+    }
+
+    assert("Invalid element type." && false);
+    return "Invalid";
+}
+
 VertexLayout::Element const& VertexLayout::ResolveByIndex(size_t index) const
 {
     return elements[index];
@@ -121,6 +145,15 @@ std::vector<D3D11_INPUT_ELEMENT_DESC> VertexLayout::GetD3DLayout() const
         desc.push_back(element.GetDesc());
     }
     return desc;
+}
+
+std::string VertexLayout::GetCode() const
+{
+    std::string code = "";
+    for (auto const& element : elements)
+        code += element.GetCode();
+    
+    return code;
 }
 
 Vertex::Vertex(char* pData, VertexLayout const& layout)

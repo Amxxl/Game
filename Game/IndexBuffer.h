@@ -8,9 +8,9 @@
 
 namespace Bind
 {
-        template<typename T>
-        class IndexBuffer : public Bindable
-        {
+    template<typename T>
+    class IndexBuffer : public Bindable
+    {
         public:
             IndexBuffer() = default;
             explicit IndexBuffer(_In_ ID3D11Device* device, _In_ T* data, uint32 indexCount)

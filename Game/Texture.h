@@ -5,8 +5,6 @@
 #pragma once
 
 #include "Color.h"
-#include <assimp/material.h>
-
 #include "Bindable.h"
 
 namespace Bind
