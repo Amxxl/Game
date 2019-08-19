@@ -1,10 +1,10 @@
 #pragma once
 
-#include "GameObject.h"
+#include "GameObject3D.h"
 #include "MD5Model.h"
 #include "StepTimer.h"
 
-class RenderableGameObject : public GameObject
+class RenderableGameObject : public GameObject3D
 {
     public:
         RenderableGameObject();

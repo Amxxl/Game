@@ -276,7 +276,8 @@
     <ClInclude Include="Bindable.h" />
     <ClInclude Include="BindableCache.h" />
     <ClInclude Include="BindableCommon.h" />
-    <ClInclude Include="Camera.h" />
+    <ClInclude Include="Camera3D.h" />
+    <ClInclude Include="Camera2D.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="ConstantBuffer.h" />
     <ClInclude Include="ConstantBuffers.h" />
@@ -288,6 +289,8 @@
     <ClInclude Include="Frustum.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GameObject2D.h" />
+    <ClInclude Include="GameObject3D.h" />
     <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="InputLayout.h" />
@@ -364,6 +367,7 @@
     <ClInclude Include="spdlog\spdlog.h" />
     <ClInclude Include="spdlog\tweakme.h" />
     <ClInclude Include="spdlog\version.h" />
+    <ClInclude Include="Sprite.h" />
     <ClInclude Include="StepTimer.h" />
     <ClInclude Include="StringHelper.h" />
     <ClInclude Include="Terrain.h" />
@@ -386,7 +390,8 @@
     <ClCompile Include="Audio.cpp" />
     <ClCompile Include="Bindable.cpp" />
     <ClCompile Include="BindableCache.cpp" />
-    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Camera3D.cpp" />
+    <ClCompile Include="Camera2D.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="DeviceResources.cpp" />
     <ClCompile Include="Drawable.cpp" />
@@ -394,6 +399,8 @@
     <ClCompile Include="Frustum.cpp" />
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GameObject2D.cpp" />
+    <ClCompile Include="GameObject3D.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="InputLayout.cpp" />
     <ClCompile Include="Logger.cpp" />
@@ -421,6 +428,7 @@
     <ClCompile Include="Sampler.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="StepTimer.cpp" />
     <ClCompile Include="StringHelper.cpp" />
     <ClCompile Include="Terrain.cpp" />

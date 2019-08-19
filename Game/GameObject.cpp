@@ -119,56 +119,6 @@ void GameObject::AdjustRotation(float x, float y, float z)
     UpdateMatrix();
 }
 
-void GameObject::SetLookAtPos(XMFLOAT3 lookAtPos)
-{
-    // Verify that look at pos is not the same as cam pos. They connot be the same as that wouldn't make sense and would result in undefined behavior.
-    if (lookAtPos.x == pos.x && lookAtPos.y == pos.y && lookAtPos.z == pos.z)
-        return;
-
-    lookAtPos.x = pos.x - lookAtPos.x;
-    lookAtPos.y = pos.y - lookAtPos.y; 
-    lookAtPos.z = pos.z - lookAtPos.z;
-    
-    float pitch = 0.0f;
-    if (lookAtPos.y != 0.0f)
-    {
-        const float distance = sqrt(lookAtPos.x * lookAtPos.x + lookAtPos.z * lookAtPos.z);
-        pitch = atan(lookAtPos.y / distance);
-    }
-
-    float yaw = 0.0f;
-    if (lookAtPos.x != 0.0f)
-    {
-        yaw = atan(lookAtPos.x / lookAtPos.z);
-    }
-
-    if (lookAtPos.z > 0)
-        yaw += XM_PI;
-
-
-    SetRotation(pitch, yaw, 0.0f);
-}
-
-XMVECTOR const& GameObject::GetForwardVector()
-{
-    return vec_forward;
-}
-
-XMVECTOR const& GameObject::GetRightVector()
-{
-    return vec_right;
-}
-
-XMVECTOR const& GameObject::GetBackwardVector()
-{
-    return vec_backward;
-}
-
-XMVECTOR const& GameObject::GetLeftVector()
-{
-    return vec_left;
-}
-
 void GameObject::UpdateMatrix()
 {
     assert("UpdateMatrix() function must be overriden." && 0);

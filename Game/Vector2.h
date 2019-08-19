@@ -33,6 +33,11 @@ class Vector2 : public DirectX::XMFLOAT2
         {
             return { x - rhs.x, y - rhs.y };
         }
+
+        Vector2 operator+(Vector2 const& rhs) const
+        {
+            return { x + rhs.x, y + rhs.y };
+        }
 };
 
 using Vector2f = Vector2;

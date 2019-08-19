@@ -1,8 +1,8 @@
 #pragma once
 
-#include "GameObject.h"
+#include "GameObject3D.h"
 
-class ThirdPersonCamera : public GameObject
+class ThirdPersonCamera : public GameObject3D
 {
     public:
         ThirdPersonCamera();

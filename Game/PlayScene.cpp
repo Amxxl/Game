@@ -104,6 +104,8 @@ bool PlayScene::Load(SceneManager* sceneManager, Window& window)
     well = std::make_unique<Model>(window.GetDeviceResources(), "Data/Models/Well/well.dae");
     //huge_tree = std::make_unique<Model>(window.GetDeviceResources(), "Data/Models/Tree/huge_tree.obj");
 
+    spr = std::make_unique<Sprite>(m_pDeviceResources, "Data/path.png");
+
     spriteBatch = std::make_unique<DirectX::SpriteBatch>(m_deviceContext);
     font = std::make_unique<DirectX::SpriteFont>(device, L"Data/Fonts/Consolas14BI.spritefont");
 
@@ -140,20 +142,21 @@ void PlayScene::Update(DX::StepTimer const& timer)
     if (Input::IsKeyDown(Input::Key::W) || Input::IsMouseButtonDown(Input::MouseButton::Left) && Input::IsMouseButtonDown(Input::MouseButton::Right))
     {
         XMFLOAT3 forward;
-        DirectX::XMStoreFloat3(&forward, camera.GetForwardVector());
+        DirectX::XMStoreFloat3(&forward, player.GetForwardVector(true));
 
         
-        player.AdjustPosition(player.GetForwardVector() * timer.GetElapsedSeconds() * speed);
-        player.SetRotation(0.0f, atan2(forward.x, forward.z), 0.0f);
+        player.AdjustPosition(player.GetForwardVector(true) * timer.GetElapsedSeconds() * speed);
+        //player.SetRotation(0.0f, atan2(forward.x, forward.z), 0.0f);
         anim_index = 1;
     }
     else if (Input::IsKeyDown(Input::Key::S))
     {
         Vector3f forward;
-        DirectX::XMStoreFloat3(&forward, camera.GetBackwardVector());
+        DirectX::XMStoreFloat3(&forward, player.GetBackwardVector(true));
 
         player.AdjustPosition(forward.x, 0.0f, forward.z);
-        //player.AdjustPosition(player.GetBackwardVector() * timer.GetElapsedSeconds() * speed);
+        //player.AdjustPosition(camera.GetBackwardVector(true));
+        //player.AdjustPosition(player.GetBackwardVector(true) * timer.GetElapsedSeconds() * speed);
         player.SetRotation(0.0f, atan2(forward.x, forward.z), 0.0f);
         anim_index = 1;
     }
@@ -277,6 +280,8 @@ void PlayScene::Render()
     house->Draw(m_pDeviceResources, m_world * DirectX::XMMatrixTranslation(465.0f, 32.5f, 485.0f) * XMMatrixScaling(0.5f, 0.5f, 0.5f));
     house->Draw(m_pDeviceResources, m_world * DirectX::XMMatrixScaling(0.7f, 0.7f, 0.7f)* DirectX::XMMatrixTranslation(365.0f, 32.5f, 485.0f) * XMMatrixScaling(0.5f, 0.5f, 0.5f));
    
+    spr->Draw(m_pDeviceResources, m_world * XMMatrixScaling(512.0f, 512.0f, 1.0f));
+
     for (unsigned int y = 0; y < 20; ++y)
     {
         for (unsigned int x = 0; x < 20; ++x)

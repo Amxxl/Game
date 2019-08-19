@@ -415,9 +415,6 @@
     <ClInclude Include="ThirdPersonCamera.h">
       <Filter>Game\GameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Game\GameObjects</Filter>
-    </ClInclude>
     <ClInclude Include="Vector3.h">
       <Filter>Engine\Math</Filter>
     </ClInclude>
@@ -763,6 +760,21 @@
     <ClInclude Include="Audio.h">
       <Filter>Engine\Audio</Filter>
     </ClInclude>
+    <ClInclude Include="Sprite.h">
+      <Filter>Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject2D.h">
+      <Filter>Game\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject3D.h">
+      <Filter>Game\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera2D.h">
+      <Filter>Game\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera3D.h">
+      <Filter>Game\GameObjects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scene.cpp">
@@ -830,9 +842,6 @@
       <Filter>Game\GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="ThirdPersonCamera.cpp">
-      <Filter>Game\GameObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp">
       <Filter>Game\GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="Vector3.cpp">
@@ -903,6 +912,21 @@
     </ClCompile>
     <ClCompile Include="Audio.cpp">
       <Filter>Engine\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite.cpp">
+      <Filter>Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject2D.cpp">
+      <Filter>Game\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject3D.cpp">
+      <Filter>Game\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera2D.cpp">
+      <Filter>Game\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera3D.cpp">
+      <Filter>Game\GameObjects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

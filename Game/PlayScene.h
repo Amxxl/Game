@@ -11,7 +11,7 @@
 #include "imgui_impl_win32.h"
 
 #include "GeometricPrimitive.h"
-#include "Camera.h"
+#include "Camera3D.h"
 #include "ThirdPersonCamera.h"
 #include "Terrain.h"
 #include "Octree.h"
@@ -20,6 +20,7 @@
 #include "Model.h"
 #include "RenderableGameObject.h"
 #include "PointLight.h"
+#include "Sprite.h"
 
 #include "MouseEvents.h"
 #include "KeyEvents.h"
@@ -90,6 +91,8 @@ class PlayScene : public Scene
         std::unique_ptr<Model> grass;
         std::unique_ptr<Model> well;
         //std::unique_ptr<Model> huge_tree;
+
+        std::unique_ptr<Sprite> spr;
 
         DX::DeviceResources* m_pDeviceResources;
 
