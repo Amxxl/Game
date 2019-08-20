@@ -376,6 +376,7 @@
     <ClInclude Include="Texture.h" />
     <ClInclude Include="ThirdPersonCamera.h" />
     <ClInclude Include="Topology.h" />
+    <ClInclude Include="Transform2D.h" />
     <ClInclude Include="TransformCBuf.h" />
     <ClInclude Include="Vector2.h" />
     <ClInclude Include="Vector3.h" />
@@ -437,6 +438,7 @@
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="ThirdPersonCamera.cpp" />
     <ClCompile Include="Topology.cpp" />
+    <ClCompile Include="Transform2D.cpp" />
     <ClCompile Include="TransformCBuf.cpp" />
     <ClCompile Include="Vector3.cpp" />
     <ClCompile Include="Vertex.cpp" />

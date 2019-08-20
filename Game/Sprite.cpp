@@ -51,7 +51,8 @@ Sprite::Sprite(DX::DeviceResources* deviceResources, std::string const& textureP
 
     AddBind(PixelShader::Resolve(deviceResources, "Data/Shaders/color.ps"));
     
-    AddBind(std::make_unique<TransformCBuf>(deviceResources, *this));
+    //AddBind(std::make_unique<TransformCBuf>(deviceResources, *this));
+    AddBind(std::make_unique<Transform2D>(deviceResources, *this));
 }
 
 void Sprite::Draw(DX::DeviceResources* deviceResources, DirectX::FXMMATRIX accumulatedTransform) const

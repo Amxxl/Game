@@ -5,6 +5,7 @@
 #include "PixelShader.h"
 #include "Sampler.h"
 #include "Topology.h"
+#include "Transform2D.h"
 #include "TransformCBuf.h"
 #include "VertexShader.h"
 #include "IndexBuffer.h"

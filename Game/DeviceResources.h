@@ -5,6 +5,7 @@
 #pragma once
 
 #include "ThirdPersonCamera.h"
+#include "Camera2D.h"
 
 namespace DX
 {
@@ -76,6 +77,9 @@ namespace DX
         void SetCamera(ThirdPersonCamera* camera) { m_camera = camera; }
         ThirdPersonCamera* GetCamera() const { return m_camera; }
 
+        void SetCamera2D(Camera2D* camera) { m_camera2d = camera; }
+        Camera2D* GetCamera2D() const { return m_camera2d; }
+
     private:
         void CreateFactory();
         void GetHardwareAdapter(IDXGIAdapter1** ppAdapter);
@@ -117,5 +121,7 @@ namespace DX
 
         // Temporary.
         ThirdPersonCamera*                                    m_camera;
+        Camera2D*                                             m_camera2d;
+
     };
 }

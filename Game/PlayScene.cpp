@@ -40,6 +40,10 @@ bool PlayScene::Load(SceneManager* sceneManager, Window& window)
     camera.SetLookAtPos(Vector3f(5.0f, 0.0f, 5.0f));
     camera.SetRotation(0.0f, 0.0f, 0.0f);
 
+    camera2d.SetProjectionValues(800.0f, 600.0f, 0.0f, 1.0f);
+    camera2d.SetPosition(0.0f, 0.0f, 0.0f);
+    camera2d.SetRotation(0.0f, 0.0f, 0.0f);
+
     light = std::make_unique<PointLight>(m_pDeviceResources);
 
     sky = DirectX::GeometricPrimitive::CreateSphere(m_deviceContext, 2000.0f, 16, true, true);
@@ -237,6 +241,7 @@ void PlayScene::Update(DX::StepTimer const& timer)
     camera.UpdateMatrix();
 
     m_pDeviceResources->SetCamera(&camera);
+    m_pDeviceResources->SetCamera2D(&camera2d);
 
     FMOD_VECTOR audioPos{ player.GetPositionFloat3().x, player.GetPositionFloat3().y, player.GetPositionFloat3().z };
     FMOD_VECTOR audioUp{ 0.0f, 1.0f, 0.0 };

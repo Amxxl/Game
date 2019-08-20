@@ -11,6 +11,7 @@
 #include "imgui_impl_win32.h"
 
 #include "GeometricPrimitive.h"
+#include "Camera2D.h"
 #include "Camera3D.h"
 #include "ThirdPersonCamera.h"
 #include "Terrain.h"
@@ -97,6 +98,7 @@ class PlayScene : public Scene
         DX::DeviceResources* m_pDeviceResources;
 
         //Camera camera;
+        Camera2D camera2d;
         ThirdPersonCamera camera;
         DirectX::XMMATRIX m_world;
 

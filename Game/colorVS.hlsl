@@ -1,8 +1,6 @@
 cbuffer MatrixBuffer
 {
-    matrix world;
-    matrix view;
-    matrix proj;
+    matrix wvp;
 };
 
 struct VSOut
@@ -16,9 +14,9 @@ VSOut main(float3 pos : Position, float2 tex : Texcoord)
 {
     VSOut output;
 
-    output.worldPos = (float3)mul(float4(pos, 1.0f), mul(world, view));
+    output.worldPos = (float3)mul(float4(pos, 1.0f), wvp);
     output.tex = tex;
-    output.pos = mul(float4(pos, 1.0f), mul(world, mul(view, proj)));
+    output.pos = mul(float4(pos, 1.0f), wvp);
 
     return output;
 }

@@ -775,6 +775,9 @@
     <ClInclude Include="Camera3D.h">
       <Filter>Game\GameObjects</Filter>
     </ClInclude>
+    <ClInclude Include="Transform2D.h">
+      <Filter>Engine\Graphics\Pipeline\Bindable\Bindables</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scene.cpp">
@@ -927,6 +930,9 @@
     </ClCompile>
     <ClCompile Include="Camera3D.cpp">
       <Filter>Game\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform2D.cpp">
+      <Filter>Engine\Graphics\Pipeline\Bindable\Bindables</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
