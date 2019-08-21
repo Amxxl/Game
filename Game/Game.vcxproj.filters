@@ -712,9 +712,6 @@
     <ClInclude Include="Model.h">
       <Filter>Engine\Graphics\Pipeline\Drawable</Filter>
     </ClInclude>
-    <ClInclude Include="TransformCBuf.h">
-      <Filter>Engine\Graphics\Pipeline\Bindable\Bindables</Filter>
-    </ClInclude>
     <ClInclude Include="Node.h">
       <Filter>Engine\Graphics\Pipeline\Drawable</Filter>
     </ClInclude>
@@ -760,9 +757,6 @@
     <ClInclude Include="Audio.h">
       <Filter>Engine\Audio</Filter>
     </ClInclude>
-    <ClInclude Include="Sprite.h">
-      <Filter>Engine\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="GameObject2D.h">
       <Filter>Game\GameObjects</Filter>
     </ClInclude>
@@ -777,6 +771,12 @@
     </ClInclude>
     <ClInclude Include="Transform2D.h">
       <Filter>Engine\Graphics\Pipeline\Bindable\Bindables</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform3D.h">
+      <Filter>Engine\Graphics\Pipeline\Bindable\Bindables</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite.h">
+      <Filter>Engine\Graphics\Pipeline\Drawable</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -880,9 +880,6 @@
     <ClCompile Include="Model.cpp">
       <Filter>Engine\Graphics\Pipeline\Drawable</Filter>
     </ClCompile>
-    <ClCompile Include="TransformCBuf.cpp">
-      <Filter>Engine\Graphics\Pipeline\Bindable\Bindables</Filter>
-    </ClCompile>
     <ClCompile Include="Node.cpp">
       <Filter>Engine\Graphics\Pipeline\Drawable</Filter>
     </ClCompile>
@@ -916,9 +913,6 @@
     <ClCompile Include="Audio.cpp">
       <Filter>Engine\Audio</Filter>
     </ClCompile>
-    <ClCompile Include="Sprite.cpp">
-      <Filter>Engine\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="GameObject2D.cpp">
       <Filter>Game\GameObjects</Filter>
     </ClCompile>
@@ -933,6 +927,12 @@
     </ClCompile>
     <ClCompile Include="Transform2D.cpp">
       <Filter>Engine\Graphics\Pipeline\Bindable\Bindables</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform3D.cpp">
+      <Filter>Engine\Graphics\Pipeline\Bindable\Bindables</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite.cpp">
+      <Filter>Engine\Graphics\Pipeline\Drawable</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -5,11 +5,12 @@
 
 namespace Bind
 {
-    class TransformCBuf : public Bindable
+    class Transform3D : public Bindable
     {
         public:
-            TransformCBuf(DX::DeviceResources* deviceResources, Drawable const& parent, UINT slot = 0u);
+            Transform3D(DX::DeviceResources* deviceResources, Drawable const& parent, UINT slot = 0u);
             virtual void Bind(DX::DeviceResources* deviceResources) noexcept override;
+
         private:
             struct Transforms
             {
@@ -19,7 +20,7 @@ namespace Bind
             };
 
         private:
-            static std::unique_ptr<VertexConstantBuffer<Transforms>> pVCbuf;
             Drawable const& parent;
+            static std::unique_ptr<VertexConstantBuffer<Transforms>> pVertexConstantBuffer;
     };
 }

@@ -377,7 +377,7 @@
     <ClInclude Include="ThirdPersonCamera.h" />
     <ClInclude Include="Topology.h" />
     <ClInclude Include="Transform2D.h" />
-    <ClInclude Include="TransformCBuf.h" />
+    <ClInclude Include="Transform3D.h" />
     <ClInclude Include="Vector2.h" />
     <ClInclude Include="Vector3.h" />
     <ClInclude Include="Vertex.h" />
@@ -439,7 +439,7 @@
     <ClCompile Include="ThirdPersonCamera.cpp" />
     <ClCompile Include="Topology.cpp" />
     <ClCompile Include="Transform2D.cpp" />
-    <ClCompile Include="TransformCBuf.cpp" />
+    <ClCompile Include="Transform3D.cpp" />
     <ClCompile Include="Vector3.cpp" />
     <ClCompile Include="Vertex.cpp" />
     <ClCompile Include="VertexBufferTypes.cpp" />
