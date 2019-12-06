@@ -8,6 +8,7 @@
 
 MD5Model::MD5Model()
 {
+    anim_index = 0;
 }
 
 MD5Model::~MD5Model()
@@ -35,6 +36,14 @@ void MD5Model::Update(ID3D11DeviceContext* deviceContext, float deltaTime, int i
 {
     if (!model.HasAnimations)
         return;
+
+    if (anim_index != index)
+    {
+        // If animation is changed reset animation time.
+        model.animations[index].currAnimTime = 0.0f;
+    }
+
+    anim_index = index;
 
     model.animations[index].currAnimTime += deltaTime;
 

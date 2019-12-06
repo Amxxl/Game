@@ -59,32 +59,52 @@ bool PlayScene::Load(SceneManager* sceneManager, Window& window)
     m_pDeviceResources->SetCamera(&camera);
 
     player.Initialize(m_deviceContext);
-    player.SetPosition(205.0f, 16.5f, 215.0f);
-    player.LoadMesh(m_deviceContext, L"Data/wraith.md5mesh");
-    player.LoadAnim(L"Data/idle.md5anim"); // 0
-    player.LoadAnim(L"Data/walk.md5anim"); // 1
-    player.LoadAnim(L"Data/attack1.md5anim"); // 2
-    player.LoadAnim(L"Data/attack2.md5anim"); // 3
-    player.LoadAnim(L"Data/attack3.md5anim"); // 4
+    player.SetPosition(205.0f, 19.5f, 215.0f);
+    player.LoadMesh(m_deviceContext, L"Data/Models/Reptile/reptile.md5mesh");
+    player.LoadAnim(L"Data/Models/Reptile/idle.md5anim"); // 0
+    player.LoadAnim(L"Data/Models/Reptile/walk.md5anim"); // 1
+    player.LoadAnim(L"Data/Models/Reptile/jump.md5anim"); // 2
+    player.LoadAnim(L"Data/Models/Reptile/run.md5anim"); // 3
+    player.LoadAnim(L"Data/Models/Reptile/attack1.md5anim"); // 4
+    player.LoadAnim(L"Data/Models/Reptile/attack2.md5anim"); // 5
+    player.LoadAnim(L"Data/Models/Reptile/attack3.md5anim"); // 6
+    player.LoadAnim(L"Data/Models/Reptile/dead.md5anim"); // 7
 
-    player.LoadAnim(L"Data/ceiling_attack_128.md5anim"); // 5
-    player.LoadAnim(L"Data/ceiling_attack_192.md5anim"); // 6
-    player.LoadAnim(L"Data/ceiling_attack_256.md5anim"); // 7 // error
-    player.LoadAnim(L"Data/ceiling_idle_128.md5anim"); // 8
-    player.LoadAnim(L"Data/ceiling_idle_192.md5anim"); // 9
-    player.LoadAnim(L"Data/ceiling_idle_256.md5anim"); // 10
-    player.LoadAnim(L"Data/evade_left.md5anim"); // 11
-    player.LoadAnim(L"Data/evade_right.md5anim"); // 12
-    player.LoadAnim(L"Data/af_pose.md5anim"); // 13
-    player.LoadAnim(L"Data/sight.md5anim"); // 14
-    player.LoadAnim(L"Data/teleport.md5anim"); // 15
-    player.LoadAnim(L"Data/run.md5anim"); // 16
+    //player.Initialize(m_deviceContext);
+    //player.SetPosition(205.0f, 16.5f, 215.0f);
+    //player.LoadMesh(m_deviceContext, L"Data/wraith.md5mesh");
+    //player.LoadAnim(L"Data/idle.md5anim"); // 0
+    //player.LoadAnim(L"Data/walk.md5anim"); // 1
+    //player.LoadAnim(L"Data/attack1.md5anim"); // 2
+    //player.LoadAnim(L"Data/attack2.md5anim"); // 3
+    //player.LoadAnim(L"Data/attack3.md5anim"); // 4
+
+    //player.LoadAnim(L"Data/ceiling_attack_128.md5anim"); // 5
+    //player.LoadAnim(L"Data/ceiling_attack_192.md5anim"); // 6
+    //player.LoadAnim(L"Data/ceiling_attack_256.md5anim"); // 7 // error
+    //player.LoadAnim(L"Data/ceiling_idle_128.md5anim"); // 8
+    //player.LoadAnim(L"Data/ceiling_idle_192.md5anim"); // 9
+    //player.LoadAnim(L"Data/ceiling_idle_256.md5anim"); // 10
+    //player.LoadAnim(L"Data/evade_left.md5anim"); // 11
+    //player.LoadAnim(L"Data/evade_right.md5anim"); // 12
+    //player.LoadAnim(L"Data/af_pose.md5anim"); // 13
+    //player.LoadAnim(L"Data/sight.md5anim"); // 14
+    //player.LoadAnim(L"Data/teleport.md5anim"); // 15
+    //player.LoadAnim(L"Data/run.md5anim"); // 16
 
     npc.Initialize(m_deviceContext);
     npc.SetPosition(188.0f, 16.5f, 220.0f);
     npc.SetRotation(0.0f, 90.0f, 0.0f);
     npc.LoadMesh(m_deviceContext, L"Data/guard.md5mesh");
     npc.LoadAnim(L"Data/guard.md5anim");
+
+    reptile.Initialize(m_deviceContext);
+    reptile.SetPosition(200.0f, 19.0f, 220.0f);
+    reptile.SetRotation(0.0f, 90.0f, 0.0f);
+    reptile.LoadMesh(m_deviceContext, L"Data/Models/Reptile/reptile.md5mesh");
+    reptile.LoadAnim(L"Data/Models/Reptile/idle.md5anim");
+    reptile.LoadAnim(L"Data/Models/Reptile/walk.md5anim");
+    reptile.LoadAnim(L"Data/Models/Reptile/jump.md5anim");
 
     effect = std::make_unique<DirectX::BasicEffect>(device);
     effect->SetAmbientLightColor(XMVectorSet(1.0f, 1.0f, 1.0f, 0.5f));
@@ -104,11 +124,9 @@ bool PlayScene::Load(SceneManager* sceneManager, Window& window)
     house = std::make_unique<Model>(window.GetDeviceResources(), "Data/WoodCabin.dae");
     bridge = std::make_unique<Model>(window.GetDeviceResources(), "Data/bridge.dae");
     spruce = std::make_unique<Model>(window.GetDeviceResources(), "Data/spruce.obj");
-    grass = std::make_unique<Model>(window.GetDeviceResources(), "Data/grass.obj");
     well = std::make_unique<Model>(window.GetDeviceResources(), "Data/Models/Well/well.dae");
-    //huge_tree = std::make_unique<Model>(window.GetDeviceResources(), "Data/Models/Tree/huge_tree.obj");
 
-    spr = std::make_unique<Sprite>(m_pDeviceResources, "Data/path.png");
+    spr = std::make_unique<Sprite>(m_pDeviceResources, "Data/spellbar.jpg");
 
     spriteBatch = std::make_unique<DirectX::SpriteBatch>(m_deviceContext);
     font = std::make_unique<DirectX::SpriteFont>(device, L"Data/Fonts/Consolas14BI.spritefont");
@@ -148,10 +166,10 @@ void PlayScene::Update(DX::StepTimer const& timer)
         XMFLOAT3 forward;
         DirectX::XMStoreFloat3(&forward, player.GetForwardVector(true));
 
-        
+
         player.AdjustPosition(player.GetForwardVector(true) * timer.GetElapsedSeconds() * speed);
         //player.SetRotation(0.0f, atan2(forward.x, forward.z), 0.0f);
-        anim_index = 1;
+        anim_index = 3;
     }
     else if (Input::IsKeyDown(Input::Key::S))
     {
@@ -162,7 +180,7 @@ void PlayScene::Update(DX::StepTimer const& timer)
         //player.AdjustPosition(camera.GetBackwardVector(true));
         //player.AdjustPosition(player.GetBackwardVector(true) * timer.GetElapsedSeconds() * speed);
         player.SetRotation(0.0f, atan2(forward.x, forward.z), 0.0f);
-        anim_index = 1;
+        anim_index = 3;
     }
     else if (Input::IsKeyDown(Input::Key::A))
     {
@@ -171,7 +189,7 @@ void PlayScene::Update(DX::StepTimer const& timer)
 
         player.AdjustPosition(forward.x, 0.0f, forward.z);
         player.SetRotation(0.0f, atan2(forward.x, forward.z), 0.0f);
-        anim_index = 1;
+        anim_index = 3;
 
     }
     else if (Input::IsKeyDown(Input::Key::D))
@@ -181,61 +199,49 @@ void PlayScene::Update(DX::StepTimer const& timer)
 
         player.AdjustPosition(forward.x, 0.0f, forward.z);
         player.SetRotation(0.0f, atan2(forward.x, forward.z), 0.0f);
-        anim_index = 1;
-    }
-
-    else anim_index = 0;
-
-    if (Input::IsKeyDown(Input::Key::NumPad0))
-        anim_index = 11;
-    else if (Input::IsKeyDown(Input::Key::NumPad1))
-        anim_index = 12;
-    else if (Input::IsKeyDown(Input::Key::NumPad2))
-        anim_index = 2;
-    else if (Input::IsKeyDown(Input::Key::NumPad3))
         anim_index = 3;
-    else if (Input::IsKeyDown(Input::Key::NumPad4))
-        anim_index = 4;
-    else if (Input::IsKeyDown(Input::Key::NumPad5))
-        anim_index = 5;
-    else if (Input::IsKeyDown(Input::Key::NumPad6))
-        anim_index = 6;
-    else if (Input::IsKeyDown(Input::Key::NumPad7))
-        anim_index = 7;
-    else if (Input::IsKeyDown(Input::Key::NumPad8))
-        anim_index = 8;
-    else if (Input::IsKeyDown(Input::Key::NumPad9))
-        anim_index = 9;
+    }
+    else if (in_jump)
+        anim_index = 2;
+    else
+        anim_index = 0;
 
     if (Input::IsKeyDown(Input::Key::D1))
-        anim_index = 3;
-
-    if (Input::IsKeyDown(Input::Key::D2))
         anim_index = 4;
 
-    if (Input::IsKeyDown(Input::Key::D3))
+    if (Input::IsKeyDown(Input::Key::D2))
         anim_index = 5;
 
-    //static float velocity = 15.0f;
+    if (Input::IsKeyDown(Input::Key::D3))
+        anim_index = 6;
 
-    if (player.GetPositionFloat3().y > 16.5f)
+    if (Input::IsKeyDown(Input::Key::D4))
+        anim_index = 7;
+
+    if (player.GetPositionFloat3().y > 19.5f)
     {
         acceleration += velocity * deltaTime;
         player.AdjustPosition(0.0f, -acceleration, 0.0f);
         velocity += 15.0f * deltaTime;
         in_jump = true;
+        anim_index = 2;
     }
 
-    if (player.GetPositionFloat3().y <= 16.5f)
+    if (player.GetPositionFloat3().y <= 19.5f)
     {
         acceleration = 0.0f;
         velocity = 1.0f;
         in_jump = false;
-        player.SetPosition(player.GetPositionFloat3().x, 16.5f, player.GetPositionFloat3().z);
+        player.SetPosition(player.GetPositionFloat3().x, 19.5f, player.GetPositionFloat3().z);
     }
 
     player.Update(m_deviceContext, deltaTime, anim_index);
     npc.Update(m_deviceContext, deltaTime, 0);
+
+    if (Input::IsKeyDown(Input::Key::G))
+        reptile.Update(m_deviceContext, deltaTime, 2);
+    else
+        reptile.Update(m_deviceContext, deltaTime, 0);
 
     camera.SetOrigin(player.GetPositionFloat3());
     camera.UpdateMatrix();
@@ -270,6 +276,7 @@ void PlayScene::Render()
 
     player.Draw(m_deviceContext, camera.GetViewMatrix(), camera.GetProjectionMatrix());
     npc.Draw(m_deviceContext, camera.GetViewMatrix(), camera.GetProjectionMatrix());
+    reptile.Draw(m_deviceContext, camera.GetViewMatrix(), camera.GetProjectionMatrix());
 
     ID3D11RasterizerState* cullNone = state->CullNone();
     m_deviceContext->RSSetState(cullNone);
@@ -281,19 +288,10 @@ void PlayScene::Render()
     tree->Draw(m_pDeviceResources, m_world * DirectX::XMMatrixScaling(0.08f, 0.08f, 0.08f) * DirectX::XMMatrixRotationX(3.1415f / 2.0f) * DirectX::XMMatrixTranslation(200.0f, 16.0f, 200.0f));
     testModel->Draw(m_pDeviceResources, DirectX::XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f) * DirectX::XMMatrixTranslation(0.0f, 10.0f, 0.0f));
     well->Draw(m_pDeviceResources, m_world * DirectX::XMMatrixScaling(3.0f, 3.0f, 3.0f) * DirectX::XMMatrixTranslation(168.0f, 16.5f, 220));
-    //huge_tree->Draw(m_pDeviceResources, m_world * DirectX::XMMatrixTranslation(138.0f, 16.5f, 220.0f));
     house->Draw(m_pDeviceResources, m_world * DirectX::XMMatrixTranslation(465.0f, 32.5f, 485.0f) * XMMatrixScaling(0.5f, 0.5f, 0.5f));
     house->Draw(m_pDeviceResources, m_world * DirectX::XMMatrixScaling(0.7f, 0.7f, 0.7f)* DirectX::XMMatrixTranslation(365.0f, 32.5f, 485.0f) * XMMatrixScaling(0.5f, 0.5f, 0.5f));
    
-    spr->Draw(m_pDeviceResources, m_world * XMMatrixScaling(512.0f, 512.0f, 1.0f));
-
-    for (unsigned int y = 0; y < 20; ++y)
-    {
-        for (unsigned int x = 0; x < 20; ++x)
-        {
-            grass->Draw(m_pDeviceResources, m_world * DirectX::XMMatrixTranslation(float(x) * 10.0f, 16.5f, float(y) * 10.0f));
-        }
-    }
+    spr->Draw(m_pDeviceResources, m_world * XMMatrixScaling(336.0f, 135.0f, 1.0f) * XMMatrixScaling(0.5f, 0.5f, 1.0f) * XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f) * XMMatrixTranslation(800.0f / 2.0f - 336.0f / 2.0f + 336.0f / 2.0f, 600.0f - (135.0f / 2.0f), 0.0f));
 
     water->Draw(m_world * XMMatrixTranslation(256.0f, 0.0f, 256.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix(), XMVectorSet(0.0f, 0.0f, 1.0f, 0.7f));
 

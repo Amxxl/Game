@@ -22,4 +22,5 @@ class MD5Model
     private:
         axec::md5_model_t model;
         MD5ModelShader shader;
+        int anim_index;
 };

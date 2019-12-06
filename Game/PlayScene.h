@@ -81,6 +81,7 @@ class PlayScene : public Scene
 
         RenderableGameObject player;
         RenderableGameObject npc;
+        RenderableGameObject reptile;
 
         std::unique_ptr<PointLight> light;
 
@@ -89,9 +90,7 @@ class PlayScene : public Scene
         std::unique_ptr<Model> tree;
         std::unique_ptr<Model> bridge;
         std::unique_ptr<Model> spruce;
-        std::unique_ptr<Model> grass;
         std::unique_ptr<Model> well;
-        //std::unique_ptr<Model> huge_tree;
 
         std::unique_ptr<Sprite> spr;
 

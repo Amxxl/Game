@@ -9,7 +9,6 @@ Mesh::Mesh(DX::DeviceResources* deviceResources, std::vector<std::shared_ptr<Bin
     for (auto& pb : bindPtrs)
         AddBind(std::move(pb));
 
-    //AddBind(std::make_shared<Bind::TransformCBuf>(deviceResources, *this));
     AddBind(std::make_unique<Bind::Transform3D>(deviceResources, *this));
 }
 

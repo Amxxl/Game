@@ -38,7 +38,7 @@ Sprite::Sprite(DX::DeviceResources* deviceResources, std::string const& textureP
     AddBind(Topology::Resolve(deviceResources, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
 
     AddBind(Texture::Resolve(deviceResources, texturePath));
-    AddBind(Sampler::Resolve(deviceResources, Sampler::State::LINEAR_WRAP));
+    AddBind(Sampler::Resolve(deviceResources, Sampler::State::ANISOTROPIC_WRAP));
 
     AddBind(std::make_unique<VertexBuffer<VertexBufferData>>(deviceResources, vbuf));
     AddBind(std::make_unique<IndexBuffer<unsigned int>>(deviceResources, indices));

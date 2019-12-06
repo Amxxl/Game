@@ -39,6 +39,6 @@ void RenderableGameObject::Draw(ID3D11DeviceContext* deviceContext, DirectX::XMM
 
 void RenderableGameObject::UpdateMatrix()
 {
-    m_worldMatrix = DirectX::XMMatrixRotationRollPitchYaw(rot.x, rot.y - DirectX::XMConvertToRadians(90.0f), rot.z) * DirectX::XMMatrixScaling(0.10f, 0.10f, 0.10f) * DirectX::XMMatrixTranslation(pos.x, pos.y, pos.z);
+    m_worldMatrix = DirectX::XMMatrixRotationRollPitchYaw(rot.x, rot.y - DirectX::XMConvertToRadians(180.0f), rot.z) * DirectX::XMMatrixScaling(0.10f, 0.10f, 0.10f) * DirectX::XMMatrixTranslation(pos.x, pos.y, pos.z);
     UpdateDirectionVectors();
 }
