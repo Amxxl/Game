@@ -150,7 +150,7 @@ void PlayScene::Update(DX::StepTimer const& timer)
     m_fps = static_cast<float>(timer.GetFramesPerSecond());
 
     static float cameraSpeed = 40.0f;
-    static float speed = 20.0f;
+    static float speed;
 
     static int anim_index = 0;
 
@@ -163,43 +163,75 @@ void PlayScene::Update(DX::StepTimer const& timer)
 
     if (Input::IsKeyDown(Input::Key::W) || Input::IsMouseButtonDown(Input::MouseButton::Left) && Input::IsMouseButtonDown(Input::MouseButton::Right))
     {
+        if (Input::IsKeyDown(VK_SHIFT))
+        {
+            speed = 12.0f;
+            anim_index = 3;
+        }
+        else
+        {
+            speed = 6.0f;
+            anim_index = 1;
+        }
         XMFLOAT3 forward;
-        DirectX::XMStoreFloat3(&forward, player.GetForwardVector(true));
+        DirectX::XMStoreFloat3(&forward, camera.GetForwardVector());
 
-
-        player.AdjustPosition(player.GetForwardVector(true) * timer.GetElapsedSeconds() * speed);
-        //player.SetRotation(0.0f, atan2(forward.x, forward.z), 0.0f);
-        anim_index = 3;
+        player.SetRotation(0.0f, atan2(forward.x, forward.z), 0.0f);
+        player.AdjustPosition(player.GetForwardVector(true) * deltaTime * speed);
     }
     else if (Input::IsKeyDown(Input::Key::S))
     {
+        if (Input::IsKeyDown(VK_SHIFT))
+        {
+            speed = 40.0f;
+            anim_index = 3;
+        }
+        else
+        {
+            speed = 20.0f;
+            anim_index = 1;
+        }
         Vector3f forward;
-        DirectX::XMStoreFloat3(&forward, player.GetBackwardVector(true));
+        DirectX::XMStoreFloat3(&forward, camera.GetBackwardVector());
 
-        player.AdjustPosition(forward.x, 0.0f, forward.z);
-        //player.AdjustPosition(camera.GetBackwardVector(true));
-        //player.AdjustPosition(player.GetBackwardVector(true) * timer.GetElapsedSeconds() * speed);
         player.SetRotation(0.0f, atan2(forward.x, forward.z), 0.0f);
-        anim_index = 3;
+        player.AdjustPosition(player.GetForwardVector(true) * deltaTime * speed);
     }
     else if (Input::IsKeyDown(Input::Key::A))
     {
+        if (Input::IsKeyDown(VK_SHIFT))
+        {
+            speed = 40.0f;
+            anim_index = 3;
+        }
+        else
+        {
+            speed = 20.0f;
+            anim_index = 1;
+        }
         Vector3f forward;
         DirectX::XMStoreFloat3(&forward, camera.GetLeftVector());
 
-        player.AdjustPosition(forward.x, 0.0f, forward.z);
         player.SetRotation(0.0f, atan2(forward.x, forward.z), 0.0f);
-        anim_index = 3;
-
+        player.AdjustPosition(player.GetForwardVector(true) * deltaTime * speed);
     }
     else if (Input::IsKeyDown(Input::Key::D))
     {
+        if (Input::IsKeyDown(VK_SHIFT))
+        {
+            speed = 40.0f;
+            anim_index = 3;
+        }
+        else
+        {
+            speed = 20.0f;
+            anim_index = 1;
+        }
         Vector3f forward;
         DirectX::XMStoreFloat3(&forward, camera.GetRightVector());
 
-        player.AdjustPosition(forward.x, 0.0f, forward.z);
         player.SetRotation(0.0f, atan2(forward.x, forward.z), 0.0f);
-        anim_index = 3;
+        player.AdjustPosition(player.GetForwardVector(true) * deltaTime * speed);
     }
     else if (in_jump)
         anim_index = 2;
@@ -222,7 +254,7 @@ void PlayScene::Update(DX::StepTimer const& timer)
     {
         acceleration += velocity * deltaTime;
         player.AdjustPosition(0.0f, -acceleration, 0.0f);
-        velocity += 15.0f * deltaTime;
+        velocity += 10.0f * deltaTime;
         in_jump = true;
         anim_index = 2;
     }
