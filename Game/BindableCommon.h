@@ -3,6 +3,7 @@
 #include "ConstantBuffers.h"
 #include "InputLayout.h"
 #include "PixelShader.h"
+#include "Blender.h"
 #include "Sampler.h"
 #include "Topology.h"
 #include "Transform2D.h"

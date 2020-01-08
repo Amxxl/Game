@@ -82,6 +82,7 @@ class PlayScene : public Scene
         RenderableGameObject player;
         RenderableGameObject npc;
         RenderableGameObject reptile;
+        RenderableGameObject jugger;
 
         std::unique_ptr<PointLight> light;
 

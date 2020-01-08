@@ -778,6 +778,10 @@
     <ClInclude Include="Sprite.h">
       <Filter>Engine\Graphics\Pipeline\Drawable</Filter>
     </ClInclude>
+    <ClInclude Include="Blender.h">
+      <Filter>Engine\Graphics\Pipeline\Bindable\Bindables</Filter>
+    </ClInclude>
+    <ClInclude Include="Rasterizer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scene.cpp">
@@ -934,6 +938,10 @@
     <ClCompile Include="Sprite.cpp">
       <Filter>Engine\Graphics\Pipeline\Drawable</Filter>
     </ClCompile>
+    <ClCompile Include="Blender.cpp">
+      <Filter>Engine\Graphics\Pipeline\Bindable\Bindables</Filter>
+    </ClCompile>
+    <ClCompile Include="Rasterizer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="bow.ico">

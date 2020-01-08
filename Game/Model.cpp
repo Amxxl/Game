@@ -121,6 +121,8 @@ std::unique_ptr<Mesh> Model::ParseMesh(DX::DeviceResources* deviceResources, aiS
         bindablePtrs.push_back(Bind::PixelConstantBuffer<PSMaterialConstant>::Resolve(deviceResources, pmc, 1u));
     }
 
+
+    bindablePtrs.push_back(Bind::Blender::Resolve(deviceResources, false));
     return std::make_unique<Mesh>(deviceResources, std::move(bindablePtrs));
 }
 

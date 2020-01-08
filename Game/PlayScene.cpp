@@ -70,28 +70,6 @@ bool PlayScene::Load(SceneManager* sceneManager, Window& window)
     player.LoadAnim(L"Data/Models/Reptile/attack3.md5anim"); // 6
     player.LoadAnim(L"Data/Models/Reptile/dead.md5anim"); // 7
 
-    //player.Initialize(m_deviceContext);
-    //player.SetPosition(205.0f, 16.5f, 215.0f);
-    //player.LoadMesh(m_deviceContext, L"Data/wraith.md5mesh");
-    //player.LoadAnim(L"Data/idle.md5anim"); // 0
-    //player.LoadAnim(L"Data/walk.md5anim"); // 1
-    //player.LoadAnim(L"Data/attack1.md5anim"); // 2
-    //player.LoadAnim(L"Data/attack2.md5anim"); // 3
-    //player.LoadAnim(L"Data/attack3.md5anim"); // 4
-
-    //player.LoadAnim(L"Data/ceiling_attack_128.md5anim"); // 5
-    //player.LoadAnim(L"Data/ceiling_attack_192.md5anim"); // 6
-    //player.LoadAnim(L"Data/ceiling_attack_256.md5anim"); // 7 // error
-    //player.LoadAnim(L"Data/ceiling_idle_128.md5anim"); // 8
-    //player.LoadAnim(L"Data/ceiling_idle_192.md5anim"); // 9
-    //player.LoadAnim(L"Data/ceiling_idle_256.md5anim"); // 10
-    //player.LoadAnim(L"Data/evade_left.md5anim"); // 11
-    //player.LoadAnim(L"Data/evade_right.md5anim"); // 12
-    //player.LoadAnim(L"Data/af_pose.md5anim"); // 13
-    //player.LoadAnim(L"Data/sight.md5anim"); // 14
-    //player.LoadAnim(L"Data/teleport.md5anim"); // 15
-    //player.LoadAnim(L"Data/run.md5anim"); // 16
-
     npc.Initialize(m_deviceContext);
     npc.SetPosition(188.0f, 16.5f, 220.0f);
     npc.SetRotation(0.0f, 90.0f, 0.0f);
@@ -105,6 +83,12 @@ bool PlayScene::Load(SceneManager* sceneManager, Window& window)
     reptile.LoadAnim(L"Data/Models/Reptile/idle.md5anim");
     reptile.LoadAnim(L"Data/Models/Reptile/walk.md5anim");
     reptile.LoadAnim(L"Data/Models/Reptile/jump.md5anim");
+
+    jugger.Initialize(m_deviceContext);
+    jugger.SetPosition(200.0f, 19.0f, 240.0f);
+    jugger.SetRotation(0.0f, 90.0f, 0.0f);
+    jugger.LoadMesh(m_deviceContext, L"Data/Models/Juggernaut/Juggernaut.md5mesh");
+    jugger.LoadAnim(L"Data/Models/Juggernaut/Juggernaut_idle.md5anim");
 
     effect = std::make_unique<DirectX::BasicEffect>(device);
     effect->SetAmbientLightColor(XMVectorSet(1.0f, 1.0f, 1.0f, 0.5f));
@@ -275,6 +259,8 @@ void PlayScene::Update(DX::StepTimer const& timer)
     else
         reptile.Update(m_deviceContext, deltaTime, 0);
 
+    jugger.Update(m_deviceContext, deltaTime, 0);
+
     camera.SetOrigin(player.GetPositionFloat3());
     camera.UpdateMatrix();
 
@@ -309,6 +295,7 @@ void PlayScene::Render()
     player.Draw(m_deviceContext, camera.GetViewMatrix(), camera.GetProjectionMatrix());
     npc.Draw(m_deviceContext, camera.GetViewMatrix(), camera.GetProjectionMatrix());
     reptile.Draw(m_deviceContext, camera.GetViewMatrix(), camera.GetProjectionMatrix());
+    jugger.Draw(m_deviceContext, camera.GetViewMatrix(), camera.GetProjectionMatrix());
 
     ID3D11RasterizerState* cullNone = state->CullNone();
     m_deviceContext->RSSetState(cullNone);
@@ -323,13 +310,14 @@ void PlayScene::Render()
     house->Draw(m_pDeviceResources, m_world * DirectX::XMMatrixTranslation(465.0f, 32.5f, 485.0f) * XMMatrixScaling(0.5f, 0.5f, 0.5f));
     house->Draw(m_pDeviceResources, m_world * DirectX::XMMatrixScaling(0.7f, 0.7f, 0.7f)* DirectX::XMMatrixTranslation(365.0f, 32.5f, 485.0f) * XMMatrixScaling(0.5f, 0.5f, 0.5f));
    
-    spr->Draw(m_pDeviceResources, m_world * XMMatrixScaling(336.0f, 135.0f, 1.0f) * XMMatrixScaling(0.5f, 0.5f, 1.0f) * XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f) * XMMatrixTranslation(800.0f / 2.0f - 336.0f / 2.0f + 336.0f / 2.0f, 600.0f - (135.0f / 2.0f), 0.0f));
+    spr->Draw(m_pDeviceResources, m_world * XMMatrixScaling(336.0f, 135.0f, 1.0f) * XMMatrixScaling(0.5f, 0.5f, 0.5f) * XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f) * XMMatrixTranslation(pWindow->GetSize().x / 2.0f - 336.0f / 2.0f + 336.0f / 2.0f, pWindow->GetSize().y - (135.0f / 2.0f) / 2.0f, 0.0f));
 
     water->Draw(m_world * XMMatrixTranslation(256.0f, 0.0f, 256.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix(), XMVectorSet(0.0f, 0.0f, 1.0f, 0.7f));
 
 
     std::ostringstream ss("");
-    ss << "FPS: " << m_fps;
+    ss << "Rezolution: " << static_cast<int>(pWindow->GetSize().x) << "x" << static_cast<int>(pWindow->GetSize().y) << "\nFPS: " << m_fps;
+
 
     spriteBatch->Begin();
     font->DrawString(spriteBatch.get(), StringHelper::StringToWide(ss.str()).c_str(), DirectX::XMVectorSet(10.0f, 10.0f, 0.0f, 0.0f), DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f));

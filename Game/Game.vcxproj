@@ -276,6 +276,7 @@
     <ClInclude Include="Bindable.h" />
     <ClInclude Include="BindableCache.h" />
     <ClInclude Include="BindableCommon.h" />
+    <ClInclude Include="Blender.h" />
     <ClInclude Include="Camera3D.h" />
     <ClInclude Include="Camera2D.h" />
     <ClInclude Include="Color.h" />
@@ -311,6 +312,7 @@
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="QuadTree.h" />
+    <ClInclude Include="Rasterizer.h" />
     <ClInclude Include="RenderableGameObject.h" />
     <ClInclude Include="Sampler.h" />
     <ClInclude Include="Scene.h" />
@@ -391,6 +393,7 @@
     <ClCompile Include="Audio.cpp" />
     <ClCompile Include="Bindable.cpp" />
     <ClCompile Include="BindableCache.cpp" />
+    <ClCompile Include="Blender.cpp" />
     <ClCompile Include="Camera3D.cpp" />
     <ClCompile Include="Camera2D.cpp" />
     <ClCompile Include="Color.cpp" />
@@ -425,6 +428,7 @@
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="QuadTree.cpp" />
+    <ClCompile Include="Rasterizer.cpp" />
     <ClCompile Include="RenderableGameObject.cpp" />
     <ClCompile Include="Sampler.cpp" />
     <ClCompile Include="Scene.cpp" />
