@@ -1,37 +1,40 @@
 #include "pch.h"
 #include "Vertex.h"
 
-VertexLayout::Element::Element(ElementType type, size_t offset, UINT semanticIndex)
-    : type(type)
-    , offset(offset)
-    , semanticIndex(semanticIndex)
-{
-}
 
-size_t VertexLayout::Element::GetOffsetAfter() const
+namespace dvt
 {
-    return offset + Size();
-}
-
-size_t VertexLayout::Element::GetOffset() const
-{
-    return offset;
-}
-
-size_t VertexLayout::Element::Size() const
-{
-    return SizeOf(type);
-}
-
-UINT VertexLayout::Element::GetSemanticIndex() const
-{
-    return semanticIndex;
-}
-
-constexpr size_t VertexLayout::Element::SizeOf(ElementType type)
-{
-    switch (type)
+    VertexLayout::Element::Element(ElementType type, size_t offset, UINT semanticIndex)
+        : type(type)
+        , offset(offset)
+        , semanticIndex(semanticIndex)
     {
+    }
+
+    size_t VertexLayout::Element::GetOffsetAfter() const
+    {
+        return offset + Size();
+    }
+
+    size_t VertexLayout::Element::GetOffset() const
+    {
+        return offset;
+    }
+
+    size_t VertexLayout::Element::Size() const
+    {
+        return SizeOf(type);
+    }
+
+    UINT VertexLayout::Element::GetSemanticIndex() const
+    {
+        return semanticIndex;
+    }
+
+    constexpr size_t VertexLayout::Element::SizeOf(ElementType type)
+    {
+        switch (type)
+        {
         case Position2D:
             return sizeof(Map<Position2D>::SysType);
         case Position3D:
@@ -46,20 +49,20 @@ constexpr size_t VertexLayout::Element::SizeOf(ElementType type)
             return sizeof(Map<Float4Color>::SysType);
         case RGBAColor:
             return sizeof(Map<RGBAColor>::SysType);
+        }
+        assert("Invalid element type" && false);
+        return 0u;
     }
-    assert("Invalid element type" && false);
-    return 0u;
-}
 
-VertexLayout::ElementType VertexLayout::Element::GetType() const noexcept
-{
-    return type;
-}
-
-D3D11_INPUT_ELEMENT_DESC VertexLayout::Element::GetDesc() const
-{
-    switch (type)
+    VertexLayout::ElementType VertexLayout::Element::GetType() const noexcept
     {
+        return type;
+    }
+
+    D3D11_INPUT_ELEMENT_DESC VertexLayout::Element::GetDesc() const
+    {
+        switch (type)
+        {
         case Position2D:
             return GenerateDesc<Position2D>(GetOffset(), GetSemanticIndex());
         case Position3D:
@@ -74,15 +77,15 @@ D3D11_INPUT_ELEMENT_DESC VertexLayout::Element::GetDesc() const
             return GenerateDesc<Float4Color>(GetOffset(), GetSemanticIndex());
         case RGBAColor:
             return GenerateDesc<RGBAColor>(GetOffset(), GetSemanticIndex());
+        }
+        assert("Invalid element type." && false);
+        return { "INVALID", 0, DXGI_FORMAT_UNKNOWN, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 };
     }
-    assert("Invalid element type." && false);
-    return { "INVALID", 0, DXGI_FORMAT_UNKNOWN, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 };
-}
 
-char const* VertexLayout::Element::GetCode() const noexcept
-{
-    switch (type)
+    char const* VertexLayout::Element::GetCode() const noexcept
     {
+        switch (type)
+        {
         case Position2D:
             return Map<Position2D>::code;
         case Position3D:
@@ -97,131 +100,132 @@ char const* VertexLayout::Element::GetCode() const noexcept
             return Map<Float4Color>::code;
         case RGBAColor:
             return Map<RGBAColor>::code;
+        }
+
+        assert("Invalid element type." && false);
+        return "Invalid";
     }
 
-    assert("Invalid element type." && false);
-    return "Invalid";
-}
-
-VertexLayout::Element const& VertexLayout::ResolveByIndex(size_t index) const
-{
-    return elements[index];
-}
-
-VertexLayout& VertexLayout::Append(ElementType type)
-{
-    UINT semanticIndex = 0;
-    for (auto& i : elements)
+    VertexLayout::Element const& VertexLayout::ResolveByIndex(size_t index) const
     {
-        if (i.GetType() == type)
-            semanticIndex++;
+        return elements[index];
     }
-    elements.emplace_back(type, Size(), semanticIndex);
-    return *this;
-}
 
-VertexLayout& VertexLayout::operator<<(ElementType type)
-{
-    Append(type);
-    return *this;
-}
-
-size_t VertexLayout::Size() const
-{
-    return elements.empty() ? 0u : elements.back().GetOffsetAfter();
-}
-
-size_t VertexLayout::GetElementCount() const noexcept
-{
-    return elements.size();
-}
-
-std::vector<D3D11_INPUT_ELEMENT_DESC> VertexLayout::GetD3DLayout() const
-{
-    std::vector<D3D11_INPUT_ELEMENT_DESC> desc;
-    desc.reserve(GetElementCount());
-    for (auto const& element : elements)
+    VertexLayout& VertexLayout::Append(ElementType type)
     {
-        desc.push_back(element.GetDesc());
+        UINT semanticIndex = 0;
+        for (auto& i : elements)
+        {
+            if (i.GetType() == type)
+                semanticIndex++;
+        }
+        elements.emplace_back(type, Size(), semanticIndex);
+        return *this;
     }
-    return desc;
-}
 
-std::string VertexLayout::GetCode() const
-{
-    std::string code = "";
-    for (auto const& element : elements)
-        code += element.GetCode();
-    
-    return code;
-}
+    VertexLayout& VertexLayout::operator<<(ElementType type)
+    {
+        Append(type);
+        return *this;
+    }
 
-Vertex::Vertex(char* pData, VertexLayout const& layout)
-    : pData(pData)
-    , layout(layout)
-{
-    assert(pData != nullptr);
-}
+    size_t VertexLayout::Size() const
+    {
+        return elements.empty() ? 0u : elements.back().GetOffsetAfter();
+    }
 
-ConstVertex::ConstVertex(Vertex const& vertex)
-    : vertex(vertex)
-{
-}
+    size_t VertexLayout::GetElementCount() const noexcept
+    {
+        return elements.size();
+    }
 
-VertexBufferData::VertexBufferData(VertexLayout layout)
-    : layout(std::move(layout))
-{
-}
+    std::vector<D3D11_INPUT_ELEMENT_DESC> VertexLayout::GetD3DLayout() const
+    {
+        std::vector<D3D11_INPUT_ELEMENT_DESC> desc;
+        desc.reserve(GetElementCount());
+        for (auto const& element : elements)
+        {
+            desc.push_back(element.GetDesc());
+        }
+        return desc;
+    }
 
-char const* VertexBufferData::GetData() const
-{
-    return buffer.data();
-}
+    std::string VertexLayout::GetCode() const
+    {
+        std::string code = "";
+        for (auto const& element : elements)
+            code += element.GetCode();
 
-VertexLayout const& VertexBufferData::GetLayout() const noexcept
-{
-    return layout;
-}
+        return code;
+    }
 
-size_t VertexBufferData::Size() const
-{
-    return buffer.size() / layout.Size();
-}
+    Vertex::Vertex(char* pData, VertexLayout const& layout)
+        : pData(pData)
+        , layout(layout)
+    {
+        assert(pData != nullptr);
+    }
 
-size_t VertexBufferData::SizeBytes() const
-{
-    return buffer.size();
-}
+    ConstVertex::ConstVertex(Vertex const& vertex)
+        : vertex(vertex)
+    {
+    }
 
-Vertex VertexBufferData::Back()
-{
-    assert(buffer.size() != 0u);
-    return Vertex{ buffer.data() + buffer.size() - layout.Size(), layout };
-}
+    VertexBuffer::VertexBuffer(VertexLayout layout)
+        : layout(std::move(layout))
+    {
+    }
 
-Vertex VertexBufferData::Front()
-{
-    assert(buffer.size() != 0u);
-    return Vertex{ buffer.data(), layout };
-}
+    char const* VertexBuffer::GetData() const
+    {
+        return buffer.data();
+    }
 
-Vertex VertexBufferData::operator[](size_t index)
-{
-    assert(index < Size());
-    return Vertex{ buffer.data() + layout.Size() * index, layout };
-}
+    VertexLayout const& VertexBuffer::GetLayout() const noexcept
+    {
+        return layout;
+    }
 
-ConstVertex VertexBufferData::Back() const
-{
-    return const_cast<VertexBufferData*>(this)->Back();
-}
+    size_t VertexBuffer::Size() const
+    {
+        return buffer.size() / layout.Size();
+    }
 
-ConstVertex VertexBufferData::Front() const
-{
-    return const_cast<VertexBufferData*>(this)->Front();
-}
+    size_t VertexBuffer::SizeBytes() const
+    {
+        return buffer.size();
+    }
 
-ConstVertex VertexBufferData::operator[](size_t index) const
-{
-    return const_cast<VertexBufferData&>(*this)[index];
+    Vertex VertexBuffer::Back()
+    {
+        assert(buffer.size() != 0u);
+        return Vertex{ buffer.data() + buffer.size() - layout.Size(), layout };
+    }
+
+    Vertex VertexBuffer::Front()
+    {
+        assert(buffer.size() != 0u);
+        return Vertex{ buffer.data(), layout };
+    }
+
+    Vertex VertexBuffer::operator[](size_t index)
+    {
+        assert(index < Size());
+        return Vertex{ buffer.data() + layout.Size() * index, layout };
+    }
+
+    ConstVertex VertexBuffer::Back() const
+    {
+        return const_cast<VertexBuffer*>(this)->Back();
+    }
+
+    ConstVertex VertexBuffer::Front() const
+    {
+        return const_cast<VertexBuffer*>(this)->Front();
+    }
+
+    ConstVertex VertexBuffer::operator[](size_t index) const
+    {
+        return const_cast<VertexBuffer&>(*this)[index];
+    }
 }

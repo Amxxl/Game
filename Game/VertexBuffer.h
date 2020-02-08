@@ -24,13 +24,13 @@ namespace Bind
 
             explicit VertexBuffer(_In_ ID3D11Device* device, _In_ std::vector<T>& vertices)
             {
-                assert("You must use another constructor for this template argument." && typeid(T) == typeid(VertexBufferData));
+                assert("You must use another constructor for this template argument." && typeid(T) == typeid(dvt::VertexBuffer));
                 Create(device, vertices.data(), vertices.size());
             }
 
-            // Constructor calling prevention if template argument isn't: VertexBufferData.
-            template<typename = typename std::enable_if<std::is_same_v<T, VertexBufferData>>::type>
-            explicit VertexBuffer(_In_ DX::DeviceResources* deviceResources, _In_ VertexBufferData const& data)
+            // Constructor calling prevention if template argument isn't: VertexBuffer.
+            template<typename = typename std::enable_if<std::is_same_v<T, dvt::VertexBuffer>>::type>
+            explicit VertexBuffer(_In_ DX::DeviceResources* deviceResources, _In_ dvt::VertexBuffer const& data)
             {
                 Create(deviceResources, data);
             }
@@ -39,8 +39,8 @@ namespace Bind
             VertexBuffer& operator=(VertexBuffer const&) = default;
 
             // Function calling prevention if template argument isn't: VertexBufferData.
-            template<typename = typename std::enable_if<std::is_same_v<T, VertexBufferData>>::type>
-            void Create(_In_ DX::DeviceResources* deviceResources, _In_ VertexBufferData const& data)
+            template<typename = typename std::enable_if<std::is_same_v<T, dvt::VertexBuffer>>::type>
+            void Create(_In_ DX::DeviceResources* deviceResources, _In_ dvt::VertexBuffer const& data)
             {
                 stride = static_cast<UINT>(data.GetLayout().Size());
 
@@ -60,7 +60,7 @@ namespace Bind
 
             void Create(_In_ ID3D11Device* device, _In_ T* data, uint32 vertexCount)
             {
-                assert("You must use another function for this template argument." && typeid(T) == typeid(VertexBufferData));
+                assert("You must use another function for this template argument." && typeid(T) == typeid(dvt::VertexBuffer));
                 this->vertexCount = vertexCount;
 
                 D3D11_BUFFER_DESC desc = { };

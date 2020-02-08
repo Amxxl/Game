@@ -3,146 +3,148 @@
 #include "pch.h"
 
 
-class VertexLayout
+namespace dvt
 {
-    public:
-        enum ElementType
-        {
-            Position2D,
-            Position3D,
-            Texture2D,
-            Normal,
-            Float3Color,
-            Float4Color,
-            RGBAColor,
-            Count
-        };
-
-        template<ElementType> struct Map;
-        template<> struct Map<Position2D>
-        {
-            using SysType = DirectX::XMFLOAT2;
-            static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32_FLOAT;
-            static constexpr char const* semantic = "Position";
-            static constexpr char const* code = "P2";
-        };
-        template<> struct Map<Position3D>
-        {
-            using SysType = DirectX::XMFLOAT3;
-            static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
-            static constexpr char const* semantic = "Position";
-            static constexpr char const* code = "P3";
-        };
-        template<> struct Map<Texture2D>
-        {
-            using SysType = DirectX::XMFLOAT2;
-            static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32_FLOAT;
-            static constexpr char const* semantic = "Texcoord";
-            static constexpr char const* code = "T2";
-        };
-        template<> struct Map<Normal>
-        {
-            using SysType = DirectX::XMFLOAT3;
-            static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
-            static constexpr char const* semantic = "Normal";
-            static constexpr char const* code = "N";
-        };
-        template<> struct Map<Float3Color>
-        {
-            using SysType = DirectX::XMFLOAT3;
-            static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
-            static constexpr char const* semantic = "Color";
-            static constexpr char const* code = "C3";
-        };
-        template<> struct Map<Float4Color>
-        {
-            using SysType = DirectX::XMFLOAT4;
-            static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32A32_FLOAT;
-            static constexpr char const* semantic = "Color";
-            static constexpr char const* code = "C4";
-        };
-        template<> struct Map<RGBAColor>
-        {
-            using SysType = uint32;
-            static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R8G8B8A8_UNORM;
-            static constexpr char const* semantic = "Color";
-            static constexpr char const* code = "C8";
-        };
-
-        class Element
-        {
-            public:
-                Element(ElementType type, size_t offset, UINT semanticIndex = 0);
-                size_t GetOffsetAfter() const;
-                size_t GetOffset() const;
-                size_t Size() const;
-                UINT GetSemanticIndex() const;
-                static constexpr size_t SizeOf(ElementType type);
-                ElementType GetType() const noexcept;
-                D3D11_INPUT_ELEMENT_DESC GetDesc() const;
-                char const* GetCode() const noexcept;
-
-            private:
-                template<ElementType type>
-                static constexpr D3D11_INPUT_ELEMENT_DESC GenerateDesc(size_t offset, UINT semanticIndex = 0)
-                {
-                    return { Map<type>::semantic, semanticIndex, Map<type>::dxgiFormat, 0, static_cast<UINT>(offset), D3D11_INPUT_PER_VERTEX_DATA, 0 };
-                }
-
-            private:
-                ElementType type;
-                size_t offset;
-                UINT semanticIndex;
-        };
-
-    public:
-        template<ElementType Type>
-        Element const& Resolve() const
-        {
-            for (auto& elem : elements)
+    class VertexLayout
+    {
+        public:
+            enum ElementType
             {
-                if (elem.GetType() == Type)
+                Position2D,
+                Position3D,
+                Texture2D,
+                Normal,
+                Float3Color,
+                Float4Color,
+                RGBAColor,
+                Count
+            };
+
+            template<ElementType> struct Map;
+            template<> struct Map<Position2D>
+            {
+                using SysType = DirectX::XMFLOAT2;
+                static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32_FLOAT;
+                static constexpr char const* semantic = "Position";
+                static constexpr char const* code = "P2";
+            };
+            template<> struct Map<Position3D>
+            {
+                using SysType = DirectX::XMFLOAT3;
+                static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
+                static constexpr char const* semantic = "Position";
+                static constexpr char const* code = "P3";
+            };
+            template<> struct Map<Texture2D>
+            {
+                using SysType = DirectX::XMFLOAT2;
+                static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32_FLOAT;
+                static constexpr char const* semantic = "Texcoord";
+                static constexpr char const* code = "T2";
+            };
+            template<> struct Map<Normal>
+            {
+                using SysType = DirectX::XMFLOAT3;
+                static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
+                static constexpr char const* semantic = "Normal";
+                static constexpr char const* code = "N";
+            };
+            template<> struct Map<Float3Color>
+            {
+                using SysType = DirectX::XMFLOAT3;
+                static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
+                static constexpr char const* semantic = "Color";
+                static constexpr char const* code = "C3";
+            };
+            template<> struct Map<Float4Color>
+            {
+                using SysType = DirectX::XMFLOAT4;
+                static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32A32_FLOAT;
+                static constexpr char const* semantic = "Color";
+                static constexpr char const* code = "C4";
+            };
+            template<> struct Map<RGBAColor>
+            {
+                using SysType = uint32;
+                static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R8G8B8A8_UNORM;
+                static constexpr char const* semantic = "Color";
+                static constexpr char const* code = "C8";
+            };
+
+            class Element
+            {
+                public:
+                    Element(ElementType type, size_t offset, UINT semanticIndex = 0);
+                    size_t GetOffsetAfter() const;
+                    size_t GetOffset() const;
+                    size_t Size() const;
+                    UINT GetSemanticIndex() const;
+                    static constexpr size_t SizeOf(ElementType type);
+                    ElementType GetType() const noexcept;
+                    D3D11_INPUT_ELEMENT_DESC GetDesc() const;
+                    char const* GetCode() const noexcept;
+
+                private:
+                    template<ElementType type>
+                    static constexpr D3D11_INPUT_ELEMENT_DESC GenerateDesc(size_t offset, UINT semanticIndex = 0)
+                    {
+                        return { Map<type>::semantic, semanticIndex, Map<type>::dxgiFormat, 0, static_cast<UINT>(offset), D3D11_INPUT_PER_VERTEX_DATA, 0 };
+                    }
+
+                private:
+                    ElementType type;
+                    size_t offset;
+                    UINT semanticIndex;
+            };
+
+        public:
+            template<ElementType Type>
+            Element const& Resolve() const
+            {
+                for (auto& elem : elements)
                 {
-                    return elem;
+                    if (elem.GetType() == Type)
+                    {
+                        return elem;
+                    }
                 }
+                assert("Could not resolve element type" && false);
+                return elements.front();
             }
-            assert("Could not resolve element type" && false);
-            return elements.front();
-        }
 
-        Element const& ResolveByIndex(size_t index) const;
-        VertexLayout& Append(ElementType type);
-        VertexLayout& operator<<(ElementType type);
-        size_t Size() const;
-        size_t GetElementCount() const noexcept;
-        std::vector<D3D11_INPUT_ELEMENT_DESC> GetD3DLayout() const;
-        std::string GetCode() const;
+            Element const& ResolveByIndex(size_t index) const;
+            VertexLayout& Append(ElementType type);
+            VertexLayout& operator<<(ElementType type);
+            size_t Size() const;
+            size_t GetElementCount() const noexcept;
+            std::vector<D3D11_INPUT_ELEMENT_DESC> GetD3DLayout() const;
+            std::string GetCode() const;
 
 
-    private:
-        std::vector<Element> elements;
-};
+        private:
+            std::vector<Element> elements;
+    };
 
-class Vertex
-{
-    friend class VertexBufferData;
+    class Vertex
+    {
+        friend class VertexBuffer;
 
-    public:
-        template<VertexLayout::ElementType Type>
-        auto& Attr()
-        {
-            auto pAttribute = pData + layout.Resolve<Type>().GetOffset();
-            return *reinterpret_cast<typename VertexLayout::Map<Type>::SysType*>(pAttribute);
-        }
-
-        template<typename T>
-        void SetAttributeByIndex(size_t index, T&& value)
-        {
-            auto const& element = layout.ResolveByIndex(index);
-            auto pAttribute = pData + element.GetOffset();
-
-            switch (element.GetType())
+        public:
+            template<VertexLayout::ElementType Type>
+            auto& Attr()
             {
+                auto pAttribute = pData + layout.Resolve<Type>().GetOffset();
+                return *reinterpret_cast<typename VertexLayout::Map<Type>::SysType*>(pAttribute);
+            }
+
+            template<typename T>
+            void SetAttributeByIndex(size_t index, T&& value)
+            {
+                auto const& element = layout.ResolveByIndex(index);
+                auto pAttribute = pData + element.GetOffset();
+
+                switch (element.GetType())
+                {
                 case VertexLayout::Position2D:
                     SetAttribute<VertexLayout::Position2D>(pAttribute, std::forward<T>(value));
                     break;
@@ -166,78 +168,79 @@ class Vertex
                     break;
                 default:
                     assert("Element type does not exist!" && false);
+                }
             }
-        }
 
-    protected:
-        Vertex(char* pData, VertexLayout const& layout);
+        protected:
+            Vertex(char* pData, VertexLayout const& layout);
 
-    private:
-        // enables parameter pack setting of multiple parameters by element index.
-        template<typename First, typename... Rest>
-        void SetAttributeByIndex(size_t index, First&& first, Rest&& ... rest)
-        {
-            SetAttributeByIndex(index, std::forward<First>(first));
-            SetAttributeByIndex(index + 1, std::forward<Rest>(rest)...);
-        }
+        private:
+            // enables parameter pack setting of multiple parameters by element index.
+            template<typename First, typename... Rest>
+            void SetAttributeByIndex(size_t index, First&& first, Rest&& ... rest)
+            {
+                SetAttributeByIndex(index, std::forward<First>(first));
+                SetAttributeByIndex(index + 1, std::forward<Rest>(rest)...);
+            }
 
-        // helper to reduce code duplication in SetAttributeByIndex
-        template<VertexLayout::ElementType DestLayoutType, typename SrcType>
-        void SetAttribute(char* pAttribute, SrcType&& value)
-        {
-            using Dest = typename VertexLayout::Map<DestLayoutType>::SysType;
+            // helper to reduce code duplication in SetAttributeByIndex
+            template<VertexLayout::ElementType DestLayoutType, typename SrcType>
+            void SetAttribute(char* pAttribute, SrcType&& value)
+            {
+                using Dest = typename VertexLayout::Map<DestLayoutType>::SysType;
 
-            if constexpr (std::is_assignable<Dest, SrcType>::value)
-                *reinterpret_cast<Dest*>(pAttribute) = value;
-            else
-                assert("Parameter attribute type mismatch." && false);
-        }
+                if constexpr (std::is_assignable<Dest, SrcType>::value)
+                    *reinterpret_cast<Dest*>(pAttribute) = value;
+                else
+                    assert("Parameter attribute type mismatch." && false);
+            }
 
-    private:
-        char* pData = nullptr;
-        VertexLayout const& layout;
-};
+        private:
+            char* pData = nullptr;
+            VertexLayout const& layout;
+    };
 
-class ConstVertex
-{
-    public:
-        ConstVertex(Vertex const& vertex);
-        template<VertexLayout::ElementType Type>
-        auto const& Attr() const
-        {
-            return const_cast<Vertex&>(vertex).Attr<Type>();
-        }
-    private:
-        Vertex vertex;
-};
+    class ConstVertex
+    {
+        public:
+            ConstVertex(Vertex const& vertex);
+            template<VertexLayout::ElementType Type>
+            auto const& Attr() const
+            {
+                return const_cast<Vertex&>(vertex).Attr<Type>();
+            }
+        private:
+            Vertex vertex;
+    };
 
-class VertexBufferData
-{
-    public:
-        VertexBufferData(VertexLayout layout);
+    class VertexBuffer
+    {
+        public:
+            VertexBuffer(VertexLayout layout);
 
-        char const* GetData() const;
+            char const* GetData() const;
 
-        VertexLayout const& GetLayout() const noexcept;
-        size_t Size() const;
-        size_t SizeBytes() const;
+            VertexLayout const& GetLayout() const noexcept;
+            size_t Size() const;
+            size_t SizeBytes() const;
 
-        template<typename... Params>
-        void EmplaceBack(Params&&... params)
-        {
-            assert(sizeof...(params) == layout.GetElementCount() && "Param count doesn't match number of vertex elements.");
-            buffer.resize(buffer.size() + layout.Size());
-            Back().SetAttributeByIndex(0u, std::forward<Params>(params)...);
-        }
+            template<typename... Params>
+            void EmplaceBack(Params&&... params)
+            {
+                assert(sizeof...(params) == layout.GetElementCount() && "Param count doesn't match number of vertex elements.");
+                buffer.resize(buffer.size() + layout.Size());
+                Back().SetAttributeByIndex(0u, std::forward<Params>(params)...);
+            }
 
-        Vertex Back();
-        Vertex Front();
-        Vertex operator[](size_t index);
-        ConstVertex Back() const;
-        ConstVertex Front() const;
-        ConstVertex operator[](size_t index) const;
+            Vertex Back();
+            Vertex Front();
+            Vertex operator[](size_t index);
+            ConstVertex Back() const;
+            ConstVertex Front() const;
+            ConstVertex operator[](size_t index) const;
 
-    private:
-        std::vector<char> buffer;
-        VertexLayout layout;
-};
+        private:
+            std::vector<char> buffer;
+            VertexLayout layout;
+    };
+}

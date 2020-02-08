@@ -781,7 +781,9 @@
     <ClInclude Include="Blender.h">
       <Filter>Engine\Graphics\Pipeline\Bindable\Bindables</Filter>
     </ClInclude>
-    <ClInclude Include="Rasterizer.h" />
+    <ClInclude Include="Rasterizer.h">
+      <Filter>Engine\Graphics\Pipeline\Bindable\Bindables</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scene.cpp">
@@ -941,7 +943,9 @@
     <ClCompile Include="Blender.cpp">
       <Filter>Engine\Graphics\Pipeline\Bindable\Bindables</Filter>
     </ClCompile>
-    <ClCompile Include="Rasterizer.cpp" />
+    <ClCompile Include="Rasterizer.cpp">
+      <Filter>Engine\Graphics\Pipeline\Bindable\Bindables</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="bow.ico">

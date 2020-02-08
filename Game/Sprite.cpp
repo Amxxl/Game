@@ -4,10 +4,10 @@
 Sprite::Sprite(DX::DeviceResources* deviceResources, std::string const& texturePath)
 {
     using namespace Bind;
-    VertexBufferData vbuf(
-        VertexLayout{}
-        << VertexLayout::Position3D
-        << VertexLayout::Texture2D
+    dvt::VertexBuffer vbuf(
+        dvt::VertexLayout{}
+        << dvt::VertexLayout::Position3D
+        << dvt::VertexLayout::Texture2D
     );
 
     vbuf.EmplaceBack(
@@ -40,7 +40,7 @@ Sprite::Sprite(DX::DeviceResources* deviceResources, std::string const& textureP
     AddBind(Texture::Resolve(deviceResources, texturePath));
     AddBind(Sampler::Resolve(deviceResources, Sampler::State::ANISOTROPIC_WRAP));
 
-    AddBind(std::make_unique<VertexBuffer<VertexBufferData>>(deviceResources, vbuf));
+    AddBind(std::make_unique<VertexBuffer<dvt::VertexBuffer>>(deviceResources, vbuf));
     AddBind(std::make_unique<IndexBuffer<unsigned int>>(deviceResources, indices));
 
     auto pvs = VertexShader::Resolve(deviceResources, "Data/Shaders/color.vs");

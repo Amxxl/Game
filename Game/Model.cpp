@@ -29,11 +29,11 @@ void Model::Draw(DX::DeviceResources* deviceResources, DirectX::FXMMATRIX transf
 
 std::unique_ptr<Mesh> Model::ParseMesh(DX::DeviceResources* deviceResources, aiScene const* pScene, aiMesh const& mesh, aiMaterial const* const* pMaterials)
 {
-    VertexBufferData vbuf(std::move(
-        VertexLayout{}
-        << VertexLayout::Position3D
-        << VertexLayout::Normal
-        << VertexLayout::Texture2D
+    dvt::VertexBuffer vbuf(std::move(
+        dvt::VertexLayout{}
+        << dvt::VertexLayout::Position3D
+        << dvt::VertexLayout::Normal
+        << dvt::VertexLayout::Texture2D
     ));
 
     for (unsigned int i = 0; i < mesh.mNumVertices; ++i)
@@ -90,10 +90,10 @@ std::unique_ptr<Mesh> Model::ParseMesh(DX::DeviceResources* deviceResources, aiS
         bindablePtrs.push_back(Bind::Sampler::Resolve(deviceResources, Bind::Sampler::State::ANISOTROPIC_WRAP));
     }
 
-    bindablePtrs.push_back(std::make_unique<Bind::VertexBuffer<VertexBufferData>>(deviceResources, vbuf));
+    bindablePtrs.push_back(std::make_unique<Bind::VertexBuffer<dvt::VertexBuffer>>(deviceResources, vbuf));
     bindablePtrs.push_back(std::make_unique<Bind::IndexBuffer<unsigned int>>(deviceResources, indices));
 
-    auto pvs = Bind::VertexShader::Resolve(deviceResources, "VertexShader.vs");
+    auto pvs = Bind::VertexShader::Resolve(deviceResources, "Data/Shaders/VertexShader.vs");
     auto pvsbc = pvs->GetBytecode();
     bindablePtrs.push_back(std::move(pvs));
 
@@ -106,7 +106,7 @@ std::unique_ptr<Mesh> Model::ParseMesh(DX::DeviceResources* deviceResources, aiS
     }
     else
     {
-        bindablePtrs.push_back(Bind::PixelShader::Resolve(deviceResources, "PixelShader.ps"));
+        bindablePtrs.push_back(Bind::PixelShader::Resolve(deviceResources, "Data/Shaders/PixelShader.ps"));
 
 
         struct PSMaterialConstant
