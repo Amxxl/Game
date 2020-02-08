@@ -1,15 +1,20 @@
 #include "pch.h"
 #include "StringHelper.h"
+#include <iomanip>
 
 
 std::wstring StringHelper::StringToWide(std::string const& str)
 {
-    return std::wstring(str.begin(), str.end());
+    wchar_t wide[512];
+    mbstowcs_s(nullptr, wide, str.c_str(), _TRUNCATE);
+    return wide;
 }
 
 std::string StringHelper::WideToString(std::wstring const& wstr)
 {
-    return std::string(wstr.begin(), wstr.end());
+    char narrow[512];
+    wcstombs_s(nullptr, narrow, wstr.c_str(), _TRUNCATE);
+    return narrow;
 }
 
 std::string StringHelper::GetDirectoryFromPath(std::string const& filePath)
