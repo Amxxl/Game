@@ -27,7 +27,7 @@ namespace Bind
             virtual std::string const& GetUID() const noexcept override;
 
         private:
-            void Create(DX::DeviceResources* deviceResources, D3D11_FILTER fileter, D3D11_TEXTURE_ADDRESS_MODE addressMode);
+            void Create(DX::DeviceResources* deviceResources, D3D11_FILTER filter, D3D11_TEXTURE_ADDRESS_MODE addressMode);
 
         protected:
             State state;
