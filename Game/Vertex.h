@@ -238,11 +238,12 @@ namespace dvt
     class VertexBuffer
     {
         public:
-            VertexBuffer(VertexLayout layout);
+            VertexBuffer(VertexLayout layout, size_t size = 0u);
 
             char const* GetData() const;
 
             VertexLayout const& GetLayout() const noexcept;
+            void Resize(size_t newSize);
             size_t Size() const;
             size_t SizeBytes() const;
 

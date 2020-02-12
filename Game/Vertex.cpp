@@ -183,9 +183,10 @@ namespace dvt
     {
     }
 
-    VertexBuffer::VertexBuffer(VertexLayout layout)
+    VertexBuffer::VertexBuffer(VertexLayout layout, size_t size)
         : layout(std::move(layout))
     {
+        Resize(size);
     }
 
     char const* VertexBuffer::GetData() const
@@ -196,6 +197,14 @@ namespace dvt
     VertexLayout const& VertexBuffer::GetLayout() const noexcept
     {
         return layout;
+    }
+
+    void VertexBuffer::Resize(size_t newSize)
+    {
+        auto const size = Size();
+
+        if (size < newSize)
+            buffer.resize(buffer.size() + layout.Size() * (newSize - size));
     }
 
     size_t VertexBuffer::Size() const

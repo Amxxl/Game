@@ -86,7 +86,6 @@ class PlayScene : public Scene
 
         std::unique_ptr<PointLight> light;
 
-        std::unique_ptr<Model> testModel;
         std::unique_ptr<Model> house;
         std::unique_ptr<Model> tree;
         std::unique_ptr<Model> bridge;

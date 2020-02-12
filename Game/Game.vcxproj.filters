@@ -784,6 +784,12 @@
     <ClInclude Include="Rasterizer.h">
       <Filter>Engine\Graphics\Pipeline\Bindable\Bindables</Filter>
     </ClInclude>
+    <ClInclude Include="IndexedTriangleList.h">
+      <Filter>Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Cube.h">
+      <Filter>Engine\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scene.cpp">
@@ -945,6 +951,12 @@
     </ClCompile>
     <ClCompile Include="Rasterizer.cpp">
       <Filter>Engine\Graphics\Pipeline\Bindable\Bindables</Filter>
+    </ClCompile>
+    <ClCompile Include="IndexedTriangleList.cpp">
+      <Filter>Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Cube.cpp">
+      <Filter>Engine\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

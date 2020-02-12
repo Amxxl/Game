@@ -102,8 +102,6 @@ bool PlayScene::Load(SceneManager* sceneManager, Window& window)
 
     sky->CreateInputLayout(effect.get(), inputLayout.ReleaseAndGetAddressOf());
 
-    testModel = std::make_unique<Model>(window.GetDeviceResources(), "Data/Models/NanoSuit/nanosuit.obj");
-
     tree = std::make_unique<Model>(window.GetDeviceResources(), "Data/10446_Palm_Tree_v1_max2010_iteration-2.obj");
     house = std::make_unique<Model>(window.GetDeviceResources(), "Data/WoodCabin.dae");
     bridge = std::make_unique<Model>(window.GetDeviceResources(), "Data/bridge.dae");
@@ -305,7 +303,6 @@ void PlayScene::Render()
     spruce->Draw(m_pDeviceResources, m_world * DirectX::XMMatrixScaling(2.0f, 2.0f, 2.0f) * DirectX::XMMatrixRotationX(AI_MATH_PI / 2) * DirectX::XMMatrixTranslation(250.0f, 16.5f, 200.0f));
     bridge->Draw(m_pDeviceResources, m_world * DirectX::XMMatrixRotationY(-77.0f * (3.1415f / 180.0f)) * DirectX::XMMatrixTranslation(257.0f, 58.0f, 381.0f));
     tree->Draw(m_pDeviceResources, m_world * DirectX::XMMatrixScaling(0.08f, 0.08f, 0.08f) * DirectX::XMMatrixRotationX(3.1415f / 2.0f) * DirectX::XMMatrixTranslation(200.0f, 16.0f, 200.0f));
-    testModel->Draw(m_pDeviceResources, DirectX::XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f) * DirectX::XMMatrixTranslation(0.0f, 10.0f, 0.0f));
     well->Draw(m_pDeviceResources, m_world * DirectX::XMMatrixScaling(3.0f, 3.0f, 3.0f) * DirectX::XMMatrixTranslation(168.0f, 16.5f, 220));
     house->Draw(m_pDeviceResources, m_world * DirectX::XMMatrixTranslation(465.0f, 32.5f, 485.0f) * XMMatrixScaling(0.5f, 0.5f, 0.5f));
     house->Draw(m_pDeviceResources, m_world * DirectX::XMMatrixScaling(0.7f, 0.7f, 0.7f)* DirectX::XMMatrixTranslation(365.0f, 32.5f, 485.0f) * XMMatrixScaling(0.5f, 0.5f, 0.5f));
