@@ -1,9 +1,12 @@
 # Game
 Developing a game in C++ with DirectXTK (Direct3D 11)
 Currently in early stage of development expect bugs, hard coded things, and anything else.
+Focusing at the engine so game will come later.
 
 # Why DirectXTK?
 The DirectX Tool Kit is a collection of helper classes for writing DirectX 11.x code in C++.
+Will be removed in the future. I realised it's not necessary to have it. For texture loading
+I will use DirectXTex library.
 
 # Why FMOD API?
 FMOD API is a cross-platform audio engine that has been used in over 2,000 games over the last 15 years.
@@ -15,10 +18,10 @@ Open Asset Import Library (short name: Assimp) is a portable Open Source library
 well-known 3D model formats. There is no reason to waste time on writing something that is already here.
 More informaction about Assimp you can find on: http://www.assimp.org
 
-# Why ReactPhysics3D?
-ReactPhysics3D is a C++ physics engine library that can be used in 3D simulations and games.
-The library is developed by Daniel Chappuis and is released under the open-source ZLib license.
-Developing our own physics engine would take a lot of time, so i prefer to use this instead.
+# Why PhysX?
+The NVIDIA PhysX SDK is a scalable multi-platform physics solution supporting a wide range of devices, 
+from smartphones to high-end multicore CPUs and GPUs. PhysX is already integrated into some of the most 
+popular game engines, including Unreal Engine, and Unity3D. If they use it, I will too.
 
 # Supported Platforms
 Targeting platforms: Windows 7, Windows 8, Windows 8.1, Windows 10.
