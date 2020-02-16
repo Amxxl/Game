@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Common">
-      <UniqueIdentifier>a76fe8cb-ae24-4307-8e9d-a4c5d0c25ceb</UniqueIdentifier>
-    </Filter>
     <Filter Include="Assets">
       <UniqueIdentifier>2c184148-7a0a-4261-bd1a-5b29d30f8dcd</UniqueIdentifier>
       <Extensions>ico;cur;bmp;dds;dlg;fbx;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tga;tiff;tif;png;wav;mfcribbon-ms</Extensions>
@@ -110,6 +107,9 @@
     <Filter Include="Engine\Platform">
       <UniqueIdentifier>{b0b795fb-e447-4ac7-9190-3efcebcdceec}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Common">
+      <UniqueIdentifier>a76fe8cb-ae24-4307-8e9d-a4c5d0c25ceb</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene.h">
@@ -119,7 +119,7 @@
       <Filter>Game\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="pch.h">
-      <Filter>Common</Filter>
+      <Filter>Engine\Common</Filter>
     </ClInclude>
     <ClInclude Include="PlayScene.h">
       <Filter>Game\Scenes</Filter>
@@ -490,6 +490,15 @@
     <ClInclude Include="Cube.h">
       <Filter>Engine\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="DynamicConstant.h">
+      <Filter>Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="ConditionalNoexcept.h">
+      <Filter>Engine\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="LayoutCache.h">
+      <Filter>Engine\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scene.cpp">
@@ -499,7 +508,7 @@
       <Filter>Game\Scenes</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp">
-      <Filter>Common</Filter>
+      <Filter>Engine\Common</Filter>
     </ClCompile>
     <ClCompile Include="PlayScene.cpp">
       <Filter>Game\Scenes</Filter>
@@ -656,6 +665,12 @@
       <Filter>Engine\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Cube.cpp">
+      <Filter>Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="DynamicConstant.cpp">
+      <Filter>Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="LayoutCache.cpp">
       <Filter>Engine\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
