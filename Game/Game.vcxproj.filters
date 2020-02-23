@@ -110,6 +110,9 @@
     <Filter Include="Engine\Common">
       <UniqueIdentifier>a76fe8cb-ae24-4307-8e9d-a4c5d0c25ceb</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Graphics\Pipeline\Drawable\Model">
+      <UniqueIdentifier>{1da3ad8b-1bd4-42e1-a911-5165d29eea9b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene.h">
@@ -382,9 +385,6 @@
     <ClInclude Include="Bindable.h">
       <Filter>Engine\Graphics\Pipeline\Bindable</Filter>
     </ClInclude>
-    <ClInclude Include="Mesh.h">
-      <Filter>Engine\Graphics\Pipeline\Drawable</Filter>
-    </ClInclude>
     <ClInclude Include="Drawable.h">
       <Filter>Engine\Graphics\Pipeline\Drawable</Filter>
     </ClInclude>
@@ -408,12 +408,6 @@
     </ClInclude>
     <ClInclude Include="BindableCommon.h">
       <Filter>Engine\Graphics\Pipeline\Bindable</Filter>
-    </ClInclude>
-    <ClInclude Include="Model.h">
-      <Filter>Engine\Graphics\Pipeline\Drawable</Filter>
-    </ClInclude>
-    <ClInclude Include="Node.h">
-      <Filter>Engine\Graphics\Pipeline\Drawable</Filter>
     </ClInclude>
     <ClInclude Include="Events\WindowEvents.h">
       <Filter>Engine\System\Events</Filter>
@@ -499,6 +493,39 @@
     <ClInclude Include="LayoutCache.h">
       <Filter>Engine\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Step.h">
+      <Filter>Engine\Graphics\Pipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Job.h">
+      <Filter>Engine\Graphics\Pipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="FrameCommander.h">
+      <Filter>Engine\Graphics\Pipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Pass.h">
+      <Filter>Engine\Graphics\Pipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="TechniqueProbe.h">
+      <Filter>Engine\Graphics\Pipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="NullPixelShader.h">
+      <Filter>Engine\Graphics\Pipeline\Bindable\Bindables</Filter>
+    </ClInclude>
+    <ClInclude Include="Technique.h">
+      <Filter>Engine\Graphics\Pipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Stencil.h">
+      <Filter>Engine\Graphics\Pipeline\Bindable\Bindables</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Engine\Graphics\Pipeline\Drawable\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>Engine\Graphics\Pipeline\Drawable\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Node.h">
+      <Filter>Engine\Graphics\Pipeline\Drawable\Model</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scene.cpp">
@@ -577,9 +604,6 @@
     <ClCompile Include="Bindable.cpp">
       <Filter>Engine\Graphics\Pipeline\Bindable</Filter>
     </ClCompile>
-    <ClCompile Include="Mesh.cpp">
-      <Filter>Engine\Graphics\Pipeline\Drawable</Filter>
-    </ClCompile>
     <ClCompile Include="Drawable.cpp">
       <Filter>Engine\Graphics\Pipeline\Drawable</Filter>
     </ClCompile>
@@ -597,12 +621,6 @@
     </ClCompile>
     <ClCompile Include="VertexShader.cpp">
       <Filter>Engine\Graphics\Pipeline\Bindable\Bindables</Filter>
-    </ClCompile>
-    <ClCompile Include="Model.cpp">
-      <Filter>Engine\Graphics\Pipeline\Drawable</Filter>
-    </ClCompile>
-    <ClCompile Include="Node.cpp">
-      <Filter>Engine\Graphics\Pipeline\Drawable</Filter>
     </ClCompile>
     <ClCompile Include="Window.cpp">
       <Filter>Engine\Platform</Filter>
@@ -672,6 +690,39 @@
     </ClCompile>
     <ClCompile Include="LayoutCache.cpp">
       <Filter>Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Step.cpp">
+      <Filter>Engine\Graphics\Pipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="Job.cpp">
+      <Filter>Engine\Graphics\Pipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="FrameCommander.cpp">
+      <Filter>Engine\Graphics\Pipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="Pass.cpp">
+      <Filter>Engine\Graphics\Pipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="TechniqueProbe.cpp">
+      <Filter>Engine\Graphics\Pipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="NullPixelShader.cpp">
+      <Filter>Engine\Graphics\Pipeline\Bindable\Bindables</Filter>
+    </ClCompile>
+    <ClCompile Include="Technique.cpp">
+      <Filter>Engine\Graphics\Pipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="Stencil.cpp">
+      <Filter>Engine\Graphics\Pipeline\Bindable\Bindables</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Engine\Graphics\Pipeline\Drawable\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>Engine\Graphics\Pipeline\Drawable\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Node.cpp">
+      <Filter>Engine\Graphics\Pipeline\Drawable\Model</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

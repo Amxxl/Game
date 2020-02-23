@@ -91,6 +91,7 @@ class PlayScene : public Scene
         std::unique_ptr<Model> bridge;
         std::unique_ptr<Model> spruce;
         std::unique_ptr<Model> well;
+        //std::unique_ptr<Model> sponza;
 
         std::unique_ptr<Sprite> spr;
 

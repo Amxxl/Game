@@ -10,7 +10,7 @@
 namespace Bind
 {
     Texture::Texture(DX::DeviceResources* deviceResources, std::wstring const& path, unsigned int slot)
-        : path(StringHelper::WideToString(path))
+        : path(StringHelper::WideToNarrow(path))
         , slot(slot)
     {
         if (StringHelper::GetFileExtension(path) == L".dds")
@@ -35,7 +35,7 @@ namespace Bind
     }
 
     Texture::Texture(DX::DeviceResources* deviceResources, std::string const& path, unsigned int slot)
-        : Texture(deviceResources, StringHelper::StringToWide(path), slot)
+        : Texture(deviceResources, StringHelper::NarrowToWide(path), slot)
     {
 
     }

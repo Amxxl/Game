@@ -107,6 +107,7 @@ bool PlayScene::Load(SceneManager* sceneManager, Window& window)
     bridge = std::make_unique<Model>(window.GetDeviceResources(), "Data/bridge.dae");
     spruce = std::make_unique<Model>(window.GetDeviceResources(), "Data/spruce.obj");
     well = std::make_unique<Model>(window.GetDeviceResources(), "Data/Models/Well/well.dae");
+    //sponza = std::make_unique<Model>(window.GetDeviceResources(), "Data/Models/Sponza/sponza.obj");
 
     spr = std::make_unique<Sprite>(m_pDeviceResources, "Data/spellbar.jpg");
 
@@ -307,6 +308,8 @@ void PlayScene::Render()
     house->Draw(m_pDeviceResources, m_world * DirectX::XMMatrixTranslation(465.0f, 32.5f, 485.0f) * XMMatrixScaling(0.5f, 0.5f, 0.5f));
     house->Draw(m_pDeviceResources, m_world * DirectX::XMMatrixScaling(0.7f, 0.7f, 0.7f)* DirectX::XMMatrixTranslation(365.0f, 32.5f, 485.0f) * XMMatrixScaling(0.5f, 0.5f, 0.5f));
    
+    //sponza->Draw(m_pDeviceResources, m_world * DirectX::XMMatrixTranslation(0.0f, 0.0f, 0.0f));
+
     spr->Draw(m_pDeviceResources, m_world * XMMatrixScaling(336.0f, 135.0f, 1.0f) * XMMatrixScaling(0.5f, 0.5f, 0.5f) * XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f) * XMMatrixTranslation(pWindow->GetSize().x / 2.0f - 336.0f / 2.0f + 336.0f / 2.0f, pWindow->GetSize().y - (135.0f / 2.0f) / 2.0f, 0.0f));
 
     water->Draw(m_world * XMMatrixTranslation(256.0f, 0.0f, 256.0f), camera.GetViewMatrix(), camera.GetProjectionMatrix(), XMVectorSet(0.0f, 0.0f, 1.0f, 0.7f));
@@ -317,7 +320,7 @@ void PlayScene::Render()
 
 
     spriteBatch->Begin();
-    font->DrawString(spriteBatch.get(), StringHelper::StringToWide(ss.str()).c_str(), DirectX::XMVectorSet(10.0f, 10.0f, 0.0f, 0.0f), DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f));
+    font->DrawString(spriteBatch.get(), StringHelper::NarrowToWide(ss.str()).c_str(), DirectX::XMVectorSet(10.0f, 10.0f, 0.0f, 0.0f), DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f));
     spriteBatch->End();
 
     // ImGui Window.

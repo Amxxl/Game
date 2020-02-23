@@ -35,10 +35,10 @@ void TerrainShader::InitializeShaders(ID3D11DeviceContext* deviceContext)
 
     // Load textures
     DirectX::CreateWICTextureFromFile(device, L"Data/color.png", nullptr, texture0.ReleaseAndGetAddressOf());
-    DirectX::CreateDDSTextureFromFile(device, L"Data/snow.dds", nullptr, texture1.ReleaseAndGetAddressOf());
-    DirectX::CreateWICTextureFromFile(device, L"Data/red.dds", nullptr, texture2.ReleaseAndGetAddressOf());
+    DirectX::CreateWICTextureFromFile(device, L"Data/path.png", nullptr, texture1.ReleaseAndGetAddressOf());
+    DirectX::CreateWICTextureFromFile(device, L"Data/base.dds", nullptr, texture2.ReleaseAndGetAddressOf());
     DirectX::CreateDDSTextureFromFile(device, L"Data/green.dds", nullptr, texture3.ReleaseAndGetAddressOf());
-    DirectX::CreateWICTextureFromFile(device, L"Data/blue.dds", nullptr, texture4.ReleaseAndGetAddressOf());
+    DirectX::CreateWICTextureFromFile(device, L"Data/five.dds", nullptr, texture4.ReleaseAndGetAddressOf());
 
     constantBuffer.Create(device);
     lightBuffer.Create(device);
@@ -55,8 +55,8 @@ void TerrainShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, Dire
     deviceContext->VSSetConstantBuffers(0, 1, constantBuffer.GetAddressOf());
 
     LightBufferType light;
-    light.ambientColor = DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
-    light.diffuseColor = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+    light.ambientColor = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+    light.diffuseColor = DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
     light.lightDirection = DirectX::XMFLOAT3(1.0f, 0.0f, 1.0f);
     light.padding = 0.0f;
     lightBuffer.SetData(deviceContext, light);

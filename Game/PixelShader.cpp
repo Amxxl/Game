@@ -8,7 +8,7 @@ namespace Bind
     PixelShader::PixelShader(DX::DeviceResources* deviceResources, std::string const& path)
     {
         Microsoft::WRL::ComPtr<ID3DBlob> pBlob;
-        DX::ThrowIfFailed(D3DReadFileToBlob(StringHelper::StringToWide(path).c_str(), &pBlob));
+        DX::ThrowIfFailed(D3DReadFileToBlob(StringHelper::NarrowToWide(path).c_str(), &pBlob));
 
         DX::ThrowIfFailed(
             GetDevice(deviceResources)->CreatePixelShader(pBlob->GetBufferPointer(),

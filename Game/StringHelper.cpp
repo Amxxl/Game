@@ -3,14 +3,14 @@
 #include <iomanip>
 
 
-std::wstring StringHelper::StringToWide(std::string const& str)
+std::wstring StringHelper::NarrowToWide(std::string const& str)
 {
     wchar_t wide[512];
     mbstowcs_s(nullptr, wide, str.c_str(), _TRUNCATE);
     return wide;
 }
 
-std::string StringHelper::WideToString(std::wstring const& wstr)
+std::string StringHelper::WideToNarrow(std::wstring const& wstr)
 {
     char narrow[512];
     wcstombs_s(nullptr, narrow, wstr.c_str(), _TRUNCATE);

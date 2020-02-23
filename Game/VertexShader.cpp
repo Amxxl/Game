@@ -8,7 +8,7 @@ namespace Bind
     VertexShader::VertexShader(DX::DeviceResources* deviceResources, std::string const& path)
         : path(path)
     {
-        DX::ThrowIfFailed(D3DReadFileToBlob(StringHelper::StringToWide(path).c_str(), &pBytecodeBlob));
+        DX::ThrowIfFailed(D3DReadFileToBlob(StringHelper::NarrowToWide(path).c_str(), &pBytecodeBlob));
 
         DX::ThrowIfFailed(
             GetDevice(deviceResources)->CreateVertexShader(pBytecodeBlob->GetBufferPointer(),
