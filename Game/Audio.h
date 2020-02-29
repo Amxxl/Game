@@ -23,6 +23,8 @@ class Audio
 
         FMOD::System* GetSystem() const { return pSystem; }
 
+        void SpawnControlWindow();
+
     private:
         bool ErrorCheck(FMOD_RESULT result);
 

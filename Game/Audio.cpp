@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "Audio.h"
-
+#include "imgui.h"
 
 Audio::Audio() : m_iChannelIndex(0)
 {
@@ -77,6 +77,23 @@ void Audio::StopAllChannels()
 {
     for (auto i : m_channels)
         i.second->stop();
+}
+
+void Audio::SpawnControlWindow()
+{
+    ImGui::Begin("Audio Engine");
+
+    for (auto i : m_sounds)
+    {
+        ImGui::Text("%s", i.first);
+
+        if (ImGui::Button("Play"))
+        {
+            PlaySound(i.first);
+        }
+    }
+
+    ImGui::End();
 }
 
 bool Audio::ErrorCheck(FMOD_RESULT result)

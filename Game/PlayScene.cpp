@@ -343,6 +343,7 @@ void PlayScene::Render()
     ImGui::End();
 
     light->SpawnControlWindow();
+    Application::Get().GetAudio()->SpawnControlWindow();
 
     ImGui::Render();
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());

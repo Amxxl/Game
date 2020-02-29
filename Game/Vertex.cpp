@@ -1,4 +1,6 @@
 #include "pch.h"
+
+#define DVT_SOURCE_FILE
 #include "Vertex.h"
 
 
@@ -31,91 +33,53 @@ namespace dvt
         return semanticIndex;
     }
 
-    constexpr size_t VertexLayout::Element::SizeOf(ElementType type)
-    {
-        switch (type)
-        {
-        case Position2D:
-            return sizeof(Map<Position2D>::SysType);
-        case Position3D:
-            return sizeof(Map<Position3D>::SysType);
-        case Texture2D:
-            return sizeof(Map<Texture2D>::SysType);
-        case Normal:
-            return sizeof(Map<Normal>::SysType);
-        case Tangent:
-            return sizeof(Map<Tangent>::SysType);
-        case Bitangent:
-            return sizeof(Map<Bitangent>::SysType);
-        case Float3Color:
-            return sizeof(Map<Float3Color>::SysType);
-        case Float4Color:
-            return sizeof(Map<Float4Color>::SysType);
-        case RGBAColor:
-            return sizeof(Map<RGBAColor>::SysType);
-        }
-        assert("Invalid element type" && false);
-        return 0u;
-    }
-
     VertexLayout::ElementType VertexLayout::Element::GetType() const noexcept
     {
         return type;
     }
 
-    D3D11_INPUT_ELEMENT_DESC VertexLayout::Element::GetDesc() const
+    template<VertexLayout::ElementType type>
+    struct CodeLookup
     {
-        switch (type)
+        static constexpr auto Exec() noexcept
         {
-        case Position2D:
-            return GenerateDesc<Position2D>(GetOffset(), GetSemanticIndex());
-        case Position3D:
-            return GenerateDesc<Position3D>(GetOffset(), GetSemanticIndex());
-        case Texture2D:
-            return GenerateDesc<Texture2D>(GetOffset(), GetSemanticIndex());
-        case Normal:
-            return GenerateDesc<Normal>(GetOffset(), GetSemanticIndex());
-        case Tangent:
-            return GenerateDesc<Tangent>(GetOffset(), GetSemanticIndex());
-        case Bitangent:
-            return GenerateDesc<Bitangent>(GetOffset(), GetSemanticIndex());
-        case Float3Color:
-            return GenerateDesc<Float3Color>(GetOffset(), GetSemanticIndex());
-        case Float4Color:
-            return GenerateDesc<Float4Color>(GetOffset(), GetSemanticIndex());
-        case RGBAColor:
-            return GenerateDesc<RGBAColor>(GetOffset(), GetSemanticIndex());
+            return VertexLayout::Map<type>::code;
         }
-        assert("Invalid element type." && false);
-        return { "INVALID", 0, DXGI_FORMAT_UNKNOWN, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 };
-    }
+    };
 
     char const* VertexLayout::Element::GetCode() const noexcept
     {
-        switch (type)
-        {
-        case Position2D:
-            return Map<Position2D>::code;
-        case Position3D:
-            return Map<Position3D>::code;
-        case Texture2D:
-            return Map<Texture2D>::code;
-        case Normal:
-            return Map<Normal>::code;
-        case Tangent:
-            return Map<Tangent>::code;
-        case Bitangent:
-            return Map<Bitangent>::code;
-        case Float3Color:
-            return Map<Float3Color>::code;
-        case Float4Color:
-            return Map<Float4Color>::code;
-        case RGBAColor:
-            return Map<RGBAColor>::code;
-        }
+        return Bridge<CodeLookup>(type);
+    }
 
-        assert("Invalid element type." && false);
-        return "Invalid";
+    template<VertexLayout::ElementType type> struct DescGenerate
+    {
+        static constexpr D3D11_INPUT_ELEMENT_DESC Exec(size_t offset, UINT semanticIndex) noexcept
+        {
+            return {
+                VertexLayout::Map<type>::semantic, semanticIndex,
+                VertexLayout::Map<type>::dxgiFormat, 0, static_cast<UINT>(offset),
+                D3D11_INPUT_PER_VERTEX_DATA, 0
+            };
+        }
+    };
+
+    D3D11_INPUT_ELEMENT_DESC VertexLayout::Element::GetDesc() const
+    {
+        return Bridge<DescGenerate>(type, GetOffset(), GetSemanticIndex());
+    }
+
+    template<VertexLayout::ElementType type>
+    struct SysSizeLookup
+    {
+        static constexpr auto Exec() noexcept
+        {
+            return sizeof(VertexLayout::Map<type>::SysType);
+        }
+    };
+    constexpr size_t VertexLayout::Element::SizeOf(ElementType type) noxnd
+    {
+        return Bridge<SysSizeLookup>(type);
     }
 
     VertexLayout::Element const& VertexLayout::ResolveByIndex(size_t index) const
@@ -123,15 +87,18 @@ namespace dvt
         return elements[index];
     }
 
-    VertexLayout& VertexLayout::Append(ElementType type)
+    VertexLayout& VertexLayout::Append(ElementType type) noxnd
     {
-        UINT semanticIndex = 0;
-        for (auto& i : elements)
+        if (!Has(type))
         {
-            if (i.GetType() == type)
-                semanticIndex++;
+            UINT semanticIndex = 0;
+            for (auto& i : elements)
+            {
+                if (i.GetType() == type)
+                    semanticIndex++;
+            }
+            elements.emplace_back(type, Size(), semanticIndex);
         }
-        elements.emplace_back(type, Size(), semanticIndex);
         return *this;
     }
 
@@ -171,6 +138,18 @@ namespace dvt
         return code;
     }
 
+    bool VertexLayout::Has(ElementType type) const noexcept
+    {
+        for (auto& e : elements)
+        {
+            if (e.GetType() == type)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     Vertex::Vertex(char* pData, VertexLayout const& layout)
         : pData(pData)
         , layout(layout)
@@ -183,10 +162,32 @@ namespace dvt
     {
     }
 
-    VertexBuffer::VertexBuffer(VertexLayout layout, size_t size)
+    VertexBuffer::VertexBuffer(VertexLayout layout, size_t size) noxnd
         : layout(std::move(layout))
     {
         Resize(size);
+    }
+
+    template<VertexLayout::ElementType type>
+    struct AttributeAiMeshFill
+    {
+        static constexpr void Exec(VertexBuffer* pBuf, aiMesh const& mesh) noxnd
+        {
+            for (auto end = mesh.mNumVertices, i = 0u; i < end; ++i)
+            {
+                (*pBuf)[i].Attr<type>() = VertexLayout::Map<type>::Extract(mesh, i);
+            }
+        }
+    };
+
+    VertexBuffer::VertexBuffer(VertexLayout layout, aiMesh const& mesh)
+        : layout(std::move(layout))
+    {
+        Resize(mesh.mNumVertices);
+        for (size_t i = 0, end = layout.GetElementCount(); i < end; ++i)
+        {
+            VertexLayout::Bridge<AttributeAiMeshFill>(layout.ResolveByIndex(i).GetType(), this, mesh);
+        }
     }
 
     char const* VertexBuffer::GetData() const

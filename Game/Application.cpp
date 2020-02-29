@@ -32,9 +32,6 @@ void Application::Initialize(int width, int height)
     if (!m_window)
         Logger::Get()->error("Window creation process failed!");
 
-
-    m_audio = std::make_unique<Audio>();
-
     auto deviceResources = m_window->GetDeviceResources();
 
     deviceResources->CreateDeviceResources();
@@ -50,6 +47,8 @@ void Application::Initialize(int width, int height)
     ImGui_ImplWin32_Init(m_window->GetHandle());
     ImGui_ImplDX11_Init(deviceResources->GetDevice(), deviceResources->GetDeviceContext());
     ImGui::StyleColorsDark();
+
+    m_audio = std::make_unique<Audio>();
 
     // Scenes manager.
     m_sceneManager = std::make_unique<SceneManager>(*m_window.get());
