@@ -38,7 +38,7 @@ namespace Bind
             VertexBuffer(VertexBuffer const&) = default;
             VertexBuffer& operator=(VertexBuffer const&) = default;
 
-            // Function calling prevention if template argument isn't: VertexBufferData.
+            // Function calling prevention if template argument isn't: VertexBuffer.
             template<typename = typename std::enable_if<std::is_same_v<T, dvt::VertexBuffer>>::type>
             void Create(_In_ DX::DeviceResources* deviceResources, _In_ dvt::VertexBuffer const& data)
             {

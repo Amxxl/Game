@@ -526,6 +526,9 @@
     <ClInclude Include="Node.h">
       <Filter>Engine\Graphics\Pipeline\Drawable\Model</Filter>
     </ClInclude>
+    <ClInclude Include="ConstantBuffersEx.h">
+      <Filter>Engine\Graphics\Pipeline\Bindable\Bindables</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scene.cpp">
@@ -723,6 +726,9 @@
     </ClCompile>
     <ClCompile Include="Node.cpp">
       <Filter>Engine\Graphics\Pipeline\Drawable\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="ConstantBuffersEx.cpp">
+      <Filter>Engine\Graphics\Pipeline\Bindable\Bindables</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

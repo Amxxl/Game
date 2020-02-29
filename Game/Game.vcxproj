@@ -202,6 +202,7 @@
     <ClInclude Include="ConditionalNoexcept.h" />
     <ClInclude Include="ConstantBuffer.h" />
     <ClInclude Include="ConstantBuffers.h" />
+    <ClInclude Include="ConstantBuffersEx.h" />
     <ClInclude Include="Core\IntegerTypes.h" />
     <ClInclude Include="Cube.h" />
     <ClInclude Include="DeviceResources.h" />
@@ -329,6 +330,7 @@
     <ClCompile Include="Camera3D.cpp" />
     <ClCompile Include="Camera2D.cpp" />
     <ClCompile Include="Color.cpp" />
+    <ClCompile Include="ConstantBuffersEx.cpp" />
     <ClCompile Include="Cube.cpp" />
     <ClCompile Include="DeviceResources.cpp" />
     <ClCompile Include="Drawable.cpp" />
