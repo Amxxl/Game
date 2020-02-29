@@ -63,4 +63,3 @@ class Step
         size_t targetPass;
         std::vector<std::shared_ptr<Bind::Bindable>> bindables;
 };
-

@@ -1,6 +1,5 @@
 #pragma once
 
-
 namespace Dcb
 {
     class Buffer;
@@ -46,4 +45,3 @@ class TechniqueProbe
         size_t stepIdx = std::numeric_limits<size_t>::max();
         size_t bufIdx = std::numeric_limits<size_t>::max();
 };
-

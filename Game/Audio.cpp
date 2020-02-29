@@ -8,7 +8,6 @@ Audio::Audio() : m_iChannelIndex(0)
     Audio::ErrorCheck(pSystem->init(512, FMOD_INIT_NORMAL, nullptr));
 }
 
-
 Audio::~Audio()
 {
     Audio::ErrorCheck(pSystem->release());
@@ -16,7 +15,7 @@ Audio::~Audio()
 
 void Audio::Update()
 {
-    pSystem->update();
+    Audio::ErrorCheck(pSystem->update());
 }
 
 bool Audio::LoadSound(std::string const& fileName, bool in_3d, bool loop, bool stream)
@@ -30,6 +29,7 @@ bool Audio::LoadSound(std::string const& fileName, bool in_3d, bool loop, bool s
 
     Audio::ErrorCheck(pSound->set3DMinMaxDistance(1.0f, 512.0f));
     Audio::ErrorCheck(pSound->setMode(FMOD_3D | FMOD_3D_INVERSEROLLOFF));
+
     m_sounds[fileName] = pSound;
 
     return true;
@@ -82,6 +82,8 @@ void Audio::StopAllChannels()
 void Audio::SpawnControlWindow()
 {
     ImGui::Begin("Audio Engine");
+
+    ImGui::Text("Loaded sounds:");
 
     for (auto i : m_sounds)
     {

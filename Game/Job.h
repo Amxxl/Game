@@ -11,4 +11,3 @@ class Job
         const class Drawable* pDrawable;
         const class Step* pStep;
 };
-

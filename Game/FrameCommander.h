@@ -45,4 +45,3 @@ class FrameCommander
     private:
         std::array<Pass, 3> passes;
 };
-

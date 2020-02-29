@@ -48,4 +48,3 @@ public:
         std::vector<Step> steps;
         std::string name = "Unnamed Tech";
 };
-

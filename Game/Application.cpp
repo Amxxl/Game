@@ -46,7 +46,7 @@ void Application::Initialize(int width, int height)
 
     ImGui_ImplWin32_Init(m_window->GetHandle());
     ImGui_ImplDX11_Init(deviceResources->GetDevice(), deviceResources->GetDeviceContext());
-    ImGui::StyleColorsDark();
+    ImGui::StyleColorsClassic();
 
     m_audio = std::make_unique<Audio>();
 
@@ -98,6 +98,10 @@ void Application::Render()
     if (m_timer.GetFrameCount() == 0)
         return;
 
+    ImGui_ImplDX11_NewFrame();
+    ImGui_ImplWin32_NewFrame();
+    ImGui::NewFrame();
+
     Clear();
 
     auto deviceResources = m_window->GetDeviceResources();
@@ -109,6 +113,9 @@ void Application::Render()
     context;
 
     m_sceneManager->Render();
+
+    ImGui::Render();
+    ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
     deviceResources->PIXEndEvent();
 

@@ -4,7 +4,8 @@
 #include <assimp/scene.h>
 #include <utility>
 
-#define DVT_ELEMENT_AI_EXTRACTOR(member) static SysType Extract(aiMesh const& mesh, size_t i) noexcept \
+#define DVT_ELEMENT_AI_EXTRACTOR(member) \
+static SysType Extract(aiMesh const& mesh, size_t i) noexcept \
 { \
     return *reinterpret_cast<SysType const*>(&mesh.member[i]); \
 }

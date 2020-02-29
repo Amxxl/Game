@@ -323,10 +323,6 @@ void PlayScene::Render()
     font->DrawString(spriteBatch.get(), StringHelper::NarrowToWide(ss.str()).c_str(), DirectX::XMVectorSet(10.0f, 10.0f, 0.0f, 0.0f), DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f));
     spriteBatch->End();
 
-    // ImGui Window.
-    ImGui_ImplDX11_NewFrame();
-    ImGui_ImplWin32_NewFrame();
-    ImGui::NewFrame();
 
     ImGui::Begin("Debug");
 
@@ -344,9 +340,6 @@ void PlayScene::Render()
 
     light->SpawnControlWindow();
     Application::Get().GetAudio()->SpawnControlWindow();
-
-    ImGui::Render();
-    ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 }
 
 void PlayScene::OnKeyChar(size_t key)
