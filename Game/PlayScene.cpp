@@ -33,7 +33,9 @@ bool PlayScene::Load(SceneManager* sceneManager, Window& window)
     m_deviceContext = window.GetDeviceResources()->GetDeviceContext();
     pWindow = &window;
 
-    Application::Get().GetAudio()->LoadSound("Data/file.mp3", true, true);
+    //Application::Get().GetAudio()->Load("Data/Sounds/Music001.mp3");
+    Application::Get().GetAudio()->Load("Data/Sounds/Music002.mp3");
+    Application::Get().GetAudio()->Load("Data/Sounds/Music003.mp3");
 
     camera.SetProjectionValues(90.0f, 800.0f / 600.0f, 0.1f, 1500.0f);
     camera.SetPosition(0.0f, 20.0f, 0.0f);
@@ -266,15 +268,7 @@ void PlayScene::Update(DX::StepTimer const& timer)
     m_pDeviceResources->SetCamera(&camera);
     m_pDeviceResources->SetCamera2D(&camera2d);
 
-    FMOD_VECTOR audioPos{ player.GetPositionFloat3().x, player.GetPositionFloat3().y, player.GetPositionFloat3().z };
-    FMOD_VECTOR audioUp{ 0.0f, 1.0f, 0.0 };
-
-    XMFLOAT3 testas;
-    DirectX::XMStoreFloat3(&testas, player.GetForwardVector());
-
-    FMOD_VECTOR audioFor{ testas.x, testas.y, testas.z };
-
-    Application::Get().GetAudio()->GetSystem()->set3DListenerAttributes(0, &audioPos, nullptr, &audioFor, &audioUp);
+    Application::Get().GetAudio()->SetListener(player.GetPositionFloat3(), player.GetForwardVector());
 }
 
 void PlayScene::Render()
@@ -355,15 +349,6 @@ void PlayScene::OnKeyPressed(size_t key)
 
         player.AdjustPosition(0.0f, 10.0f, 0.0f);
     }
-
-    if (key == Input::Key::F)
-    {
-        Vector3 poza = npc.GetPositionFloat3();
-        Application::Get().GetAudio()->PlaySound("Data/file.mp3", npc.GetPositionFloat3());
-    }
-
-    if (key == Input::Key::C)
-        Application::Get().GetAudio()->StopAllChannels();
 
     Logger::Get()->info("Key was pressed: {}", key);
 }

@@ -18,7 +18,7 @@ namespace Bind
 
             explicit VertexBuffer(_In_ ID3D11Device* device, _In_ T* data, uint32 vertexCount)
             {
-                assert("You must use another constructor for this template argument." && typeid(T) == typeid(VertexBufferData));
+                assert("You must use another constructor for this template argument." && typeid(T) == typeid(dvt::VertexBuffer));
                 Create(device, data, vertexCount);
             }
 

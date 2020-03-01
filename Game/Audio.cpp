@@ -1,8 +1,9 @@
 #include "pch.h"
 #include "Audio.h"
 #include "imgui.h"
+#include <assert.h>
 
-Audio::Audio() : m_iChannelIndex(0)
+Audio::Audio()
 {
     Audio::ErrorCheck(FMOD::System_Create(&pSystem));
     Audio::ErrorCheck(pSystem->init(512, FMOD_INIT_NORMAL, nullptr));
@@ -18,84 +19,105 @@ void Audio::Update()
     Audio::ErrorCheck(pSystem->update());
 }
 
-bool Audio::LoadSound(std::string const& fileName, bool in_3d, bool loop, bool stream)
+bool Audio::Load(std::string const& fileName)
 {
-    FMOD::Sound* pSound = nullptr;
-    if (!Audio::ErrorCheck(pSystem->createSound(fileName.c_str(), FMOD_3D, nullptr, &pSound)))
+    std::unique_ptr<Sound> pSound = std::make_unique<Sound>();
+
+    if (!pSound->Load(pSystem, fileName))
         return false;
 
-    if (pSound == nullptr)
-        return false;
-
-    Audio::ErrorCheck(pSound->set3DMinMaxDistance(1.0f, 512.0f));
-    Audio::ErrorCheck(pSound->setMode(FMOD_3D | FMOD_3D_INVERSEROLLOFF));
-
-    m_sounds[fileName] = pSound;
-
+    sounds[fileName] = std::move(pSound);
     return true;
 }
 
-int Audio::PlaySound(std::string const& fileName, Vector3 const& vPosition, float volume)
+bool Audio::Play(std::string const& fileName, Vector3f const& vPosition, float volume)
 {
-    int channelId = m_iChannelIndex++;
-
-    if (m_sounds.find(fileName) == m_sounds.end())
+    if (sounds[fileName] == nullptr)
     {
-        LoadSound(fileName);
-
-        if (m_sounds.find(fileName) == m_sounds.end())
-            return channelId;
+        if (!Load(fileName))
+            return false;
     }
 
-    FMOD::Channel* pChannel = nullptr;
-    Audio::ErrorCheck(pSystem->playSound(m_sounds[fileName], nullptr, true, &pChannel));
+    if (sounds[fileName]->IsPlaying())
+        return false;
 
-    if (pChannel != nullptr)
-    {
-        FMOD_VECTOR position = { vPosition.x, vPosition.y, vPosition.z };
-        FMOD_VECTOR velocity = { 0.0f, 0.0f, 0.0f };
-
-        Audio::ErrorCheck(pChannel->set3DAttributes(&position, &velocity));
-        Audio::ErrorCheck(pChannel->set3DMinMaxDistance(1.0f, 512.0f));
-        Audio::ErrorCheck(pChannel->setVolume(volume));
-        Audio::ErrorCheck(pChannel->setPaused(false));
-
-        m_channels[channelId] = pChannel;
-    }
-
-    Logger::Get()->info("FMOD: Playing on channel id: {}", channelId);
-
-    return channelId;
+    return sounds[fileName]->Play(pSystem, vPosition, volume);
 }
 
-void Audio::StopChannel(unsigned int channelId)
+void Audio::Stop(std::string const& fileName)
 {
-    m_channels[channelId]->stop();
+    if (sounds[fileName] == nullptr)
+        return;
+
+    sounds[fileName]->Stop();
 }
 
-void Audio::StopAllChannels()
+void Audio::Pause(std::string const& fileName)
 {
-    for (auto i : m_channels)
-        i.second->stop();
+    if (sounds[fileName] == nullptr)
+        return;
+
+    sounds[fileName]->Pause();
+}
+
+void Audio::Resume(std::string const& fileName)
+{
+    if (sounds[fileName] == nullptr)
+        return;
+
+    sounds[fileName]->Resume();
+}
+
+void Audio::SetListener(Vector3f const& position, DirectX::XMVECTOR const& forward)
+{
+    assert(pSystem == nullptr);
+    FMOD_VECTOR pos{ position.x, position.y, position.z };
+    FMOD_VECTOR up{ 0.0f, 1.0f, 0.0f };
+
+    Vector3f fwd;
+    DirectX::XMStoreFloat3(&fwd, forward);
+    FMOD_VECTOR vecFwd{ fwd.x, fwd.y, fwd.z };
+
+    pSystem->set3DListenerAttributes(0, &pos, nullptr, &vecFwd, &up);
 }
 
 void Audio::SpawnControlWindow()
 {
-    ImGui::Begin("Audio Engine");
-
-    ImGui::Text("Loaded sounds:");
-
-    for (auto i : m_sounds)
+    for (auto&& i : sounds)
     {
-        ImGui::Text("%s", i.first);
+        ImGui::Begin(i.first.c_str());
+
+        ImGui::Text("File: %s", i.first.c_str());
 
         if (ImGui::Button("Play"))
         {
-            PlaySound(i.first);
+            Play(i.first.c_str());
         }
-    }
 
-    ImGui::End();
+        ImGui::SameLine();
+        if (ImGui::Button("Pause"))
+        {
+            Pause(i.first.c_str());
+        }
+
+        ImGui::SameLine();
+        if (ImGui::Button("Resume"))
+        {
+            Resume(i.first.c_str());
+        }
+
+        ImGui::SameLine();
+        if (ImGui::Button("Stop"))
+        {
+            Stop(i.first.c_str());
+        }
+
+        static float volume = 0.5f;
+        ImGui::SliderFloat("Volume", &volume, 0.0f, 1.0f);
+        i.second->SetVolume(volume);
+
+        ImGui::End();
+    }
 }
 
 bool Audio::ErrorCheck(FMOD_RESULT result)
@@ -106,4 +128,94 @@ bool Audio::ErrorCheck(FMOD_RESULT result)
         return false;
     }
     return true;
+}
+
+bool Sound::Load(FMOD::System* pSystem, std::string const& fileName)
+{
+    if (!Audio::ErrorCheck(pSystem->createSound(fileName.c_str(), FMOD_3D, nullptr, &pSound)))
+        return false;
+
+    if (pSound == nullptr)
+        return false;
+
+    // Temporary.
+    if (!Audio::ErrorCheck(pSound->set3DMinMaxDistance(1.0f, 512.0f)))
+        return false;
+
+    // Temporary.
+    if (!Audio::ErrorCheck(pSound->setMode(FMOD_3D | FMOD_3D_INVERSEROLLOFF)))
+        return false;
+
+    return true;
+}
+
+bool Sound::Play(FMOD::System* pSystem, Vector3f const& vPosition, float volume)
+{
+    if (pSystem == nullptr || pSound == nullptr)
+        return false;
+
+    if (!Audio::ErrorCheck(pSystem->playSound(pSound, nullptr, true, &pChannel)))
+        return false;
+
+    if (pChannel == nullptr)
+        return false;
+
+    FMOD_VECTOR position = { vPosition.x, vPosition.y, vPosition.z };
+    FMOD_VECTOR velocity = { 0.0f, 0.0f, 0.0f };
+
+    if (!Audio::ErrorCheck(pChannel->set3DAttributes(&position, &velocity)))
+        return false;
+
+    if (!Audio::ErrorCheck(pChannel->set3DMinMaxDistance(1.0f, 512.0f)))
+        return false;
+
+    if (!Audio::ErrorCheck(pChannel->setVolume(volume)))
+        return false;
+
+    if (!Audio::ErrorCheck(pChannel->setPaused(false)))
+        return false;
+
+    return true;
+}
+
+bool Sound::Stop()
+{
+    if (pChannel == nullptr)
+        return false;
+
+    return Audio::ErrorCheck(pChannel->stop());
+}
+
+bool Sound::Pause()
+{
+    if (pChannel == nullptr)
+        return false;
+
+    return Audio::ErrorCheck(pChannel->setPaused(true));
+}
+
+bool Sound::Resume()
+{
+    if (pChannel == nullptr)
+        return false;
+
+    return Audio::ErrorCheck(pChannel->setPaused(false));
+}
+
+bool Sound::IsPlaying() const
+{
+    if (pChannel == nullptr)
+        return false;
+
+    int index = 0;
+    assert(!Audio::ErrorCheck(pChannel->getIndex(&index)));
+    return index > 0;
+}
+
+bool Sound::SetVolume(float volume)
+{
+    if (pChannel == nullptr)
+        return false;
+
+    return Audio::ErrorCheck(pChannel->setVolume(volume));
 }
