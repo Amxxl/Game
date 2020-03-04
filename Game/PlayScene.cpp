@@ -33,7 +33,7 @@ bool PlayScene::Load(SceneManager* sceneManager, Window& window)
     m_deviceContext = window.GetDeviceResources()->GetDeviceContext();
     pWindow = &window;
 
-    //Application::Get().GetAudio()->Load("Data/Sounds/Music001.mp3");
+    Application::Get().GetAudio()->Load("Data/Sounds/Music001.mp3");
     Application::Get().GetAudio()->Load("Data/Sounds/Music002.mp3");
     Application::Get().GetAudio()->Load("Data/Sounds/Music003.mp3");
 
