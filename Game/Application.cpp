@@ -6,11 +6,11 @@
 #include "Application.h"
 #include "Color.h"
 
-
 Application* Application::s_instance;
 
 Application::Application() noexcept(false)
 {
+
     s_instance = this;
 }
 

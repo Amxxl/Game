@@ -110,6 +110,12 @@
     <Filter Include="Engine\Graphics\Pipeline\Drawable\Model">
       <UniqueIdentifier>{1da3ad8b-1bd4-42e1-a911-5165d29eea9b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Assets\Shaders\Phong">
+      <UniqueIdentifier>{9adbe978-8df9-4320-a40d-dd6b6b6e0f66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\Shaders\Common">
+      <UniqueIdentifier>{816d6636-1b2a-42c1-bd3d-8f106ee7690d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene.h">
@@ -815,6 +821,12 @@
     </FxCompile>
     <FxCompile Include="colorPS.hlsl">
       <Filter>Assets\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Transform.hlsl">
+      <Filter>Assets\Shaders\Common</Filter>
+    </FxCompile>
+    <FxCompile Include="PointLight.hlsl">
+      <Filter>Assets\Shaders\Common</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

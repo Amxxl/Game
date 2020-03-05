@@ -1,13 +1,4 @@
-cbuffer LightCBuf
-{
-    float3 lightPos;
-    float3 ambient;
-    float3 diffuseColor;
-    float diffuseIntensity;
-    float attConst;
-    float attLin;
-    float attQuad;
-};
+#include "PointLight.hlsl"
 
 Texture2D tex;
 Texture2D spec;
@@ -18,7 +9,7 @@ SamplerState splr;
 float4 main(float3 worldPos : Position, float3 n : Normal, float2 tc : Texcoord) : SV_Target
 {
     // fragment to light vector data
-    const float3 vToL = lightPos - worldPos;
+    const float3 vToL = viewLightPos - worldPos;
     const float distToL = length(vToL);
     const float3 dirToL = vToL / distToL;
     // attenuation
